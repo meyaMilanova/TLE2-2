@@ -28,7 +28,7 @@ function LoginScreen() {
             <BackButton onClick={() => { /* handle navigation here */ }} />
 
             <h1
-                className="text-white text-8xl font-bold mb-10" style={{fontFamily: "'Itim', cursive"}}>Inloggen</h1>
+                className="text-white text-8xl font-bold mb-10 font-itim">Inloggen</h1>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-[90%] max-w-md">
                 <input
@@ -60,8 +60,8 @@ function LoginScreen() {
                 />
 
                 <div className="flex justify-around mt-6">
-                    <PinkButton type="button" onClick={() => navigate('/aanmelden')}>Aanmelden</PinkButton>
-                    <OrangeButton type="submit" onClick={() => navigate('/hoofdpagina')}>Start</OrangeButton>
+                    <PinkButton type="button" onClick={() => navigate('/aanmelden')}>AANMELDEN</PinkButton>
+                    <OrangeButton type="submit" onClick={() => navigate('/hoofdpagina')}>START</OrangeButton>
                 </div>
             </form>
         </div>

@@ -1,24 +1,32 @@
 import React from 'react';
 import PinkButton from "./Components/PinkButton.jsx";
 import BackButton from "./Components/BackButton.jsx";
+import {useNavigate} from "react-router-dom";
 
-const TitleScreen = () => (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+const TitleScreen = () => {
+    const navigate = useNavigate();
 
-        <BackButton onClick={() => { /* handle navigation here */ }} />
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-green-900">
 
-        <h1 className="text-9xl font-klear text-white mb-2">GROENLANDIA</h1>
+            <BackButton onClick={() => { /* handle navigation here */ }} />
+
+            <h1 className="text-9xl font-klear text-white mb-2">GROENLANDIA</h1>
 
 
-        <div className="flex justify-around mt-6 flex-col md:flex-col max-w-2xl gap-5">
-            <PinkButton type="button">
-                Inloggen
-            </PinkButton>
-            <PinkButton type="button">
-                Aanmelden
-            </PinkButton>
+            <div className="flex justify-around mt-6 flex-col md:flex-col max-w-2xl gap-5">
+                <PinkButton type="button" onClick={() => navigate('/inloggen')}>
+                    INLOGGEN
+                </PinkButton>
+                <PinkButton type="button" onClick={() => navigate('/aanmelden')}>
+                    AANMELDEN
+                </PinkButton>
+            </div>
         </div>
-    </div>
-);
+    );
+}
+
+
+
 
 export default TitleScreen;
