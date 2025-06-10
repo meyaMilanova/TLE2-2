@@ -1,11 +1,16 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Title from "./Title.jsx";
+import TitleScreen from "./TitleScreen.jsx";
+import RegisterScreen from "./RegisterScreen.jsx";
 
 const router = createBrowserRouter([{
         children: [
             {
                 path: "/",
-                element: <Title />
+                element: <TitleScreen />
+            },
+            {
+                path: "/register",
+                element: <RegisterScreen />
             }
         ]
     }],
