@@ -1,8 +1,12 @@
 import React from 'react';
 import PinkButton from "./Components/PinkButton.jsx";
+import BackButton from "./Components/BackButton.jsx";
 
 const TitleScreen = () => (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+
+        <BackButton onClick={() => { /* handle navigation here */ }} />
+
         <h1 className="text-9xl font-klear text-white mb-2">GROENLANDIA</h1>
 
 
