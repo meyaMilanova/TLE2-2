@@ -1,17 +1,18 @@
 import React from 'react';
+import PinkButton from "./Components/PinkButton.jsx";
 
 const TitleScreen = () => (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-        <h1 className="text-8xl font-klear text-white mb-2">GROENLANDIA</h1>
+        <h1 className="text-9xl font-klear text-white mb-2">GROENLANDIA</h1>
 
 
-        <div className="mt-8 flex flex-col items-center">
-            <button className="mt-4 px-6 py-2 bg-rozeButton text-white font-semibold rounded hover:bg-hoverButton">
+        <div className="flex justify-around mt-6 flex-col md:flex-col max-w-2xl gap-5">
+            <PinkButton type="button">
                 Inloggen
-            </button>
-            <button className="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">
+            </PinkButton>
+            <PinkButton type="button">
                 Aanmelden
-            </button>
+            </PinkButton>
         </div>
     </div>
 );
