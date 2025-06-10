@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PinkButton({ type = "button", children, ...props }) {
+function PinkButton({ type = "button", children, className = "", style = {}, ...props }) {
     return (
         <button
             type={type}
