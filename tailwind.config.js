@@ -10,7 +10,6 @@ export default {
             rozeButton: '#E4A5CA',
             hoverButton: '#F8A91F',
             startButton: '#EC6426',
-            background: '#2E573A',
         },
         fontFamily: {
             sans: ['Inter', 'sans-serif'],

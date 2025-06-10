@@ -27,7 +27,7 @@ function RegisterScreen() {
             <BackButton onClick={() => { /* handle navigation here */ }} />
 
             <h1
-                className="text-white text-8xl font-bold mb-10" style={{fontFamily: "'Itim', cursive"}}>Aanmelden</h1>
+                className="text-white text-8xl font-bold mb-10 font-itim" >Aanmelden</h1>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-[90%] max-w-md">
                 <input
@@ -68,8 +68,8 @@ function RegisterScreen() {
                 />
 
                 <div className="flex justify-around mt-6">
-                    <PinkButton type="button" onClick={() => navigate('/inloggen')}>Inloggen</PinkButton>
-                    <PinkButton type="submit">Volgende</PinkButton>
+                    <PinkButton type="button" onClick={() => navigate('/inloggen')}>INLOGGEN</PinkButton>
+                    <PinkButton type="submit">VOLGENDE</PinkButton>
                 </div>
             </form>
         </div>
