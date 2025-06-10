@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PinkButton from './components/PinkButton';
 
 function RegisterScreen() {
     const [form, setForm] = useState({
@@ -18,49 +19,59 @@ function RegisterScreen() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Voornaam:</label>
+        <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
+            <button
+                className="absolute top-6 left-6 bg-orange-500 rounded-full w-16 h-16 flex items-center justify-center text-white text-3xl">
+                <span className="font-bold">&#8592;</span>
+            </button>
+
+            <h1
+                className="text-white text-8xl font-bold mb-10" style={{fontFamily: "'Itim', cursive"}}>Aanmelden</h1>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-[90%] max-w-md">
                 <input
                     type="text"
                     name="voornaam"
+                    placeholder="Voornaam..."
                     value={form.voornaam}
                     onChange={handleChange}
                     required
+                    className="bg-orange-100 text-orange-800 placeholder-orange-700 rounded-full px-6 py-3 border-4 border-green-500 focus:outline-none text-xl"
                 />
-            </div>
-            <div>
-                <label>Achternaam:</label>
                 <input
                     type="text"
                     name="achternaam"
+                    placeholder="Achternaam..."
                     value={form.achternaam}
                     onChange={handleChange}
                     required
+                    className="bg-orange-100 text-orange-800 placeholder-orange-700 rounded-full px-6 py-3 border-4 border-green-500 focus:outline-none text-xl"
                 />
-            </div>
-            <div>
-                <label>Wachtwoord:</label>
                 <input
                     type="password"
                     name="wachtwoord"
+                    placeholder="Wachtwoord..."
                     value={form.wachtwoord}
                     onChange={handleChange}
                     required
+                    className="bg-orange-100 text-orange-800 placeholder-orange-700 rounded-full px-6 py-3 border-4 border-green-500 focus:outline-none text-xl"
                 />
-            </div>
-            <div>
-                <label>Klassencode:</label>
                 <input
                     type="text"
                     name="klassencode"
+                    placeholder="Klas Code..."
                     value={form.klassencode}
                     onChange={handleChange}
                     required
+                    className="bg-orange-100 text-orange-800 placeholder-orange-700 rounded-full px-6 py-3 border-4 border-green-500 focus:outline-none text-xl"
                 />
-            </div>
-            <button type="submit">Registreren</button>
-        </form>
+
+                <div className="flex justify-around mt-6">
+                    <PinkButton type="button">Inloggen</PinkButton>
+                    <PinkButton type="submit">Volgende</PinkButton>
+                </div>
+            </form>
+        </div>
     );
 }
 
