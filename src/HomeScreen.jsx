@@ -42,8 +42,6 @@ function HomeScreen() {
                             {/* "Nails" in the corners */}
                             <div className="absolute top-2 left-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
                             <div className="absolute top-2 right-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
-                            <div className="absolute bottom-2 left-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
-                            <div className="absolute bottom-2 right-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
 
                             {/* Left: Image */}
                             <div className="flex items-center justify-center w-1/3 h-full">
