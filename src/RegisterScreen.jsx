@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PinkButton from './components/PinkButton';
 import BackButton from "./Components/BackButton.jsx";
 
@@ -9,6 +10,8 @@ function RegisterScreen() {
         wachtwoord: '',
         klassencode: '',
     });
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -65,7 +68,7 @@ function RegisterScreen() {
                 />
 
                 <div className="flex justify-around mt-6">
-                    <PinkButton type="button">Inloggen</PinkButton>
+                    <PinkButton type="button" onClick={() => navigate('/inloggen')}>Inloggen</PinkButton>
                     <PinkButton type="submit">Volgende</PinkButton>
                 </div>
             </form>
