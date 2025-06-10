@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PinkButton from './components/PinkButton';
+import BackButton from "./Components/BackButton.jsx";
 
 function RegisterScreen() {
     const [form, setForm] = useState({
@@ -20,10 +21,7 @@ function RegisterScreen() {
 
     return (
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
-            <button
-                className="absolute top-6 left-6 bg-orange-500 rounded-full w-16 h-16 flex items-center justify-center text-white text-3xl">
-                <span className="font-bold">&#8592;</span>
-            </button>
+            <BackButton onClick={() => { /* handle navigation here */ }} />
 
             <h1
                 className="text-white text-8xl font-bold mb-10" style={{fontFamily: "'Itim', cursive"}}>Aanmelden</h1>
