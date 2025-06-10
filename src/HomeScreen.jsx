@@ -4,7 +4,7 @@ import BackButton from "./Components/BackButton.jsx";
 import PinkButton from './components/PinkButton';
 import placeholderImg from './assets/placeholder.jpg';
 import woodBackground from './assets/wood.webp';
-import OrangeButton from "./Components/OrangeButton.jsx"; // Assuming you have a wood texture image
+import OrangeButton from "./Components/OrangeButton.jsx";
 
 function HomeScreen() {
     const navigate = useNavigate();
@@ -20,14 +20,25 @@ function HomeScreen() {
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
             <BackButton onClick={() => { /* handle navigation here */
             }}/>
+            <h1 className="text-white text-6xl font-bold mb-8">Hoi [Jouw Naam]!</h1>
+
             <div
-                className="w-[1150px] h-[600px] rounded-2xl flex items-center justify-center"
+                className="w-[1150px] h-[600px] rounded-2xl flex items-center justify-center relative"
                 style={{
                     backgroundImage: `url(${woodBackground})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                 }}
             >
+                <div
+                    className="absolute top-4 left-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
+                <div
+                    className="absolute top-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
+                <div
+                    className="absolute bottom-4 left-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
+                <div
+                    className="absolute bottom-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
+
                 <div className="grid grid-cols-2 grid-rows-2 w-[1100px] h-[550px] gap-8 p-6">
                     {rectangles.map((rect) => (
                         <div
@@ -39,16 +50,15 @@ function HomeScreen() {
                                 border: '3px solid #b48a78'
                             }}
                         >
-                            {/* "Nails" in the corners */}
-                            <div className="absolute top-2 left-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
-                            <div className="absolute top-2 right-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
+                            <div
+                                className="absolute top-2 left-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
+                            <div
+                                className="absolute top-2 right-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
 
-                            {/* Left: Image */}
                             <div className="flex items-center justify-center w-1/3 h-full">
                                 <img src={placeholderImg} alt="placeholder" className="w-full h-full object-cover"/>
                             </div>
 
-                            {/* Right: Text, Description, and Button */}
                             <div className="flex flex-col items-start w-2/3 h-full pl-4 pr-2">
                                 <span className="text-4xl mt-8" style={{color: '#632713'}}>{rect.label}</span>
                                 <p className="mt-2 mb-2 text-base text-black flex-1">{rect.description}</p>
