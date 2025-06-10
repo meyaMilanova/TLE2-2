@@ -69,7 +69,7 @@ function RegisterScreen() {
 
                 <div className="flex justify-around mt-6">
                     <PinkButton type="button" onClick={() => navigate('/inloggen')}>Inloggen</PinkButton>
-                    <PinkButton type="submit">Volgende</PinkButton>
+                    <PinkButton type="submit" onClick={() => navigate('/hoofdpagina')}>Volgende</PinkButton>
                 </div>
             </form>
         </div>

@@ -61,7 +61,7 @@ function LoginScreen() {
 
                 <div className="flex justify-around mt-6">
                     <PinkButton type="button" onClick={() => navigate('/aanmelden')}>Aanmelden</PinkButton>
-                    <OrangeButton type="submit">Start</OrangeButton>
+                    <OrangeButton type="submit" onClick={() => navigate('/hoofdpagina')}>Start</OrangeButton>
                 </div>
             </form>
         </div>
