@@ -1,9 +1,20 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Title from "./Title.jsx";
+
+const router = createBrowserRouter([{
+        children: [
+            {
+                path: "/",
+                element: <Title />
+            }
+        ]
+    }],
+);
+
 function App() {
     return (
         <>
-            <h1 className="text-3xl font-bold underline text-blue-700">
-                Hello world!
-            </h1>
+            <RouterProvider router={router} />
         </>
     )
 }
