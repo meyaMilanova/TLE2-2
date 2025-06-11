@@ -5,9 +5,9 @@ import LoginScreen from "./LoginScreen.jsx";
 import HomeScreen from "./HomeScreen.jsx";
 import GameExplainer from "./Components/GameExplainer.jsx";
 import WasteSorting from "./WasteSorting.jsx";
+import AvatarMovement from "./AvatarMovement.jsx";
 
-const router = createBrowserRouter([
-    {
+const router = createBrowserRouter([{
         children: [
             {
                 path: "/",
@@ -32,6 +32,10 @@ const router = createBrowserRouter([
             {
                 path: "/afvalsorteren",
                 element: <WasteSorting />
+            },
+            {
+                path: "/avatar",
+                element: <AvatarMovement/>
             }
         ]
     }
