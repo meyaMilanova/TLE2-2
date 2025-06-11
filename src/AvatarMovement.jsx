@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 function AvatarMovement() {
     const [position, setPosition] = useState({ top: "50%", left: "50%" });
     const [frame, setFrame] = useState(0);
     const [currentKey, setCurrentKey] = useState(null);
+    const pressedKeysRef = useRef(new Set());
+    const requestRef = useRef();
 
     const spriteFrames = {
         stand: 0,
@@ -14,39 +16,64 @@ function AvatarMovement() {
     };
 
     const handleKeyDown = (event) => {
-        setCurrentKey(event.key);
-        setPosition((prevPosition) => {
-            let { top, left } = prevPosition;
-            const step = 1;
+        const key = event.key;
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d"].includes(key)) {
+            pressedKeysRef.current.add(key);
+            setCurrentKey(key);
+        }
+    };
 
-            switch (event.key) {
-                case "ArrowUp":
-                case "w":
-                    top = `${Math.max(0, parseInt(top) - step)}%`;
-                    break;
-                case "ArrowDown":
-                case "s":
-                    top = `${Math.min(90, parseInt(top) + step)}%`;
-                    break;
-                case "ArrowLeft":
-                case "a":
-                    left = `${Math.max(0, parseInt(left) - step)}%`;
-                    break;
-                case "ArrowRight":
-                case "d":
-                    left = `${Math.min(90, parseInt(left) + step)}%`;
-                    break;
-                default:
-                    break;
+    const handleKeyUp = (event) => {
+        const key = event.key;
+        pressedKeysRef.current.delete(key);
+
+        if (key === currentKey) {
+            const remainingKeys = Array.from(pressedKeysRef.current);
+            if (remainingKeys.length > 0) {
+                setCurrentKey(remainingKeys[remainingKeys.length - 1]); 
+            } else {
+                setCurrentKey(null);
+                setFrame(spriteFrames.stand);
             }
-            return { top, left };
-        });
+        }
     };
 
-    const handleKeyUp = () => {
-        setCurrentKey(null);
-        setFrame(spriteFrames.stand);
-    };
+    useEffect(() => {
+        const move = () => {
+            if (currentKey) {
+                setPosition((prevPosition) => {
+                    let { top, left } = prevPosition;
+                    const step = 0.5;
+
+                    switch (currentKey) {
+                        case "ArrowUp":
+                        case "w":
+                            top = `${Math.max(0, parseFloat(top) - step)}%`;
+                            break;
+                        case "ArrowDown":
+                        case "s":
+                            top = `${Math.min(90, parseFloat(top) + step)}%`;
+                            break;
+                        case "ArrowLeft":
+                        case "a":
+                            left = `${Math.max(0, parseFloat(left) - step)}%`;
+                            break;
+                        case "ArrowRight":
+                        case "d":
+                            left = `${Math.min(90, parseFloat(left) + step)}%`;
+                            break;
+                        default:
+                            break;
+                    }
+                    return { top, left };
+                });
+            }
+            requestRef.current = requestAnimationFrame(move);
+        };
+
+        requestRef.current = requestAnimationFrame(move);
+        return () => cancelAnimationFrame(requestRef.current);
+    }, [currentKey]);
 
     useEffect(() => {
         let animationInterval;
@@ -71,6 +98,7 @@ function AvatarMovement() {
                 }
             })();
 
+            setFrame((prevFrame) => (prevFrame === frames[0] ? frames[1] : frames[0]));
             animationInterval = setInterval(() => {
                 setFrame((prevFrame) => (prevFrame === frames[0] ? frames[1] : frames[0]));
             }, 200);
