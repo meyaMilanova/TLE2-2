@@ -4,20 +4,18 @@ import woodBackground from "../../public/images/wood.webp";
 import GameSlideshow from "./GameSlideshow.jsx";
 import {useParams} from "react-router-dom";
 import games from "../data/games.js";
+import OrangeButton from "./OrangeButton.jsx";
 
 function GameExplainer() {
     const { id } = useParams();
-
     const game = games.find((p) => p.id === parseInt(id));
 
     return (
-
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
-
             <BackButton onClick={() => { /* handle navigation here */ }} />
-            <h1 className="text-white text-6xl font-bold mb-8">Uitleg</h1>
+            <h1 className="text-white text-6xl font-bold mb-8">{game.title} - uitleg</h1>
             <div
-                className="w-[1150px] h-[600px] rounded-2xl flex items-center justify-center relative"
+                className="w-[1150px] h-[600px] rounded-2xl flex items-center justify-center relative mb-6"
                 style={{
                     backgroundImage: `url(${woodBackground})`,
                     backgroundSize: 'cover',
@@ -31,6 +29,14 @@ function GameExplainer() {
 
                 <GameSlideshow images={game.images}/>
             </div>
+            <OrangeButton
+                type="button"
+                onClick={() => { /* handle play action here */ }}
+                style={{fontSize: '1.8rem', padding: '0.7rem 4rem'}}
+                className="mb-4"
+            >
+                Spelen
+            </OrangeButton>
         </div>
     );
 }
