@@ -72,8 +72,8 @@ function AvatarMovement() {
             })();
 
             animationInterval = setInterval(() => {
-                setFrame((prevFrame) => (prevFrame === frames[0] ? frames[5] : frames[0]));
-            }, 50);
+                setFrame((prevFrame) => (prevFrame === frames[0] ? frames[1] : frames[0]));
+            }, 200);
         }
 
         window.addEventListener("keydown", handleKeyDown);
