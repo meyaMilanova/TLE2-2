@@ -4,6 +4,7 @@ import RegisterScreen from "./RegisterScreen.jsx";
 import LoginScreen from "./LoginScreen.jsx";
 import HomeScreen from "./HomeScreen.jsx";
 import GameExplainer from "./Components/GameExplainer.jsx";
+import AvatarMovement from "./AvatarMovement.jsx";
 
 const router = createBrowserRouter([{
         children: [
@@ -26,6 +27,10 @@ const router = createBrowserRouter([{
             {
                 path: "/game/:id",
                 element: <GameExplainer />
+            },
+            {
+                path: "/avatar",
+                element: <AvatarMovement/>
             }
         ]
     }],
