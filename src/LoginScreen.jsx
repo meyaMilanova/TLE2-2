@@ -18,10 +18,36 @@ function LoginScreen() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert('Registratie verstuurd:\n' + JSON.stringify(form, null, 2));
-    };
+
+        try {
+            const response = await fetch('http://145.24.223.108:8000/user/login', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    voornaam: form.voornaam,
+                    wachtwoord: form.wachtwoord,
+                }),
+            })
+
+            if (response.ok) {
+                const data = await response.json()
+                console.log('Login succesvol:', data)
+                navigate('/hoofdpagina');
+            } else {
+                const errorData = await response.json()
+                console.error('Fout bij inloggen:', errorData)
+                alert('Fout bij inloggen: ' + (errorData.message || errorData.error))
+            }
+        } catch (error) {
+            console.error('Netwerkfout:', error)
+            alert('Netwerkfout: ' + error.message)
+        }
+    }
 
     return (
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
@@ -61,7 +87,7 @@ function LoginScreen() {
 
                 <div className="flex justify-around mt-6">
                     <PinkButton type="button" onClick={() => navigate('/aanmelden')}>AANMELDEN</PinkButton>
-                    <OrangeButton type="submit" onClick={() => navigate('/hoofdpagina')}>START</OrangeButton>
+                    <OrangeButton type="submit">START</OrangeButton>
                 </div>
             </form>
         </div>
