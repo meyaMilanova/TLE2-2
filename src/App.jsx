@@ -3,6 +3,7 @@ import TitleScreen from "./TitleScreen.jsx";
 import RegisterScreen from "./RegisterScreen.jsx";
 import LoginScreen from "./LoginScreen.jsx";
 import HomeScreen from "./HomeScreen.jsx";
+import GameExplainer from "./Components/GameExplainer.jsx";
 
 const router = createBrowserRouter([{
         children: [
@@ -21,6 +22,10 @@ const router = createBrowserRouter([{
             {
                 path: "/hoofdpagina",
                 element: <HomeScreen />
+            },
+            {
+                path: "/game/:id",
+                element: <GameExplainer />
             }
         ]
     }],

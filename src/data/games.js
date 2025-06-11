@@ -1,0 +1,64 @@
+const games = [
+    {
+        id: 1,
+        title: "Afval en sorteren",
+        description: "Leer hoe je afval moet sorteren en waarom dat belangrijk is.",
+        image: "../images/placeholder.jpg",
+        images: [
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+        ],
+    },
+    {
+        id: 2,
+        title: "Speelgoed maken",
+        description: "Maak je eigen speelgoed van gerecycled materiaal.",
+        image: "../images/placeholder.jpg",
+        images: [
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+        ],
+    },
+    {
+        id: 3,
+        title: "Elektrische kat",
+        description: "Leer hoe je energie en water kunt besparen.",
+        image: "../images/placeholder.jpg",
+        images: [
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+        ],
+    },
+    {
+        id: 4,
+        title: "Tuintje",
+        description: "Plant je eigen tuintje en leer over planten en natuur.",
+        image: "../images/placeholder.jpg",
+        images: [
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
+        ],
+    }
+];
+
+export default games;
