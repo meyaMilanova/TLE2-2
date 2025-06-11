@@ -2,8 +2,8 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import BackButton from "./Components/BackButton.jsx";
 import PinkButton from './components/PinkButton';
-import placeholderImg from './assets/placeholder.jpg';
-import woodBackground from './assets/wood.webp';
+import placeholderImg from '../public/images/placeholder.jpg';
+import woodBackground from '../public/images/wood.webp';
 import OrangeButton from "./Components/OrangeButton.jsx";
 
 function HomeScreen() {

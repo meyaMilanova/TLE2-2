@@ -1,10 +1,19 @@
 import BackButton from "./BackButton.jsx";
 import React from "react";
-import woodBackground from "../assets/wood.webp";
+import woodBackground from "../../public/images/wood.webp";
+import GameSlideshow from "./GameSlideshow.jsx";
+import {useParams} from "react-router-dom";
+import games from "../data/games.js";
 
 function GameExplainer() {
+    const { id } = useParams();
+
+    const game = games.find((p) => p.id === parseInt(id));
+
     return (
+
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
+
             <BackButton onClick={() => { /* handle navigation here */ }} />
             <h1 className="text-white text-6xl font-bold mb-8">Uitleg</h1>
             <div
@@ -19,6 +28,8 @@ function GameExplainer() {
                 <div className="absolute top-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
                 <div className="absolute bottom-4 left-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
                 <div className="absolute bottom-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
+
+                <GameSlideshow images={game.images}/>
             </div>
         </div>
     );

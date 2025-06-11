@@ -24,7 +24,7 @@ const router = createBrowserRouter([{
                 element: <HomeScreen />
             },
             {
-                path: "/uitleg",
+                path: "/game/:id",
                 element: <GameExplainer />
             }
         ]
