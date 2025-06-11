@@ -10,10 +10,10 @@ function HomeScreen() {
     const navigate = useNavigate();
 
     const rectangles = [
-        { label: "Afval en sorteren", description: "Leer hoe je afval moet sorteren en waarom dat belangrijk is." },
-        { label: "Speelgoed maken", description: "Maak je eigen speelgoed van gerecycled materiaal." },
-        { label: "Elektrische kat", description: "Leer hoe je energie en water kunt besparen." },
-        { label: "Tuintje", description: "Plant je eigen tuintje en leer over planten en natuur." }
+        { id: 1, label: "Afval en sorteren", description: "Leer hoe je afval moet sorteren en waarom dat belangrijk is." },
+        { id: 2, label: "Speelgoed maken", description: "Maak je eigen speelgoed van gerecycled materiaal." },
+        { id: 3, label: "Elektrische kat", description: "Leer hoe je energie en water kunt besparen." },
+        { id: 4, label: "Tuintje", description: "Plant je eigen tuintje en leer over planten en natuur." }
     ];
 
     return (
@@ -63,7 +63,7 @@ function HomeScreen() {
                                 <p className="mt-2 mb-2 text-base text-black flex-1">{rect.description}</p>
                                 <OrangeButton
                                     type="button"
-                                    onClick={() => navigate('/')}
+                                    onClick={() => navigate(`/game/${rect.id}`)}
                                     style={{fontSize: '1.4rem', padding: '0.7rem 2rem'}}
                                     className="self-end mb-4 mr-3"
                                 >
