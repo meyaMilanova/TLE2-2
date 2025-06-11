@@ -11,6 +11,7 @@ const games = [
             "../images/placeholder.jpg",
             "../images/placeholder.jpg",
             "../images/placeholder.jpg",
+            "../images/placeholder.jpg",
         ],
     }
 ];
