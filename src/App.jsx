@@ -4,6 +4,7 @@ import RegisterScreen from "./RegisterScreen.jsx";
 import LoginScreen from "./LoginScreen.jsx";
 import HomeScreen from "./HomeScreen.jsx";
 import GameExplainer from "./Components/GameExplainer.jsx";
+import WasteSorting from "./WasteSorting.jsx";
 import AvatarMovement from "./AvatarMovement.jsx";
 
 const router = createBrowserRouter([{
@@ -29,19 +30,23 @@ const router = createBrowserRouter([{
                 element: <GameExplainer />
             },
             {
+                path: "/afvalsorteren",
+                element: <WasteSorting />
+            },
+            {
                 path: "/avatar",
                 element: <AvatarMovement/>
             }
         ]
-    }],
-);
+    }
+]);
 
 function App() {
     return (
         <>
             <RouterProvider router={router} />
         </>
-    )
+    );
 }
 
-export default App
+export default App;
