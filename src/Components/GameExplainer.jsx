@@ -1,5 +1,6 @@
 import BackButton from "./BackButton.jsx";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import woodBackground from "../../public/images/wood.webp";
 import GameSlideshow from "./GameSlideshow.jsx";
 import {useParams} from "react-router-dom";
@@ -9,6 +10,16 @@ import OrangeButton from "./OrangeButton.jsx";
 function GameExplainer() {
     const { id } = useParams();
     const game = games.find((p) => p.id === parseInt(id));
+
+    const navigate = useNavigate();
+
+    const handlePlay = () => {
+        if (game.id === 1) {
+            navigate("/afvalsorteren");
+        } else {
+            // handle other games if needed
+        }
+    };
 
     return (
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
@@ -31,7 +42,7 @@ function GameExplainer() {
             </div>
             <OrangeButton
                 type="button"
-                onClick={() => { /* handle play action here */ }}
+                onClick={handlePlay}
                 style={{fontSize: '1.8rem', padding: '0.7rem 4rem'}}
                 className="mb-4"
             >

@@ -6,7 +6,7 @@ function BackButton() {
 
     return (
         <button
-            className="absolute top-6 left-6 bg-orange-500 rounded-full w-16 h-16 flex items-center justify-center text-white text-3xl"
+            className="absolute top-6 left-6 bg-orange-500 rounded-full w-16 h-16 flex items-center justify-center text-white text-3xl z-50"
             onClick={() => navigate(-1)}
             type="button"
         >

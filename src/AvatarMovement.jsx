@@ -87,7 +87,7 @@ function AvatarMovement() {
     }, [currentKey]);
 
     return (
-        <div className="relative w-screen h-screen bg-gray-800 overflow-hidden flex justify-center items-center">
+        <div className="relative w-screen h-screen overflow-hidden flex justify-center items-center">
             <div
                 className="absolute w-[100px] h-[100px] bg-no-repeat bg-cover"
                 style={{
