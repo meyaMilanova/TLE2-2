@@ -51,12 +51,13 @@ function WasteSorting() {
     };
 
     useEffect(() => {
+        if (collectedCount >= 15) return;
         const foundIndex = randomItems.findIndex(item => checkCollision(avatarPos, item));
         if (foundIndex !== -1) {
             setCollectedCount(count => count + 1);
             setRandomItems(items => items.filter((_, idx) => idx !== foundIndex));
         }
-    }, [avatarPos, randomItems]);
+    }, [avatarPos, randomItems, collectedCount]);
 
 
     return (
@@ -75,7 +76,7 @@ function WasteSorting() {
                 fontSize: "1.5rem",
                 zIndex: 1000
             }}>
-                🗑️ {collectedCount}
+                🗑️ {collectedCount}/15
             </div>
             <div className="relative w[100vha] h-[100vh] rounded-xl overflow-hidden">
                 <AvatarMovement onMove={setAvatarPos} />
