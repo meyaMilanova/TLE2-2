@@ -39,7 +39,7 @@ function Results() {
             </motion.div>
 
             <div className="flex gap-8 mt-8">
-                <OrangeButton onClick={() => navigate(0)}>Opnieuw</OrangeButton>
+                <OrangeButton onClick={() => navigate("/afvalsorteren")}>Opnieuw</OrangeButton>
                 <OrangeButton onClick={() => navigate("/hoofdpagina")}>Home</OrangeButton>
             </div>
         </motion.div>
