@@ -1,6 +1,5 @@
 import wasteItems from "./data/waste.js";
 import AvatarMovement from './avatarMovement';
-import BackButton from "./Components/BackButton.jsx";
 import React, { useState, useEffect } from "react";
 import PauseButton from "./Components/PauseButton.jsx";
 
@@ -85,7 +84,7 @@ function WasteSorting() {
     return (
         <div className="waste-sorting bg-green-500 min-h-screen flex flex-col items-center justify-center relative"
              style={{ overflow: "hidden" }}>
-            <BackButton onClick={() => { /* handle navigation here */ }} />
+            <PauseButton onClick={handleBack} />
             {/* Counter in top-right */}
             <div style={{
                 position: "fixed",
@@ -118,9 +117,6 @@ function WasteSorting() {
                     </div>
                 ))}
             </div>
-        <div className="waste-sorting bg-green-500 min-h-screen flex items-center justify-center">
-            <PauseButton onClick={handleBack} />
-            <AvatarMovement />
         </div>
     );
 }
