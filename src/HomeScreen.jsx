@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import BackButton from "./Components/BackButton.jsx";
 import placeholderImg from '../public/images/placeholder.jpg';
 import woodBackground from '../public/images/wood.webp';
@@ -10,9 +11,20 @@ function HomeScreen() {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
+        <motion.div
+            className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden"
+            style={{ backgroundColor: '#14532d' }} // fallback for bg-green-900
+            animate={{ opacity: 1, y: 0 }}
+        >
             <BackButton onClick={() => navigate(-1)} />
-            <h1 className="text-white text-6xl font-bold mb-8">Hoi [Jouw Naam]!</h1>
+            <motion.h1
+                className="text-white text-6xl font-bold mb-8"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+            >
+                Hoi [Jouw Naam]!
+            </motion.h1>
 
             <div
                 className="w-[1150px] h-[600px] rounded-2xl flex items-center justify-center relative"
@@ -22,15 +34,15 @@ function HomeScreen() {
                     backgroundPosition: 'center'
                 }}
             >
-                {/* Decoratieve hoeken */}
+                {/* Decorative corners */}
                 <div className="absolute top-4 left-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
                 <div className="absolute top-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
                 <div className="absolute bottom-4 left-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
                 <div className="absolute bottom-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
 
                 <div className="grid grid-cols-2 grid-rows-2 w-[1100px] h-[550px] gap-8 p-6">
-                    {games.map((rectangle) => (
-                        <div
+                    {games.map((rectangle, idx) => (
+                        <motion.div
                             key={rectangle.id}
                             className="flex flex-row items-center justify-center rounded border-2 text-2xl w-full h-full relative"
                             style={{
@@ -38,8 +50,12 @@ function HomeScreen() {
                                 boxShadow: '0 8px 24px rgba(60, 30, 10, 0.25), 0 2px 4px rgba(60, 30, 10, 0.15)',
                                 border: '3px solid #b48a78'
                             }}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.4 + idx * 0.15, duration: 0.5 }}
+                            whileHover={{ scale: 1.04, boxShadow: '0 12px 32px rgba(60,30,10,0.35)' }}
                         >
-                            {/* Kleine decoratie bolletjes */}
+                            {/* Small decorative dots */}
                             <div className="absolute top-2 left-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
                             <div className="absolute top-2 right-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
 
@@ -59,11 +75,11 @@ function HomeScreen() {
                                     Start
                                 </OrangeButton>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 

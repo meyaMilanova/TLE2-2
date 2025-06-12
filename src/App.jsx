@@ -5,6 +5,8 @@ import LoginScreen from "./LoginScreen.jsx";
 import HomeScreen from "./HomeScreen.jsx";
 import GameExplainer from "./Components/GameExplainer.jsx";
 import PauseMenu from "./PauseMenu.jsx";
+import WasteSorting from "./WasteSorting.jsx";
+import AvatarMovement from "./AvatarMovement.jsx";
 
 const router = createBrowserRouter([{
         children: [
@@ -31,17 +33,25 @@ const router = createBrowserRouter([{
             {
                 path: "/pauze",
                 element: <PauseMenu />
+            },
+            {
+                path: "/afvalsorteren",
+                element: <WasteSorting />
+            },
+            {
+                path: "/avatar",
+                element: <AvatarMovement/>
             }
         ]
-    }],
-);
+    }
+]);
 
 function App() {
     return (
         <>
             <RouterProvider router={router} />
         </>
-    )
+    );
 }
 
-export default App
+export default App;
