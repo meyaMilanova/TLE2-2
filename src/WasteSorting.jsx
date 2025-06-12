@@ -5,13 +5,14 @@ import React, { useState, useEffect } from "react";
 
 function WasteSorting() {
     const [randomItems, setRandomItems] = useState([]);
-    const [avatarPos, setAvatarPos] = useState({ left: 50, top: 50 }); // Initial avatar position
+    const [avatarPos, setAvatarPos] = useState({ left: 50, top: 50 });
+    const [collectedCount, setCollectedCount] = useState(0);
 
     useEffect(() => {
         const getRandomWasteItems = () => {
             const items = [];
-            const rows = 3;
-            const cols = 5;
+            const rows = 5;
+            const cols = 6;
             const cellWidth = 100 / cols;
             const cellHeight = 100 / rows;
             const usedIndexes = new Set();
@@ -40,27 +41,42 @@ function WasteSorting() {
         setRandomItems(getRandomWasteItems());
     }, []);
 
-    // Collision check: simple bounding box overlap
     const checkCollision = (avatar, item) => {
-        const avatarSize = 10; // percent, adjust as needed
-        const itemSize = 10;   // percent, adjust as needed
+        const avatarSize = 10;
+        const itemSize = 10;
         return (
             Math.abs(avatar.left - item.left) < (avatarSize + itemSize) / 2 &&
             Math.abs(avatar.top - item.top) < (avatarSize + itemSize) / 2
         );
     };
 
-    // Remove items on collision
     useEffect(() => {
-        setRandomItems(items =>
-            items.filter(item => !checkCollision(avatarPos, item))
-        );
-    }, [avatarPos]);
+        const foundIndex = randomItems.findIndex(item => checkCollision(avatarPos, item));
+        if (foundIndex !== -1) {
+            setCollectedCount(count => count + 1);
+            setRandomItems(items => items.filter((_, idx) => idx !== foundIndex));
+        }
+    }, [avatarPos, randomItems]);
+
 
     return (
         <div className="waste-sorting bg-green-500 min-h-screen flex flex-col items-center justify-center relative"
              style={{overflow: "hidden"}}>
             <BackButton onClick={() => { /* handle navigation here */ }}/>
+            {/* Counter in top-right */}
+            <div style={{
+                position: "fixed",
+                top: 20,
+                right: 30,
+                background: "rgba(255,255,255,0.9)",
+                borderRadius: "1rem",
+                padding: "0.5rem 1.2rem",
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                zIndex: 1000
+            }}>
+                🗑️ {collectedCount}
+            </div>
             <div className="relative w[100vha] h-[100vh] rounded-xl overflow-hidden">
                 <AvatarMovement onMove={setAvatarPos} />
                 {randomItems.map((item, index) => (
