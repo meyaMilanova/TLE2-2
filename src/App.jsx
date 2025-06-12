@@ -6,8 +6,10 @@ import HomeScreen from "./HomeScreen.jsx";
 import GameExplainer from "./Components/GameExplainer.jsx";
 import WasteSorting from "./WasteSorting.jsx";
 import AvatarMovement from "./AvatarMovement.jsx";
+import Results from "./Results.jsx";
 
-const router = createBrowserRouter([{
+const router = createBrowserRouter([
+    {
         children: [
             {
                 path: "/",
@@ -35,7 +37,11 @@ const router = createBrowserRouter([{
             },
             {
                 path: "/avatar",
-                element: <AvatarMovement/>
+                element: <AvatarMovement />
+            },
+            {
+                path: "/resultaten",
+                element: <Results />
             }
         ]
     }
