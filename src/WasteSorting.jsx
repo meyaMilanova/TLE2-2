@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 
 function WasteSorting() {
     const [randomItems, setRandomItems] = useState([]);
+    const [avatarPos, setAvatarPos] = useState({ left: 50, top: 50 }); // Initial avatar position
 
     useEffect(() => {
         const getRandomWasteItems = () => {
@@ -12,7 +13,7 @@ function WasteSorting() {
             const rows = 3;
             const cols = 5;
             const cellWidth = 100 / cols;
-            const cellHeight = 100 / rows; // Use 100% for the area, since the container is 80vh tall
+            const cellHeight = 100 / rows;
             const usedIndexes = new Set();
 
             for (let i = 0; i < rows * cols; i++) {
@@ -24,7 +25,6 @@ function WasteSorting() {
 
                 const row = Math.floor(i / cols);
                 const col = i % cols;
-                // Add small random offset within each cell
                 const left = col * cellWidth + Math.random() * (cellWidth * 0.7);
                 const top = row * cellHeight + Math.random() * (cellHeight * 0.7);
 
@@ -40,13 +40,29 @@ function WasteSorting() {
         setRandomItems(getRandomWasteItems());
     }, []);
 
+    // Collision check: simple bounding box overlap
+    const checkCollision = (avatar, item) => {
+        const avatarSize = 10; // percent, adjust as needed
+        const itemSize = 10;   // percent, adjust as needed
+        return (
+            Math.abs(avatar.left - item.left) < (avatarSize + itemSize) / 2 &&
+            Math.abs(avatar.top - item.top) < (avatarSize + itemSize) / 2
+        );
+    };
+
+    // Remove items on collision
+    useEffect(() => {
+        setRandomItems(items =>
+            items.filter(item => !checkCollision(avatarPos, item))
+        );
+    }, [avatarPos]);
+
     return (
         <div className="waste-sorting bg-green-500 min-h-screen flex flex-col items-center justify-center relative"
              style={{overflow: "hidden"}}>
-            <BackButton onClick={() => { /* handle navigation here */
-            }}/>
-            <div className="relative w[100vh] h-[100vh] rounded-xl overflow-hidden">
-                <AvatarMovement/>
+            <BackButton onClick={() => { /* handle navigation here */ }}/>
+            <div className="relative w[100vha] h-[100vh] rounded-xl overflow-hidden">
+                <AvatarMovement onMove={setAvatarPos} />
                 {randomItems.map((item, index) => (
                     <div
                         key={index}
