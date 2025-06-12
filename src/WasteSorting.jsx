@@ -63,7 +63,8 @@ function WasteSorting() {
     return (
         <div className="waste-sorting bg-green-500 min-h-screen flex flex-col items-center justify-center relative"
              style={{overflow: "hidden"}}>
-            <BackButton onClick={() => { /* handle navigation here */ }}/>
+            <BackButton onClick={() => { /* handle navigation here */
+            }}/>
             {/* Counter in top-right */}
             <div style={{
                 position: "fixed",
@@ -74,12 +75,14 @@ function WasteSorting() {
                 padding: "0.5rem 1.2rem",
                 fontWeight: "bold",
                 fontSize: "1.5rem",
-                zIndex: 1000
+                zIndex: 1000,
+                color: collectedCount >= 15 ? "red" : "black",   // <-- kleur afhankelijk van count
+                border: collectedCount >= 15 ? "2px solid red" : "none" // optioneel rode border
             }}>
                 🗑️ {collectedCount}/15
             </div>
             <div className="relative w[100vha] h-[100vh] rounded-xl overflow-hidden">
-                <AvatarMovement onMove={setAvatarPos} />
+                <AvatarMovement onMove={setAvatarPos}/>
                 {randomItems.map((item, index) => (
                     <div
                         key={index}
