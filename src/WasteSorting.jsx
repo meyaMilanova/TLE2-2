@@ -7,6 +7,14 @@ function WasteSorting() {
     const [randomItems, setRandomItems] = useState([]);
     const [avatarPos, setAvatarPos] = useState({ left: 50, top: 50 });
     const [collectedCount, setCollectedCount] = useState(0);
+    const [collectedItems, setCollectedItems] = useState([]);
+
+    // Clear localStorage on component mount (start of game)
+    useEffect(() => {
+        localStorage.removeItem("collectedItems");
+        setCollectedItems([]);
+        setCollectedCount(0);
+    }, []);
 
     useEffect(() => {
         const getRandomWasteItems = () => {
@@ -51,20 +59,27 @@ function WasteSorting() {
     };
 
     useEffect(() => {
-        if (collectedCount >= 15) return;
+        if (collectedCount >= 15) return; // Cap
+
         const foundIndex = randomItems.findIndex(item => checkCollision(avatarPos, item));
         if (foundIndex !== -1) {
+            const foundItem = randomItems[foundIndex];
             setCollectedCount(count => count + 1);
+
+            setCollectedItems(items => {
+                const newCollected = [...items, foundItem];
+                localStorage.setItem("collectedItems", JSON.stringify(newCollected));
+                return newCollected;
+            });
+
             setRandomItems(items => items.filter((_, idx) => idx !== foundIndex));
         }
     }, [avatarPos, randomItems, collectedCount]);
 
-
     return (
         <div className="waste-sorting bg-green-500 min-h-screen flex flex-col items-center justify-center relative"
-             style={{overflow: "hidden"}}>
-            <BackButton onClick={() => { /* handle navigation here */
-            }}/>
+             style={{ overflow: "hidden" }}>
+            <BackButton onClick={() => { /* handle navigation here */ }} />
             {/* Counter in top-right */}
             <div style={{
                 position: "fixed",
@@ -76,13 +91,13 @@ function WasteSorting() {
                 fontWeight: "bold",
                 fontSize: "1.5rem",
                 zIndex: 1000,
-                color: collectedCount >= 15 ? "red" : "black",   // <-- kleur afhankelijk van count
-                border: collectedCount >= 15 ? "2px solid red" : "none" // optioneel rode border
+                color: collectedCount >= 15 ? "red" : "black",
+                border: collectedCount >= 15 ? "2px solid red" : "none",
             }}>
                 🗑️ {collectedCount}/15
             </div>
-            <div className="relative w[100vha] h-[100vh] rounded-xl overflow-hidden">
-                <AvatarMovement onMove={setAvatarPos}/>
+            <div className="relative w-[100vw] h-[100vh] rounded-xl overflow-hidden">
+                <AvatarMovement onMove={setAvatarPos} />
                 {randomItems.map((item, index) => (
                     <div
                         key={index}
@@ -93,7 +108,7 @@ function WasteSorting() {
                             transform: "translate(-50%, -50%)"
                         }}
                     >
-                        <img src={item.image} alt={item.name} className="w-20 h-20 object-contain"/>
+                        <img src={item.image} alt={item.name} className="w-20 h-20 object-contain" />
                     </div>
                 ))}
             </div>
