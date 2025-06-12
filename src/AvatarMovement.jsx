@@ -123,6 +123,7 @@ function AvatarMovement() {
                     left: position.left,
                     backgroundImage: "url('src/assets/images/avatars/pink-hair-avatar.png')",
                     backgroundPosition: `-${frame * 100}px 0`,
+                    zIndex: 10
                 }}
             ></div>
         </div>
