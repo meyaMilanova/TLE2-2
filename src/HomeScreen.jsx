@@ -6,6 +6,7 @@ import placeholderImg from '../public/images/placeholder.jpg';
 import woodBackground from '../public/images/wood.webp';
 import OrangeButton from "./Components/OrangeButton.jsx";
 import games from "./data/games.js";
+import funFact from "./Components/FunFact.jsx";
 
 function HomeScreen() {
     const navigate = useNavigate();
@@ -25,6 +26,9 @@ function HomeScreen() {
             >
                 Hoi [Jouw Naam]!
             </motion.h1>
+            <section>
+                <p>{funFact}</p>
+            </section>
 
             <div
                 className="w-[1150px] h-[600px] rounded-2xl flex items-center justify-center relative"
