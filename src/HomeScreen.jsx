@@ -17,17 +17,26 @@ function HomeScreen() {
             animate={{ opacity: 1, y: 0 }}
         >
             <BackButton onClick={() => navigate(-1)} />
-            <motion.h1
-                className="text-white text-6xl font-bold mb-8"
+            <motion.div
+                style={{ backgroundColor: '#72AC43' }}
+                className="flex items-center p-5 rounded-xl mb-5"
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
             >
-                Hoi [Jouw Naam]!
-            </motion.h1>
-            <section>
-                <p>{funFact}</p>
-            </section>
+                <motion.p
+                    className="text-white text-2xl mr-4"
+                >
+                    feitje van de dag:
+                </motion.p>
+
+                <motion.h1
+                    className="text-black text-1.5xl"
+
+                >
+                    {funFact}
+                </motion.h1>
+            </motion.div>
 
             <div
                 className="w-[1150px] h-[600px] rounded-2xl flex items-center justify-center relative"
