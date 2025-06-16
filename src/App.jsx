@@ -8,9 +8,9 @@ import WasteSorting from "./WasteSorting.jsx";
 import AvatarMovement from "./AvatarMovement.jsx";
 import Sorting from "./Sorting.jsx";
 import ToyCreation from "./ToyCreation.jsx"; // ✅ Import the new component
+import Results from "./Results.jsx";
 
-const router = createBrowserRouter([
-    {
+const router = createBrowserRouter([{
         children: [
             {
                 path: "/",
@@ -38,11 +38,15 @@ const router = createBrowserRouter([
             },
             {
                 path: "/avatar",
-                element: <AvatarMovement />
+                element: <AvatarMovement/>
             },
             {
                 path: "/sorting",
-                element: <Sorting />
+                element: <Sorting/>
+            },
+            {
+                path: "/resultaten",
+                element: <Results/>
             },
             {
                 path: "/speelgoedmaken",
