@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import BackButton from "./Components/BackButton.jsx";
@@ -6,8 +6,14 @@ import woodBackground from '../public/images/wood.webp';
 import OrangeButton from "./Components/OrangeButton.jsx";
 import games from "./data/games.js";
 
+
 function HomeScreen() {
     const navigate = useNavigate();
+    const [voornaam, setVoornaam] = useState('Gebruiker')
+
+    useEffect(() => {
+        setVoornaam (JSON.parse(localStorage.getItem('userData'))?.voornaam || 'Gebruiker')
+    }, []);
 
     return (
         <motion.div
@@ -22,7 +28,7 @@ function HomeScreen() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
             >
-                Hoi [Jouw Naam]!
+                Hoi {voornaam}!
             </motion.h1>
 
             <div
