@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import BackButton from "./Components/BackButton.jsx";
@@ -7,45 +7,40 @@ import OrangeButton from "./Components/OrangeButton.jsx";
 import games from "./data/games.js";
 import funFact from "./Components/FunFact.jsx";
 
-
 function HomeScreen() {
     const navigate = useNavigate();
-    const [voornaam, setVoornaam] = useState('Gebruiker')
+    const [voornaam, setVoornaam] = useState('Gebruiker');
 
     useEffect(() => {
-        setVoornaam (JSON.parse(localStorage.getItem('userData'))?.voornaam || 'Gebruiker')
+        setVoornaam(JSON.parse(localStorage.getItem('userData'))?.voornaam || 'Gebruiker');
     }, []);
 
     return (
         <motion.div
             className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden"
-            style={{ backgroundColor: '#14532d' }} // fallback for bg-green-900
-            animate={{ opacity: 1, y: 0 }}
+            style={{backgroundColor: '#14532d'}}
+            animate={{opacity: 1, y: 0}}
         >
-            <BackButton onClick={() => navigate(-1)} />
+            <BackButton onClick={() => navigate(-1)}/>
+
+            <h1 className="text-white text-4xl mb-5">
+                Hoi {voornaam}!
+            </h1>
+
             <motion.div
-                style={{ backgroundColor: '#72AC43' }}
+                style={{backgroundColor: '#72AC43'}}
                 className="flex items-center p-5 rounded-xl mb-5"
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
+                initial={{scale: 0.8, opacity: 0}}
+                animate={{scale: 1, opacity: 1}}
+                transition={{delay: 0.2, duration: 0.5}}
             >
-                <motion.p
-                    className="text-white text-2xl mr-4"
-                >
+                <motion.p className="text-white text-2xl mr-4">
                     feitje van de dag:
                 </motion.p>
-
-                <motion.h1
-                    className="text-black text-1.5xl"
-
-                >
+                <motion.h1 className="text-black text-1.5xl">
                     {funFact}
                 </motion.h1>
             </motion.div>
-                Hoi {voornaam}!
-            </motion.h1>
-
             <div
                 className="w-[1150px] h-[600px] rounded-2xl flex items-center justify-center relative"
                 style={{
@@ -55,10 +50,14 @@ function HomeScreen() {
                 }}
             >
                 {/* Decorative corners */}
-                <div className="absolute top-4 left-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
-                <div className="absolute top-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
-                <div className="absolute bottom-4 left-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
-                <div className="absolute bottom-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
+                <div
+                    className="absolute top-4 left-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
+                <div
+                    className="absolute top-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
+                <div
+                    className="absolute bottom-4 left-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
+                <div
+                    className="absolute bottom-4 right-4 w-5 h-5 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md z-10"></div>
 
                 <div className="grid grid-cols-2 grid-rows-2 w-[1100px] h-[550px] gap-8 p-6">
                     {games.map((rectangle, idx) => (
@@ -85,7 +84,6 @@ function HomeScreen() {
                                 <img src={rectangle.image} alt={rectangle.title}
                                      className="w-full h-full object-cover"/>
                             </div>
-
 
                             <div className="flex flex-col items-start w-2/3 h-full pl-4 pr-2">
                                 <span className="text-4xl mt-8" style={{color: '#632713'}}>{rectangle.title}</span>
