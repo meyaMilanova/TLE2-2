@@ -2,6 +2,36 @@ import wasteItems from "./data/waste.js";
 import AvatarMovement from './avatarMovement';
 import React, { useState, useEffect } from "react";
 import PauseButton from "./Components/PauseButton.jsx";
+import { useNavigate } from "react-router-dom";
+
+const getRandomWasteItems = () => {
+    const items = [];
+    const rows = 4;
+    const cols = 5;
+    const cellWidth = 100 / cols;
+    const cellHeight = 100 / rows;
+    const usedIndexes = new Set();
+
+    for (let i = 0; i < rows * cols; i++) {
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * wasteItems.length);
+        } while (usedIndexes.has(randomIndex) && usedIndexes.size < wasteItems.length);
+        usedIndexes.add(randomIndex);
+
+        const row = Math.floor(i / cols);
+        const col = i % cols;
+        const left = col * cellWidth + Math.random() * (cellWidth * 0.7);
+        const top = row * cellHeight + Math.random() * (cellHeight * 0.7);
+
+        items.push({
+            ...wasteItems[randomIndex],
+            left,
+            top
+        });
+    }
+    return items;
+};
 
 function WasteSorting() {
     const [randomItems, setRandomItems] = useState([]);
@@ -9,44 +39,46 @@ function WasteSorting() {
     const [collectedCount, setCollectedCount] = useState(0);
     const [collectedItems, setCollectedItems] = useState([]);
 
+    const navigate = useNavigate();
+
+    const updateGameData = (updatedData) => {
+        const currentData = JSON.parse(localStorage.getItem("gameDataWasteSorting")) || {};
+        const newData = { ...currentData, ...updatedData };
+        localStorage.setItem("gameDataWasteSorting", JSON.stringify(newData));
+    };
+
+    const handleMove = (newPos) => {
+        setAvatarPos(newPos);
+        const currentData = JSON.parse(localStorage.getItem("gameDataWasteSorting")) || {};
+        const updatedData = {
+            ...currentData,
+            avatarPos: newPos,
+        };
+        localStorage.setItem("gameDataWasteSorting", JSON.stringify(updatedData));
+    };
+
     // Clear localStorage on component mount (start of game)
     useEffect(() => {
-        localStorage.removeItem("collectedItems");
-        setCollectedItems([]);
-        setCollectedCount(0);
-    }, []);
-
-    useEffect(() => {
-        const getRandomWasteItems = () => {
-            const items = [];
-            const rows = 4;
-            const cols = 5;
-            const cellWidth = 100 / cols;
-            const cellHeight = 100 / rows;
-            const usedIndexes = new Set();
-
-            for (let i = 0; i < rows * cols; i++) {
-                let randomIndex;
-                do {
-                    randomIndex = Math.floor(Math.random() * wasteItems.length);
-                } while (usedIndexes.has(randomIndex) && usedIndexes.size < wasteItems.length);
-                usedIndexes.add(randomIndex);
-
-                const row = Math.floor(i / cols);
-                const col = i % cols;
-                const left = col * cellWidth + Math.random() * (cellWidth * 0.7);
-                const top = row * cellHeight + Math.random() * (cellHeight * 0.7);
-
-                items.push({
-                    ...wasteItems[randomIndex],
-                    left,
-                    top
-                });
+        const savedData = JSON.parse(localStorage.getItem("gameDataWasteSorting"));
+        if (savedData) {
+            setCollectedItems(savedData.collectedItems || []);
+            setCollectedCount(savedData.collectedCount || 0);
+            if (savedData.avatarPos && typeof savedData.avatarPos.left === 'number' && typeof savedData.avatarPos.top === 'number') {
+                setAvatarPos(savedData.avatarPos);
+            } else {
+                setAvatarPos({ left: 50, top: 50 });
             }
-            return items;
-        };
-
-        setRandomItems(getRandomWasteItems());
+            setRandomItems(savedData.randomItems || getRandomWasteItems());
+        } else {
+            const items = getRandomWasteItems();
+            setRandomItems(items);
+            updateGameData({
+                collectedItems: [],
+                collectedCount: 0,
+                avatarPos: { left: 50, top: 50 },
+                randomItems: items
+            });
+        }
     }, []);
 
     const checkCollision = (avatar, item) => {
@@ -64,21 +96,37 @@ function WasteSorting() {
         const foundIndex = randomItems.findIndex(item => checkCollision(avatarPos, item));
         if (foundIndex !== -1) {
             const foundItem = randomItems[foundIndex];
-            setCollectedCount(count => count + 1);
+            const newCollectedCount = collectedCount + 1;
+            const newCollectedItems = [...collectedItems, foundItem];
+            const newRandomItems = randomItems.filter((_, idx) => idx !== foundIndex);
 
-            setCollectedItems(items => {
-                const newCollected = [...items, foundItem];
-                localStorage.setItem("collectedItems", JSON.stringify(newCollected));
-                return newCollected;
+            setCollectedCount(newCollectedCount);
+            setCollectedItems(newCollectedItems);
+            setRandomItems(newRandomItems);
+
+            updateGameData({
+                collectedItems: newCollectedItems,
+                collectedCount: newCollectedCount,
+                avatarPos,
+                randomItems: newRandomItems
             });
-
-            setRandomItems(items => items.filter((_, idx) => idx !== foundIndex));
         }
     }, [avatarPos, randomItems, collectedCount]);
 
+    const saveGame = () => {
+        const gameData  = {
+            collectedItems,
+            collectedCount,
+            avatarPos,
+            randomItems
+        };
+        localStorage.setItem("gameDataWasteSorting", JSON.stringify(gameData));
+    }
+
 
     const handleBack = () => {
-        // localStorage opslaan wat er in de game is gebeurt;
+        saveGame();
+        navigate('/pauze', { state: { gameKey: 'gameDataWasteSorting' } });
     };
 
     return (
@@ -109,7 +157,7 @@ function WasteSorting() {
                 🗑️ {collectedCount}/15
             </div>
             <div className="relative w-[100vw] h-[100vh] rounded-xl overflow-hidden">
-                <AvatarMovement onMove={setAvatarPos} />
+                <AvatarMovement position={avatarPos} onMove={handleMove} />
                 {randomItems.map((item, index) => (
                     <div
                         key={index}

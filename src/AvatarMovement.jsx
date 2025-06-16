@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
-function AvatarMovement({ onMove }) {
-    const [position, setPosition] = useState({ top: 50, left: 50 }); // numbers, not strings
+function AvatarMovement({ position, onMove }) {
+    const [pos, setPos] = useState(position || { top: 50, left: 50 }); // numbers, not strings
     const [frame, setFrame] = useState(0);
     const [currentKey, setCurrentKey] = useState(null);
     const pressedKeysRef = useRef(new Set());
@@ -14,6 +14,16 @@ function AvatarMovement({ onMove }) {
         left: [5, 6],
         up: [7, 8],
     };
+
+    useEffect(() => {
+        if (
+            position &&
+            (position.top !== pos.top || pos.left !== pos.left)
+        ) {
+            setPos(position);
+        }
+    }, [position]);
+
 
     const handleKeyDown = (event) => {
         const key = event.key;
@@ -41,7 +51,7 @@ function AvatarMovement({ onMove }) {
     useEffect(() => {
         const move = () => {
             if (currentKey) {
-                setPosition((prevPosition) => {
+                setPos((prevPosition) => {
                     let { top, left } = prevPosition;
                     const step = 0.5;
 
