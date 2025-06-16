@@ -8,6 +8,7 @@ import WasteSorting from "./WasteSorting.jsx";
 import AvatarMovement from "./AvatarMovement.jsx";
 import Sorting from "./Sorting.jsx";
 import Profiel from "./Profiel.jsx";
+import Results from "./Results.jsx";
 
 const router = createBrowserRouter([{
         children: [
@@ -46,6 +47,10 @@ const router = createBrowserRouter([{
             {
                 path: "/profiel",
                 element: <Profiel/>
+            },
+            {
+                path: "/resultaten",
+                element: <Results/>
             }
         ]
     }
