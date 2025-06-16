@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
-function AvatarMovement() {
-    const [position, setPosition] = useState({ top: "50%", left: "50%" });
+function AvatarMovement({ onMove }) {
+    const [position, setPosition] = useState({ top: 50, left: 50 }); // numbers, not strings
     const [frame, setFrame] = useState(0);
     const [currentKey, setCurrentKey] = useState(null);
     const pressedKeysRef = useRef(new Set());
@@ -30,7 +30,7 @@ function AvatarMovement() {
         if (key === currentKey) {
             const remainingKeys = Array.from(pressedKeysRef.current);
             if (remainingKeys.length > 0) {
-                setCurrentKey(remainingKeys[remainingKeys.length - 1]); 
+                setCurrentKey(remainingKeys[remainingKeys.length - 1]);
             } else {
                 setCurrentKey(null);
                 setFrame(spriteFrames.stand);
@@ -48,23 +48,25 @@ function AvatarMovement() {
                     switch (currentKey) {
                         case "ArrowUp":
                         case "w":
-                            top = `${Math.max(0, parseFloat(top) - step)}%`;
+                            top = Math.max(0, top - step);
                             break;
                         case "ArrowDown":
                         case "s":
-                            top = `${Math.min(90, parseFloat(top) + step)}%`;
+                            top = Math.min(90, top + step);
                             break;
                         case "ArrowLeft":
                         case "a":
-                            left = `${Math.max(0, parseFloat(left) - step)}%`;
+                            left = Math.max(0, left - step);
                             break;
                         case "ArrowRight":
                         case "d":
-                            left = `${Math.min(90, parseFloat(left) + step)}%`;
+                            left = Math.min(90, left + step);
                             break;
                         default:
                             break;
                     }
+                    // Call onMove with numeric values
+                    if (onMove) onMove({ left, top });
                     return { top, left };
                 });
             }
@@ -73,7 +75,7 @@ function AvatarMovement() {
 
         requestRef.current = requestAnimationFrame(move);
         return () => cancelAnimationFrame(requestRef.current);
-    }, [currentKey]);
+    }, [currentKey, onMove]);
 
     useEffect(() => {
         let animationInterval;
@@ -119,10 +121,11 @@ function AvatarMovement() {
             <div
                 className="absolute w-[100px] h-[100px] bg-no-repeat bg-cover"
                 style={{
-                    top: position.top,
-                    left: position.left,
+                    top: `${position.top}%`,
+                    left: `${position.left}%`,
                     backgroundImage: "url('src/assets/images/avatars/pink-hair-avatar.png')",
                     backgroundPosition: `-${frame * 100}px 0`,
+                    zIndex: 10
                 }}
             ></div>
         </div>
