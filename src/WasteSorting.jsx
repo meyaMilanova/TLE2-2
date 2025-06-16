@@ -10,7 +10,6 @@ function WasteSorting() {
     const [collectedItems, setCollectedItems] = useState([]);
     const [showOverview, setShowOverview] = useState(false);
 
-    // Clear localStorage on component mount (start of game)
     useEffect(() => {
         localStorage.removeItem("collectedItems");
         setCollectedItems([]);
@@ -60,7 +59,7 @@ function WasteSorting() {
     };
 
     useEffect(() => {
-        if (collectedCount >= 15) return; // Cap
+        if (collectedCount >= 15) return;
 
         const foundIndex = randomItems.findIndex(item => checkCollision(avatarPos, item));
         if (foundIndex !== -1) {
@@ -99,8 +98,7 @@ function WasteSorting() {
                 backgroundPosition: "center",
             }}
         >
-            <BackButton onClick={() => { /* handle navigation here */ }} />
-            {/* Counter in top-right */}
+            <BackButton onClick={() => { }} />
             <div style={{
                 position: "fixed",
                 top: 20,
@@ -118,7 +116,7 @@ function WasteSorting() {
             </div>
             <button
                 onClick={() => setShowOverview(true)}
-                className="fixed top-20 left-6 bg-white text-black font-semibold py-2 px-4 rounded-lg shadow-md z-50"
+                className="fixed top-20 right-6 bg-white text-black font-semibold py-2 px-4 rounded-lg shadow-md z-50"
             >
                 Bekijk Gevonden Afval
             </button>
