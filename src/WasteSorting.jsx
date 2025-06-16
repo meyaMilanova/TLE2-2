@@ -1,5 +1,6 @@
 import wasteItems from "./data/waste.js";
 import AvatarMovement from './avatarMovement';
+import BackButton from "./Components/BackButton.jsx";
 import React, { useState, useEffect } from "react";
 import PauseButton from "./Components/PauseButton.jsx";
 
@@ -19,8 +20,8 @@ function WasteSorting() {
     useEffect(() => {
         const getRandomWasteItems = () => {
             const items = [];
-            const rows = 5;
-            const cols = 6;
+            const rows = 4;
+            const cols = 5;
             const cellWidth = 100 / cols;
             const cellHeight = 100 / rows;
             const usedIndexes = new Set();
@@ -82,6 +83,16 @@ function WasteSorting() {
     };
 
     return (
+        <div
+            className="waste-sorting min-h-screen flex flex-col items-center justify-center relative"
+            style={{
+                overflow: "hidden",
+                backgroundImage: "url('../backgrounds/map.png')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }}
+        >
+            <BackButton onClick={() => { /* handle navigation here */ }} />
         <div className="waste-sorting bg-green-500 min-h-screen flex flex-col items-center justify-center relative"
              style={{ overflow: "hidden" }}>
             <PauseButton onClick={handleBack} />
