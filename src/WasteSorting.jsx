@@ -19,8 +19,8 @@ function WasteSorting() {
     useEffect(() => {
         const getRandomWasteItems = () => {
             const items = [];
-            const rows = 5;
-            const cols = 6;
+            const rows = 4;
+            const cols = 5;
             const cellWidth = 100 / cols;
             const cellHeight = 100 / rows;
             const usedIndexes = new Set();
@@ -77,8 +77,15 @@ function WasteSorting() {
     }, [avatarPos, randomItems, collectedCount]);
 
     return (
-        <div className="waste-sorting bg-green-500 min-h-screen flex flex-col items-center justify-center relative"
-             style={{ overflow: "hidden" }}>
+        <div
+            className="waste-sorting min-h-screen flex flex-col items-center justify-center relative"
+            style={{
+                overflow: "hidden",
+                backgroundImage: "url('../backgrounds/map.png')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }}
+        >
             <BackButton onClick={() => { /* handle navigation here */ }} />
             {/* Counter in top-right */}
             <div style={{
