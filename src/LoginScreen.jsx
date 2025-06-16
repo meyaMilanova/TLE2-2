@@ -37,7 +37,13 @@ function LoginScreen() {
             if (response.ok) {
                 const data = await response.json()
                 console.log('Login succesvol:', data)
+
+                if (!localStorage.getItem('userData')) {
+                    localStorage.setItem('userData', JSON.stringify(data.user))
+                }
+
                 navigate('/hoofdpagina');
+
             } else {
                 const errorData = await response.json()
                 console.error('Fout bij inloggen:', errorData)
