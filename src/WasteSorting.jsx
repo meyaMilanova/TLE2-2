@@ -8,8 +8,8 @@ function WasteSorting() {
     const [avatarPos, setAvatarPos] = useState({ left: 50, top: 50 });
     const [collectedCount, setCollectedCount] = useState(0);
     const [collectedItems, setCollectedItems] = useState([]);
+    const [showOverview, setShowOverview] = useState(false);
 
-    // Clear localStorage on component mount (start of game)
     useEffect(() => {
         localStorage.removeItem("collectedItems");
         setCollectedItems([]);
@@ -59,7 +59,7 @@ function WasteSorting() {
     };
 
     useEffect(() => {
-        if (collectedCount >= 15) return; // Cap
+        if (collectedCount >= 15) return;
 
         const foundIndex = randomItems.findIndex(item => checkCollision(avatarPos, item));
         if (foundIndex !== -1) {
@@ -76,6 +76,18 @@ function WasteSorting() {
         }
     }, [avatarPos, randomItems, collectedCount]);
 
+    const getGroupedItems = () => {
+        const grouped = {};
+        collectedItems.forEach((item) => {
+            const key = item.name || "Onbekend";
+            if (!grouped[key]) {
+                grouped[key] = { count: 0, image: item.image };
+            }
+            grouped[key].count += 1;
+        });
+        return grouped;
+    };
+
     return (
         <div
             className="waste-sorting min-h-screen flex flex-col items-center justify-center relative"
@@ -86,8 +98,7 @@ function WasteSorting() {
                 backgroundPosition: "center",
             }}
         >
-            <BackButton onClick={() => { /* handle navigation here */ }} />
-            {/* Counter in top-right */}
+            <BackButton onClick={() => { }} />
             <div style={{
                 position: "fixed",
                 top: 20,
@@ -103,6 +114,33 @@ function WasteSorting() {
             }}>
                 🗑️ {collectedCount}/15
             </div>
+            <button
+                onClick={() => setShowOverview(true)}
+                className="fixed top-20 right-6 bg-white text-black font-semibold py-2 px-4 rounded-lg shadow-md z-50"
+            >
+                Bekijk Gevonden Afval
+            </button>
+            {showOverview && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 w-[90vw] max-w-md shadow-xl relative text-center">
+                        <h2 className="text-2xl font-bold mb-4">📦 Afval Overzicht</h2>
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                            {Object.entries(getGroupedItems()).map(([name, data]) => (
+                                <div key={name} className="flex items-center space-x-3 text-left">
+                                    <img src={data.image} alt={name} className="w-12 h-12 object-contain" />
+                                    <span className="text-lg font-semibold">{name}: {data.count}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                            onClick={() => setShowOverview(false)}
+                            className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600"
+                        >
+                            Sluiten
+                        </button>
+                    </div>
+                </div>
+            )}
             <div className="relative w-[100vw] h-[100vh] rounded-xl overflow-hidden">
                 <AvatarMovement onMove={setAvatarPos} />
                 {randomItems.map((item, index) => (
