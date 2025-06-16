@@ -38,6 +38,7 @@ function WasteSorting() {
     const [avatarPos, setAvatarPos] = useState({ left: 50, top: 50 });
     const [collectedCount, setCollectedCount] = useState(0);
     const [collectedItems, setCollectedItems] = useState([]);
+    const [showOverview, setShowOverview] = useState(false);
 
     const navigate = useNavigate();
 
