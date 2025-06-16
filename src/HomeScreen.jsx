@@ -7,8 +7,14 @@ import OrangeButton from "./Components/OrangeButton.jsx";
 import games from "./data/games.js";
 import funFact from "./Components/FunFact.jsx";
 
+
 function HomeScreen() {
     const navigate = useNavigate();
+    const [voornaam, setVoornaam] = useState('Gebruiker')
+
+    useEffect(() => {
+        setVoornaam (JSON.parse(localStorage.getItem('userData'))?.voornaam || 'Gebruiker')
+    }, []);
 
     return (
         <motion.div
@@ -37,6 +43,8 @@ function HomeScreen() {
                     {funFact}
                 </motion.h1>
             </motion.div>
+                Hoi {voornaam}!
+            </motion.h1>
 
             <div
                 className="w-[1150px] h-[600px] rounded-2xl flex items-center justify-center relative"
