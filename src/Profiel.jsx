@@ -5,13 +5,20 @@ import BackButton from "./Components/BackButton.jsx";
 
 function Profiel() {
     const navigate = useNavigate();
-    const [voornaam, setVoornaam] = useState('Gebruiker')
-    const [achternaam, setAchternaam] = useState('Gebruiker Achternaam')
+    const [voornaam, setVoornaam] = useState('Gebruiker');
+    const [achternaam, setAchternaam] = useState('Gebruiker Achternaam');
 
     useEffect(() => {
-        setVoornaam (JSON.parse(localStorage.getItem('userData'))?.voornaam || 'Gebruiker')
-        setAchternaam (JSON.parse(localStorage.getItem('userData'))?.achternaam || 'Gebruiker Achternaam')
-    }, []);
+        const userData = localStorage.getItem('userData');
+        if (!userData) {
+            navigate("/inloggen");
+            return;
+        }
+
+        const parsedData = JSON.parse(userData);
+        setVoornaam(parsedData?.voornaam || 'Gebruiker');
+        setAchternaam(parsedData?.achternaam || 'Gebruiker Achternaam');
+    }, [navigate]);
 
     return (
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
@@ -19,23 +26,28 @@ function Profiel() {
 
             <h1 className="text-white text-8xl font-bold mb-10 font-itim">Profiel</h1>
 
-            <div className="flex">
-                <div className="flex flex-col gap-[2vw]">
-                    <p className={`bg-orange-100 text-[1.7vw] w-[25vw] text-center text-orange-800 placeholder-orange-700 rounded-full py-5 border-4 border-green-500 focus:outline-none text-xl 'opacity-50 cursor-not-allowed' : ''}`}
-                    > {voornaam} </p>
+            <div className="flex flex-col md:flex-row items-center gap-10">
+                <div className="flex flex-col gap-6 items-center">
+                    <p className="bg-orange-100 text-[1.7vw] w-[25vw] text-center text-orange-800 rounded-full py-5 border-4 border-green-500 text-xl">
+                        {voornaam}
+                    </p>
 
-                    <p className={`bg-orange-100 text-[1.7vw] w-[25vw] text-center text-orange-800 placeholder-orange-700 rounded-full py-5 border-4 border-green-500 focus:outline-none text-xl 'opacity-50 cursor-not-allowed' : ''}`}
-                    > {achternaam} </p>
+                    <p className="bg-orange-100 text-[1.7vw] w-[25vw] text-center text-orange-800 rounded-full py-5 border-4 border-green-500 text-xl">
+                        {achternaam}
+                    </p>
 
-                    <p className={`bg-orange-100 text-[1.7vw] w-[25vw] text-center text-orange-800 placeholder-orange-700 rounded-full py-5 border-4 border-green-500 focus:outline-none text-xl 'opacity-50 cursor-not-allowed' : ''}`}
-                    >*********</p>
+                    <p className="bg-orange-100 text-[1.7vw] w-[25vw] text-center text-orange-800 rounded-full py-5 border-4 border-green-500 text-xl">
+                        *********
+                    </p>
                 </div>
 
-                <img/>
-
+                {/* Profielfoto placeholder */}
+                <img
+                    src="/placeholder-profile.png"
+                    alt="Profielfoto"
+                    className="w-[12vw] h-[12vw] rounded-full border-4 border-orange-100 object-cover"
+                />
             </div>
-
-
         </div>
     );
 }

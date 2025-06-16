@@ -1,5 +1,5 @@
 // Results.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import woodBackground from '../public/images/wood.webp';
@@ -8,6 +8,13 @@ import BackButton from "./Components/BackButton.jsx";
 
 function Results() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const userData = localStorage.getItem("userData");
+        if (!userData) {
+            navigate("/inloggen");
+        }
+    }, [navigate]);
 
     return (
         <motion.div
