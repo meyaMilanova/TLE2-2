@@ -8,6 +8,7 @@ import WasteSorting from "./WasteSorting.jsx";
 import AvatarMovement from "./AvatarMovement.jsx";
 import Sorting from "./Sorting.jsx";
 import ToyCreation from "./ToyCreation.jsx"; // ✅ Import the new component
+import Profiel from "./Profiel.jsx";
 import Results from "./Results.jsx";
 
 const router = createBrowserRouter([{
@@ -43,6 +44,10 @@ const router = createBrowserRouter([{
             {
                 path: "/sorting",
                 element: <Sorting/>
+            },
+            {
+                path: "/profiel",
+                element: <Profiel/>
             },
             {
                 path: "/resultaten",

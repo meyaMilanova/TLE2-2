@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 function AvatarMovement({ onMove }) {
-    const [position, setPosition] = useState({ top: 50, left: 50 }); // numbers, not strings
+    const [position, setPosition] = useState({ top: 50, left: 50 }); // Main avatar position
     const [frame, setFrame] = useState(0);
     const [currentKey, setCurrentKey] = useState(null);
     const pressedKeysRef = useRef(new Set());
@@ -65,7 +65,6 @@ function AvatarMovement({ onMove }) {
                         default:
                             break;
                     }
-                    // Call onMove with numeric values
                     if (onMove) onMove({ left, top });
                     return { top, left };
                 });
@@ -118,6 +117,7 @@ function AvatarMovement({ onMove }) {
 
     return (
         <div className="relative w-screen h-screen overflow-hidden flex justify-center items-center">
+            {/* Main Avatar */}
             <div
                 className="absolute w-[100px] h-[100px] bg-no-repeat bg-cover"
                 style={{
@@ -125,7 +125,19 @@ function AvatarMovement({ onMove }) {
                     left: `${position.left}%`,
                     backgroundImage: "url('src/assets/images/avatars/pink-hair-avatar.png')",
                     backgroundPosition: `-${frame * 100}px 0`,
-                    zIndex: 10
+                    zIndex: 10,
+                }}
+            ></div>
+
+            {/* Smaller Avatar */}
+            <div
+                className="absolute w-[50px] h-[50px] bg-no-repeat bg-cover opacity-80"
+                style={{
+                    top: `${position.top + 6}%`,
+                    left: `${position.left - 3}%`,
+                    backgroundImage: "url('src/assets/images/avatars/red-hat-avatar.png')",
+                    backgroundPosition: `-${frame * 50}px 0`,
+                    zIndex: 9,
                 }}
             ></div>
         </div>
