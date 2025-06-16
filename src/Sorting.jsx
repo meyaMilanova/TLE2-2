@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import BackButton from "./Components/BackButton.jsx";
 import SortingModal from "./Components/SortingModal.jsx";
 
 const bins = [
-    { id: "plastic", label: "Plastic", img: "/images/wastesorting/red.png" },
-    { id: "organic", label: "GFT", img: "/images/wastesorting/green.png" },
-    { id: "paper", label: "Papier", img: "/images/wastesorting/blue.png" },
-    { id: "rest", label: "Rest", img: "/images/wastesorting/black.png" },
+    { id: "plastic", label: "Plastic", img: "../wastesorting/red.png" },
+    { id: "organic", label: "GFT", img: "../wastesorting/green.png" },
+    { id: "paper", label: "Papier", img: "../wastesorting/blue.png" },
+    { id: "rest", label: "Rest", img: "../wastesorting/black.png" },
 ];
 
 function convertCategoryToType(category) {
@@ -20,13 +21,22 @@ function convertCategoryToType(category) {
 }
 
 function Sorting() {
+    const navigate = useNavigate();
+
     const [items, setItems] = useState([]);
     const [initialTotal, setInitialTotal] = useState(0);
     const [score, setScore] = useState(0);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
 
+    // Check authenticatie bij laden component
     useEffect(() => {
+        const userData = localStorage.getItem("userData");
+        if (!userData) {
+            navigate("/inloggen");
+            return;
+        }
+
         const stored = localStorage.getItem("collectedItems");
         if (stored) {
             const parsed = JSON.parse(stored);
@@ -37,9 +47,9 @@ function Sorting() {
                 img: item.image,
             }));
             setItems(itemsWithIds);
-            setInitialTotal(parsed.length); // zet totaal op basis van localStorage
+            setInitialTotal(parsed.length);
         }
-    }, []);
+    }, [navigate]);
 
     const explanations = {
         plastic: "Dit is plastic. Plastic verpakkingen horen in de plasticbak zodat ze gerecycled kunnen worden.",
@@ -55,7 +65,7 @@ function Sorting() {
         if (currentItem && currentItem.id.toString() === itemId) {
             if (currentItem.type === binType) {
                 setScore((prev) => prev + 1);
-                setItems((prevItems) => prevItems.slice(1)); // volgende item
+                setItems((prevItems) => prevItems.slice(1));
             } else {
                 const explanation = explanations[currentItem.type] || "Onbekend type afval.";
                 setModalMessage(explanation);
@@ -73,20 +83,48 @@ function Sorting() {
     return (
         <div className="waste-sorting min-h-screen bg-green-100 p-8">
             <BackButton />
-            <h1 className="text-3xl font-bold mb-4">Afval Sorteren</h1>
 
-            {/* Teller + Score */}
-            <div className="flex justify-between items-center mb-6">
-                <p className="text-xl font-semibold">
-                    🗑️ {remaining - 1}/{initialTotal}
-                </p>
-                <p className="text-xl font-semibold">
-                    ✅ Score: {score}
-                </p>
+            {/* Teller rechtsboven */}
+            <div
+                style={{
+                    position: "fixed",
+                    top: 20,
+                    right: 30,
+                    background: "#FDE3CF",
+                    borderRadius: "1rem",
+                    padding: "0.5rem 1.2rem",
+                    fontWeight: "bold",
+                    fontSize: "1.5rem",
+                    zIndex: 1000,
+                    color: remaining >= 15 ? "#632713" : "black",
+                    border: initialTotal >= 15 ? "2px solid red" : "none",
+                }}
+            >
+                🗑️ {remaining}/{initialTotal}
+            </div>
+
+            {/* Score bovenin gecentreerd */}
+            <div
+                style={{
+                    position: "fixed",
+                    top: 20,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "#FDE3CF",
+                    borderRadius: "1rem",
+                    padding: "0.5rem 1.2rem",
+                    fontWeight: "bold",
+                    fontSize: "1.5rem",
+                    zIndex: 1000,
+                    color: "#632713",
+                    border: "2px solid red",
+                }}
+            >
+                Score: {score}
             </div>
 
             {/* Alleen huidige item tonen */}
-            <div className="flex flex-wrap gap-4 mb-8 justify-center">
+            <div className="flex flex-wrap gap-4 mb-8 justify-center mt-20">
                 {items[0] && (
                     <img
                         key={items[0].id}
@@ -101,16 +139,16 @@ function Sorting() {
             </div>
 
             {/* Vuilnisbakken */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-16">
                 {bins.map((bin) => (
                     <div
                         key={bin.id}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => handleDrop(e, bin.id)}
-                        className="p-4 bg-white rounded shadow-md text-center border-2 border-dashed border-gray-400"
+                        className="p-2 text-center"
                     >
-                        <img src={bin.img} alt={bin.label} className="w-24 h-24 mx-auto" />
-                        <p className="mt-2 font-semibold">{bin.label}</p>
+                        <img src={bin.img} alt={bin.label} className="w-21 h-21 mx-auto" />
+                        <p className="mt-1 text-sm font-medium">{bin.label}</p>
                     </div>
                 ))}
             </div>
