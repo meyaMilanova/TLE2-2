@@ -1,21 +1,29 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import wasteItems from "./data/waste.js";
 import AvatarMovement from './avatarMovement';
 import BackButton from "./Components/BackButton.jsx";
-import React, { useState, useEffect } from "react";
 
 function WasteSorting() {
+    const navigate = useNavigate();
     const [randomItems, setRandomItems] = useState([]);
     const [avatarPos, setAvatarPos] = useState({ left: 50, top: 50 });
     const [collectedCount, setCollectedCount] = useState(0);
     const [collectedItems, setCollectedItems] = useState([]);
 
-    // Clear localStorage on component mount (start of game)
+    // Check login + reset bij starten spel
     useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        if (!userData) {
+            navigate("/inloggen");
+        }
+
         localStorage.removeItem("collectedItems");
         setCollectedItems([]);
         setCollectedCount(0);
-    }, []);
+    }, [navigate]);
 
+    // Genereer willekeurige items
     useEffect(() => {
         const getRandomWasteItems = () => {
             const items = [];
@@ -30,6 +38,7 @@ function WasteSorting() {
                 do {
                     randomIndex = Math.floor(Math.random() * wasteItems.length);
                 } while (usedIndexes.has(randomIndex) && usedIndexes.size < wasteItems.length);
+
                 usedIndexes.add(randomIndex);
 
                 const row = Math.floor(i / cols);
@@ -49,30 +58,31 @@ function WasteSorting() {
         setRandomItems(getRandomWasteItems());
     }, []);
 
+    // Check collision
     const checkCollision = (avatar, item) => {
-        const avatarSize = 10;
-        const itemSize = 10;
+        const size = 10;
         return (
-            Math.abs(avatar.left - item.left) < (avatarSize + itemSize) / 2 &&
-            Math.abs(avatar.top - item.top) < (avatarSize + itemSize) / 2
+            Math.abs(avatar.left - item.left) < size &&
+            Math.abs(avatar.top - item.top) < size
         );
     };
 
+    // Verzamel afval bij botsing
     useEffect(() => {
-        if (collectedCount >= 15) return; // Cap
+        if (collectedCount >= 15) return;
 
         const foundIndex = randomItems.findIndex(item => checkCollision(avatarPos, item));
         if (foundIndex !== -1) {
             const foundItem = randomItems[foundIndex];
-            setCollectedCount(count => count + 1);
+            setCollectedCount(prev => prev + 1);
 
-            setCollectedItems(items => {
-                const newCollected = [...items, foundItem];
-                localStorage.setItem("collectedItems", JSON.stringify(newCollected));
-                return newCollected;
+            setCollectedItems(prevItems => {
+                const updated = [...prevItems, foundItem];
+                localStorage.setItem("collectedItems", JSON.stringify(updated));
+                return updated;
             });
 
-            setRandomItems(items => items.filter((_, idx) => idx !== foundIndex));
+            setRandomItems(items => items.filter((_, i) => i !== foundIndex));
         }
     }, [avatarPos, randomItems, collectedCount]);
 
@@ -86,8 +96,9 @@ function WasteSorting() {
                 backgroundPosition: "center",
             }}
         >
-            <BackButton onClick={() => { /* handle navigation here */ }} />
-            {/* Counter in top-right */}
+            <BackButton onClick={() => navigate(-1)} />
+
+            {/* Teller rechtsboven */}
             <div style={{
                 position: "fixed",
                 top: 20,
@@ -103,6 +114,7 @@ function WasteSorting() {
             }}>
                 🗑️ {collectedCount}/15
             </div>
+
             <div className="relative w-[100vw] h-[100vh] rounded-xl overflow-hidden">
                 <AvatarMovement onMove={setAvatarPos} />
                 {randomItems.map((item, index) => (

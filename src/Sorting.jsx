@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import BackButton from "./Components/BackButton.jsx";
 import SortingModal from "./Components/SortingModal.jsx";
 
@@ -20,13 +21,22 @@ function convertCategoryToType(category) {
 }
 
 function Sorting() {
+    const navigate = useNavigate();
+
     const [items, setItems] = useState([]);
     const [initialTotal, setInitialTotal] = useState(0);
     const [score, setScore] = useState(0);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
 
+    // Check authenticatie bij laden component
     useEffect(() => {
+        const userData = localStorage.getItem("userData");
+        if (!userData) {
+            navigate("/inloggen");
+            return;
+        }
+
         const stored = localStorage.getItem("collectedItems");
         if (stored) {
             const parsed = JSON.parse(stored);
@@ -37,9 +47,9 @@ function Sorting() {
                 img: item.image,
             }));
             setItems(itemsWithIds);
-            setInitialTotal(parsed.length); // zet totaal op basis van localStorage
+            setInitialTotal(parsed.length);
         }
-    }, []);
+    }, [navigate]);
 
     const explanations = {
         plastic: "Dit is plastic. Plastic verpakkingen horen in de plasticbak zodat ze gerecycled kunnen worden.",
@@ -55,7 +65,7 @@ function Sorting() {
         if (currentItem && currentItem.id.toString() === itemId) {
             if (currentItem.type === binType) {
                 setScore((prev) => prev + 1);
-                setItems((prevItems) => prevItems.slice(1)); // volgende item
+                setItems((prevItems) => prevItems.slice(1));
             } else {
                 const explanation = explanations[currentItem.type] || "Onbekend type afval.";
                 setModalMessage(explanation);
@@ -75,37 +85,41 @@ function Sorting() {
             <BackButton />
 
             {/* Teller rechtsboven */}
-            <div style={{
-                position: "fixed",
-                top: 20,
-                right: 30,
-                background: "#FDE3CF",
-                borderRadius: "1rem",
-                padding: "0.5rem 1.2rem",
-                fontWeight: "bold",
-                fontSize: "1.5rem",
-                zIndex: 1000,
-                color: remaining >= 15 ? "#632713" : "black",
-                border: initialTotal >= 15 ? "2px solid red" : "none",
-            }}>
+            <div
+                style={{
+                    position: "fixed",
+                    top: 20,
+                    right: 30,
+                    background: "#FDE3CF",
+                    borderRadius: "1rem",
+                    padding: "0.5rem 1.2rem",
+                    fontWeight: "bold",
+                    fontSize: "1.5rem",
+                    zIndex: 1000,
+                    color: remaining >= 15 ? "#632713" : "black",
+                    border: initialTotal >= 15 ? "2px solid red" : "none",
+                }}
+            >
                 🗑️ {remaining}/{initialTotal}
             </div>
 
             {/* Score bovenin gecentreerd */}
-            <div style={{
-                position: "fixed",
-                top: 20,
-                left: "50%",
-                transform: "translateX(-50%)",
-                background: "#FDE3CF",
-                borderRadius: "1rem",
-                padding: "0.5rem 1.2rem",
-                fontWeight: "bold",
-                fontSize: "1.5rem",
-                zIndex: 1000,
-                color:  "#632713",
-                border:  "2px solid red",
-            }}>
+            <div
+                style={{
+                    position: "fixed",
+                    top: 20,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "#FDE3CF",
+                    borderRadius: "1rem",
+                    padding: "0.5rem 1.2rem",
+                    fontWeight: "bold",
+                    fontSize: "1.5rem",
+                    zIndex: 1000,
+                    color: "#632713",
+                    border: "2px solid red",
+                }}
+            >
                 Score: {score}
             </div>
 
@@ -139,8 +153,6 @@ function Sorting() {
                 ))}
             </div>
 
-
-
             {/* Feedback bij fout */}
             <SortingModal
                 isOpen={modalOpen}
@@ -150,7 +162,6 @@ function Sorting() {
             />
         </div>
     );
-
 }
 
 export default Sorting;
