@@ -1,14 +1,19 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import BackButton from "./Components/BackButton.jsx";
-import placeholderImg from '../public/images/placeholder.jpg';
 import woodBackground from '../public/images/wood.webp';
 import OrangeButton from "./Components/OrangeButton.jsx";
 import games from "./data/games.js";
 
+
 function HomeScreen() {
     const navigate = useNavigate();
+    const [voornaam, setVoornaam] = useState('Gebruiker')
+
+    useEffect(() => {
+        setVoornaam (JSON.parse(localStorage.getItem('userData'))?.voornaam || 'Gebruiker')
+    }, []);
 
     return (
         <motion.div
@@ -23,7 +28,7 @@ function HomeScreen() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
             >
-                Hoi [Jouw Naam]!
+                Hoi {voornaam}!
             </motion.h1>
 
             <div
@@ -50,26 +55,30 @@ function HomeScreen() {
                                 boxShadow: '0 8px 24px rgba(60, 30, 10, 0.25), 0 2px 4px rgba(60, 30, 10, 0.15)',
                                 border: '3px solid #b48a78'
                             }}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.4 + idx * 0.15, duration: 0.5 }}
-                            whileHover={{ scale: 1.04, boxShadow: '0 12px 32px rgba(60,30,10,0.35)' }}
+                            initial={{opacity: 0, scale: 0.9}}
+                            animate={{opacity: 1, scale: 1}}
+                            transition={{delay: 0.4 + idx * 0.15, duration: 0.5}}
+                            whileHover={{scale: 1.04, boxShadow: '0 12px 32px rgba(60,30,10,0.35)'}}
                         >
                             {/* Small decorative dots */}
-                            <div className="absolute top-2 left-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
-                            <div className="absolute top-2 right-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
+                            <div
+                                className="absolute top-2 left-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
+                            <div
+                                className="absolute top-2 right-2 w-4 h-4 bg-gray-700 rounded-full border-2 border-gray-400 shadow-md"></div>
 
                             <div className="flex items-center justify-center w-1/3 h-full">
-                                <img src={placeholderImg} alt="placeholder" className="w-full h-full object-cover" />
+                                <img src={rectangle.image} alt={rectangle.title}
+                                     className="w-full h-full object-cover"/>
                             </div>
 
+
                             <div className="flex flex-col items-start w-2/3 h-full pl-4 pr-2">
-                                <span className="text-4xl mt-8" style={{ color: '#632713' }}>{rectangle.title}</span>
+                                <span className="text-4xl mt-8" style={{color: '#632713'}}>{rectangle.title}</span>
                                 <p className="mt-2 mb-2 text-base text-black flex-1">{rectangle.description}</p>
                                 <OrangeButton
                                     type="button"
                                     onClick={() => navigate(`/game/${rectangle.id}`)}
-                                    style={{ fontSize: '1.4rem', padding: '0.7rem 2rem' }}
+                                    style={{fontSize: '1.4rem', padding: '0.7rem 2rem'}}
                                     className="self-end mb-4 mr-3"
                                 >
                                     Start

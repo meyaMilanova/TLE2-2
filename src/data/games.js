@@ -3,9 +3,9 @@ const games = [
         id: 1,
         title: "Afval en sorteren",
         description: "Leer hoe je afval moet sorteren en waarom dat belangrijk is.",
-        image: "../images/placeholder.jpg",
+        image: "../games/wasteGame.png",
         images: [
-            "../images/placeholder.jpg",
+            "../games/wasteGame2.png",
             "../images/placeholder.jpg",
             "../images/placeholder.jpg",
             "../images/placeholder.jpg",
