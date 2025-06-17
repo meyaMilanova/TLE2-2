@@ -3,13 +3,7 @@ import {useNavigate} from "react-router-dom";
 import BackButton from "./Components/BackButton.jsx";
 import SortingModal from "./Components/SortingModal.jsx";
 import AntiDeeplink from "./Components/AntiDeeplink.jsx";
-
-const bins = [
-    { id: "plastic", label: "Plastic", img: "../wastesorting/red.png" },
-    { id: "organic", label: "GFT", img: "../wastesorting/green.png" },
-    { id: "paper", label: "Papier", img: "../wastesorting/blue.png" },
-    { id: "rest", label: "Rest", img: "../wastesorting/black.png" },
-];
+import { bins, map, explanations } from "./data/waste.js";
 
 async function updateSortingData(userId, type) {
     const body = {
@@ -42,12 +36,6 @@ async function updateSortingData(userId, type) {
 
 
 function convertCategoryToType(category) {
-    const map = {
-        gft: "organic",
-        plastic: "plastic",
-        papier: "paper",
-        restafval: "rest",
-    };
     return map[category] || "rest";
 }
 
@@ -87,14 +75,6 @@ function WasteSorting() {
             navigate("/resultaten");
         }
     }, [items, initialTotal, navigate]);
-
-
-    const explanations = {
-        plastic: "Dit is plastic. Plastic verpakkingen horen in de plasticbak zodat ze gerecycled kunnen worden.",
-        organic: "Dit is organisch afval. Etensresten horen in de GFT-bak voor compostering.",
-        paper: "Dit is papier. Schoon en droog papier hoort in de papierbak om hergebruikt te worden.",
-        rest: "Dit is restafval. Dit soort afval kan niet gerecycled worden en hoort in de restbak.",
-    };
 
     async function handleDrop(e, binType) {
         const itemId = e.dataTransfer.getData("text/plain");
