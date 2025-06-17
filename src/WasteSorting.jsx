@@ -104,8 +104,8 @@ function WasteSorting() {
     return (
         <>
             <AntiDeeplink/>
-            <div className="waste-sorting min-h-screen bg-green-100 p-8">
-                <BackButton />
+            <div className="waste-sorting max-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
+                <BackButton/>
 
                 <h1 className="text-2xl md:text-3xl font-bold text-center mt-4 mb-8 text-green-800">
                     Sleep het afval naar de juiste bak!
