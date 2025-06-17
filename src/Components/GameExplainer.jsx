@@ -17,6 +17,10 @@ function GameExplainer() {
         if (!userData) {
             navigate('/inloggen');
         }
+        const restrictedIds = [3, 4];
+        if (restrictedIds.includes(parseInt(id))) {
+            navigate('/hoofdpagina');
+        }
     }, []);
 
     const game = games.find((p) => p.id === parseInt(id));
