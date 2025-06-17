@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import BackButton from "./Components/BackButton.jsx";
 import SortingModal from "./Components/SortingModal.jsx";
+import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 
 const bins = [
     { id: "plastic", label: "Plastic", img: "../wastesorting/red.png" },
@@ -66,12 +67,6 @@ function Sorting() {
     // Check authenticatie bij laden component
     // Effect 1: Initialiseren bij laden
     useEffect(() => {
-        const userData = localStorage.getItem("userData");
-        if (!userData) {
-            navigate("/inloggen");
-            return;
-        }
-
         const stored = localStorage.getItem("collectedItems");
         if (stored) {
             const parsed = JSON.parse(stored);
@@ -127,27 +122,29 @@ function Sorting() {
     const remaining = items.length;
 
     return (
-        <div className="waste-sorting min-h-screen bg-green-100 p-8">
-            <BackButton />
+        <>
+            <AntiDeeplink/>
+            <div className="waste-sorting min-h-screen bg-green-100 p-8">
+                <BackButton />
 
-            {/* Teller rechtsboven */}
-            <div
-                style={{
-                    position: "fixed",
-                    top: 20,
-                    right: 30,
-                    background: "#FDE3CF",
-                    borderRadius: "1rem",
-                    padding: "0.5rem 1.2rem",
-                    fontWeight: "bold",
-                    fontSize: "1.5rem",
-                    zIndex: 1000,
-                    color: remaining >= 15 ? "#632713" : "black",
-                    border: initialTotal >= 15 ? "2px solid red" : "none",
-                }}
-            >
-                🗑️ {remaining}/{initialTotal}
-            </div>
+                {/* Teller rechtsboven */}
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 20,
+                        right: 30,
+                        background: "#FDE3CF",
+                        borderRadius: "1rem",
+                        padding: "0.5rem 1.2rem",
+                        fontWeight: "bold",
+                        fontSize: "1.5rem",
+                        zIndex: 1000,
+                        color: remaining >= 15 ? "#632713" : "black",
+                        border: initialTotal >= 15 ? "2px solid red" : "none",
+                    }}
+                >
+                    🗑️ {remaining}/{initialTotal}
+                </div>
 
             {/*/!* Score bovenin gecentreerd *!/*/}
             {/*<div*/}
@@ -169,44 +166,45 @@ function Sorting() {
             {/*    Score: {score}*/}
             {/*</div>*/}
 
-            {/* Alleen huidige item tonen */}
-            <div className="flex flex-wrap gap-4 mb-8 justify-center mt-20">
-                {items[0] && (
-                    <img
-                        key={items[0].id}
-                        src={items[0].img}
-                        alt={items[0].name}
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, items[0].id)}
-                        className="w-20 h-20 cursor-move"
-                        title={items[0].name}
-                    />
-                )}
-            </div>
+                {/* Alleen huidige item tonen */}
+                <div className="flex flex-wrap gap-4 mb-8 justify-center mt-20">
+                    {items[0] && (
+                        <img
+                            key={items[0].id}
+                            src={items[0].img}
+                            alt={items[0].name}
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, items[0].id)}
+                            className="w-20 h-20 cursor-move"
+                            title={items[0].name}
+                        />
+                    )}
+                </div>
 
-            {/* Vuilnisbakken */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-16">
-                {bins.map((bin) => (
-                    <div
-                        key={bin.id}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={(e) => handleDrop(e, bin.id)}
-                        className="p-2 text-center"
-                    >
-                        <img src={bin.img} alt={bin.label} className="w-21 h-21 mx-auto" />
-                        <p className="mt-1 text-sm font-medium">{bin.label}</p>
-                    </div>
-                ))}
-            </div>
+                {/* Vuilnisbakken */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-16">
+                    {bins.map((bin) => (
+                        <div
+                            key={bin.id}
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={(e) => handleDrop(e, bin.id)}
+                            className="p-2 text-center"
+                        >
+                            <img src={bin.img} alt={bin.label} className="w-21 h-21 mx-auto" />
+                            <p className="mt-1 text-sm font-medium">{bin.label}</p>
+                        </div>
+                    ))}
+                </div>
 
-            {/* Feedback bij fout */}
-            <SortingModal
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
-                title="Verkeerde bak!"
-                message={modalMessage}
-            />
-        </div>
+                {/* Feedback bij fout */}
+                <SortingModal
+                    isOpen={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    title="Verkeerde bak!"
+                    message={modalMessage}
+                />
+            </div>
+        </>
     );
 }
 

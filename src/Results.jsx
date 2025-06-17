@@ -3,9 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import React, {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import {motion} from "framer-motion";
 import woodBackground from '../public/images/wood.webp';
 import OrangeButton from "./Components/OrangeButton.jsx";
 import BackButton from "./Components/BackButton.jsx";
+import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 
 function Results() {
     const navigate = useNavigate();
@@ -29,14 +33,9 @@ function Results() {
         fetchSortingData();
     }, []);
 
-    useEffect(() => {
-        const userData = localStorage.getItem("userData");
-        if (!userData) {
-            navigate("/inloggen");
-        }
-    }, [navigate]);
-
     return (
+        <>
+            <AntiDeeplink />
         <motion.div
             className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden"
             initial={{ opacity: 0, y: 30 }}
@@ -47,7 +46,7 @@ function Results() {
             <BackButton onClick={() => navigate(-1)} />
 
             <motion.div
-                className="w-[700px] h-auto rounded-2xl flex flex-col items-center justify-center relative p-6 gap-4"
+                className="w-[700px] h-[350px] rounded-2xl flex items-center justify-center relative p-6"
                 style={{
                     backgroundImage: `url(${woodBackground})`,
                     backgroundSize: 'cover',
@@ -80,6 +79,7 @@ function Results() {
                 <OrangeButton onClick={() => navigate("/hoofdpagina")}>Home</OrangeButton>
             </div>
         </motion.div>
+        </>
     );
 }
 
