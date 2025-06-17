@@ -10,6 +10,7 @@ import Sorting from "./Sorting.jsx";
 import ToyCreation from "./ToyCreation.jsx"; // ✅ Import the new component
 import Profiel from "./Profiel.jsx";
 import Results from "./Results.jsx";
+import AvatarSelection from "./ChooseAvatar.jsx";
 
 const router = createBrowserRouter([{
         children: [
@@ -56,6 +57,10 @@ const router = createBrowserRouter([{
             {
                 path: "/speelgoedmaken",
                 element: <ToyCreation />
+            },
+            {
+                path: "/chooseavatar",
+                element: <AvatarSelection/>
             }
         ]
     }
