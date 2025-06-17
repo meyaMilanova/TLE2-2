@@ -35,7 +35,7 @@ const router = createBrowserRouter([{
                 element: <GameExplainer />
             },
             {
-                path: "/afvalsorteren",
+                path: "/afvalrapen",
                 element: <WastePickup />
             },
             {
@@ -43,7 +43,7 @@ const router = createBrowserRouter([{
                 element: <AvatarMovement/>
             },
             {
-                path: "/sorteren",
+                path: "/afvalsorteren",
                 element: <WasteSorting/>
             },
             {
