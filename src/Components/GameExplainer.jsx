@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, {useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import woodBackground from "../../public/images/wood.webp";
 import GameSlideshow from "./GameSlideshow.jsx";
 import games from "../data/games.js";
 import OrangeButton from "./OrangeButton.jsx";
 import BackButton from "./BackButton.jsx";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
+import AntiDeeplink from "./AntiDeeplink.jsx";
 
 function GameExplainer() {
     const { id } = useParams();
@@ -40,6 +41,8 @@ function GameExplainer() {
     };
 
     return (
+        <>
+            <AntiDeeplink />
         <motion.div
             className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden"
         >
@@ -81,6 +84,7 @@ function GameExplainer() {
                 </OrangeButton>
             </motion.div>
         </motion.div>
+        </>
     );
 }
 
