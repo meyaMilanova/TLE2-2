@@ -1,5 +1,5 @@
 import wasteItems from "./data/waste.js";
-import AvatarMovement from './avatarMovement';
+import AvatarMovement from './Components/AvatarMovement.jsx';
 import BackButton from "./Components/BackButton.jsx";
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";

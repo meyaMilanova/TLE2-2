@@ -10,9 +10,12 @@ function AntiDeeplink({ onNameFetched }) {
         if (!userData) {
             navigate('/inloggen');
         } else {
-            onNameFetched(userData.voornaam || 'Gebruiker');
+            if (onNameFetched && typeof onNameFetched === 'function') {
+                onNameFetched(userData.voornaam || 'Gebruiker');
+            }
         }
     }, [navigate, onNameFetched]);
+
 
     return null;
 }
