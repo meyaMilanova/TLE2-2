@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {motion} from 'framer-motion';
 import BackButton from "./Components/BackButton.jsx";
 import woodBackground from '../public/images/wood.webp';
 import OrangeButton from "./Components/OrangeButton.jsx";
 import games from "./data/games.js";
 import funFact from "./Components/FunFact.jsx";
+import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 
 function HomeScreen() {
     const navigate = useNavigate();
-    const [voornaam, setVoornaam] = useState('Gebruiker');
-
-    useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem('userData'));
-
-        if (!userData) {
-            navigate('/inloggen'); //
-        } else {
-            setVoornaam(userData.voornaam || 'Gebruiker');
-        }
-    }, []);
+    const [name, setName] = useState('Gebruiker');
 
     return (
+        <>
+            <AntiDeeplink onNameFetched={setName}/>
+
         <motion.div
             className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden"
             style={{ backgroundColor: '#14532d' }}
@@ -30,7 +24,7 @@ function HomeScreen() {
             <BackButton onClick={() => navigate(-1)} />
 
             <h1 className="text-white text-4xl mb-5">
-                Hoi {voornaam}!
+                Hoi {name}!
             </h1>
 
             <motion.div
@@ -41,7 +35,7 @@ function HomeScreen() {
                 transition={{ delay: 0.2, duration: 0.5 }}
             >
                 <motion.p className="text-white text-2xl mr-4">
-                    feitje van de dag:
+                    Feitje van de dag:
                 </motion.p>
                 <motion.h1 className="text-black text-1.5xl">
                     {funFact}
@@ -90,18 +84,32 @@ function HomeScreen() {
                                 <p className="mt-2 mb-2 text-base text-black flex-1">{rectangle.description}</p>
                                 <OrangeButton
                                     type="button"
-                                    onClick={() => navigate(`/game/${rectangle.id}`)}
-                                    style={{ fontSize: '1.4rem', padding: '0.7rem 2rem' }}
+                                    onClick={() => {
+                                        if (rectangle.id !== 3 && rectangle.id !== 4) {
+                                            navigate(`/game/${rectangle.id}`);
+                                        }
+                                    }}
+                                    disabled={rectangle.id === 3 || rectangle.id === 4}
+                                    style={{
+                                        fontSize: '1.4rem',
+                                        padding: '0.7rem 2rem',
+                                        backgroundColor: rectangle.id === 3 || rectangle.id === 4 ? '#cccccc' : '#F97316', // grijs of oranje
+                                        color: rectangle.id === 3 || rectangle.id === 4 ? '#666666' : 'white',
+                                        opacity: rectangle.id === 3 || rectangle.id === 4 ? 0.8 : 1,
+                                        cursor: rectangle.id === 3 || rectangle.id === 4 ? 'not-allowed' : 'pointer',
+                                    }}
                                     className="self-end mb-4 mr-3"
                                 >
-                                    Start
+                                    {rectangle.id === 3 || rectangle.id === 4 ? 'Binnenkort' : 'Start'}
                                 </OrangeButton>
+
                             </div>
                         </motion.div>
                     ))}
                 </div>
             </div>
         </motion.div>
+        </>
     );
 }
 
