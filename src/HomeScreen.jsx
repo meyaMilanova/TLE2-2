@@ -35,7 +35,7 @@ function HomeScreen() {
                 transition={{ delay: 0.2, duration: 0.5 }}
             >
                 <motion.p className="text-white text-2xl mr-4">
-                    feitje van de dag:
+                    Feitje van de dag:
                 </motion.p>
                 <motion.h1 className="text-black text-1.5xl">
                     {funFact}

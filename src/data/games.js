@@ -1,7 +1,7 @@
 const games = [
     {
         id: 1,
-        title: "Afval en sorteren",
+        title: "Afvalsorteren",
         description: "Leer hoe je afval moet sorteren en waarom dat belangrijk is.",
         image: "../games/wasteGame.png",
         images: [
