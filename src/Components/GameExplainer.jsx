@@ -17,6 +17,10 @@ function GameExplainer() {
         if (!userData) {
             navigate('/inloggen');
         }
+        const restrictedIds = [3, 4];
+        if (restrictedIds.includes(parseInt(id))) {
+            navigate('/hoofdpagina');
+        }
     }, []);
 
     const game = games.find((p) => p.id === parseInt(id));
@@ -33,7 +37,7 @@ function GameExplainer() {
 
     const handlePlay = () => {
         if (game.id === 1) {
-            navigate("/afvalsorteren");
+            navigate("/afvalrapen");
         } else {
             // hier kun je andere spellen later toevoegen
             console.warn("Spel nog niet geïmplementeerd.");
