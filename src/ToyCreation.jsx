@@ -1,8 +1,9 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import {motion} from 'framer-motion';
+import {useNavigate} from 'react-router-dom';
 import BackButton from "./Components/BackButton.jsx";
 import woodTexture from '../public/images/wood.webp';
+import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 
 const toys = [
     {
@@ -73,6 +74,8 @@ function ToyCreation() {
     const navigate = useNavigate();
 
     return (
+        <>
+            <AntiDeeplink />
         <motion.div
             className="min-h-screen bg-green-900 flex flex-col items-center py-10"
             style={{ backgroundColor: '#14532d' }}
@@ -117,6 +120,7 @@ function ToyCreation() {
                 ))}
             </div>
         </motion.div>
+        </>
     );
 }
 

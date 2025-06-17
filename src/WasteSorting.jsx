@@ -1,8 +1,9 @@
 import wasteItems from "./data/waste.js";
 import AvatarMovement from './avatarMovement';
 import BackButton from "./Components/BackButton.jsx";
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 
 function WasteSorting() {
     const [randomItems, setRandomItems] = useState([]);
@@ -100,6 +101,8 @@ function WasteSorting() {
     };
 
     return (
+        <>
+            <AntiDeeplink />
         <div
             className="waste-sorting min-h-screen flex flex-col items-center justify-center relative"
             style={{
@@ -186,6 +189,7 @@ function WasteSorting() {
                 ))}
             </div>
         </div>
+        </>
     );
 }
 

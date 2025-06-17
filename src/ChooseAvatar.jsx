@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import avatar1 from '/src/assets/images/avatars-profiel/blond-hair-girl-avatar-p.png';
 import avatar2 from '/src/assets/images/avatars-profiel/ginger-hair-girl-avatar-p.png';
 import avatar3 from '/src/assets/images/avatars-profiel/grey-tshirt-girl-avatar-p.png';
@@ -13,6 +13,7 @@ import avatar11 from '/src/assets/images/avatars-profiel/blue-hat-avatar-p.png';
 import avatar12 from '/src/assets/images/avatars-profiel/red-hat-avatar-p.png';
 import greyAvatar from '/src/assets/images/avatars-profiel/grey-avatar.png';
 import PinkButton from "./Components/PinkButton.jsx";
+import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 
 function AvatarSelection() {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
@@ -67,6 +68,8 @@ function AvatarSelection() {
     };
 
     return (
+        <>
+            <AntiDeeplink />
         <div className="flex min-h-screen items-center justify-center bg-green-900 p-6">
             {/* Modal Alert */}
             {showAlert && (
@@ -118,6 +121,7 @@ function AvatarSelection() {
                 ))}
             </div>
         </div>
+        </>
     );
 }
 
