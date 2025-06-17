@@ -36,8 +36,7 @@ function Results() {
                 transition={{ delay: 0.3, duration: 0.6 }}
             >
                 <div className="bg-orange-50 w-[550px] h-[200px] rounded-xl flex flex-col items-center justify-center shadow-inner border-4 border-orange-200">
-                    <h2 className="text-6xl font-bold text-brown-900">10/15</h2>
-                    <p className="text-3xl font-semibold text-brown-800 mt-2">Goed bezig makker!</p>
+                    <h2 className="text-6xl font-bold text-brown-900">Goed bezig makker!</h2>
                 </div>
             </motion.div>
 

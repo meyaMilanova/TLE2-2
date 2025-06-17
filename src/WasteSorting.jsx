@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import BackButton from "./Components/BackButton.jsx";
 import SortingModal from "./Components/SortingModal.jsx";
 import AntiDeeplink from "./Components/AntiDeeplink.jsx";
@@ -33,6 +33,12 @@ function WasteSorting() {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        if (items.length === 0 && initialTotal > 0) {
+            navigate("/resultaten", { replace: true });
+        }
+    }, [items, initialTotal, navigate]);
+
     function handleDrop(e, binType) {
         const itemId = e.dataTransfer.getData("text/plain");
         const currentItem = items[0];
@@ -57,7 +63,7 @@ function WasteSorting() {
 
     return (
         <>
-            <AntiDeeplink/>
+            <AntiDeeplink />
             <div className="waste-sorting min-h-screen bg-green-100 p-8">
                 <BackButton />
 
