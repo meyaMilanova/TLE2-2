@@ -29,7 +29,10 @@ function ToyCreation() {
     // Functie om vuilniszak data op te halen
     async function fetchBagData() {
         try {
-            const response = await fetch(`http://145.24.223.108:8000/sortingGame`, {
+            const parsedData = JSON.parse(localStorage.getItem('userData'))
+            const userId = parsedData?.id
+
+            const response = await fetch(`http://145.24.223.108:8000/sortingGame/user/${userId}`, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -37,6 +40,7 @@ function ToyCreation() {
                 throw new Error("Fout bij ophalen van vuilniszak data");
             }
             const data = await response.json();
+            console.log(data)
             setBagData(data);
         } catch (error) {
             console.error(error);
