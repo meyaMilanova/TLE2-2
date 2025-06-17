@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import avatar1 from '/src/assets/images/avatars-profiel/blond-hair-girl-avatar-p.png';
-import avatar2 from '/src/assets/images/avatars-profiel/ginger-hair-girl-avatar-p.png'
-import avatar3 from '/src/assets/images/avatars-profiel/grey-tshirt-girl-avatar-p.png'
-import avatar4 from '/src/assets/images/avatars-profiel/pink-hair-avatar-p.png'
-import avatar5 from '/src/assets/images/avatars-profiel/yellow-purple-shirt-avatar-p.png'
-import avatar6 from '/src/assets/images/avatars-profiel/pink-tshirt-avatar-p.png'
-import avatar7 from '/src/assets/images/avatars-profiel/orange-tshirt-boy-avatar-p.png'
-import avatar8 from '/src/assets/images/avatars-profiel/ginger-hair-boy-avatar-p.png'
-import avatar9 from '/src/assets/images/avatars-profiel/light-blue-boy-avatar-p.png'
-import avatar10 from '/src/assets/images/avatars-profiel/red-shirt-boy-avatar-p.png'
-import avatar11 from '/src/assets/images/avatars-profiel/blue-hat-avatar-p.png'
-import avatar12 from '/src/assets/images/avatars-profiel/red-hat-avatar-p.png'
-import greyAvatar from '/src/assets/images/avatars-profiel/grey-avatar.png'
+import avatar2 from '/src/assets/images/avatars-profiel/ginger-hair-girl-avatar-p.png';
+import avatar3 from '/src/assets/images/avatars-profiel/grey-tshirt-girl-avatar-p.png';
+import avatar4 from '/src/assets/images/avatars-profiel/pink-hair-avatar-p.png';
+import avatar5 from '/src/assets/images/avatars-profiel/yellow-purple-shirt-avatar-p.png';
+import avatar6 from '/src/assets/images/avatars-profiel/pink-tshirt-avatar-p.png';
+import avatar7 from '/src/assets/images/avatars-profiel/orange-tshirt-boy-avatar-p.png';
+import avatar8 from '/src/assets/images/avatars-profiel/ginger-hair-boy-avatar-p.png';
+import avatar9 from '/src/assets/images/avatars-profiel/light-blue-boy-avatar-p.png';
+import avatar10 from '/src/assets/images/avatars-profiel/red-shirt-boy-avatar-p.png';
+import avatar11 from '/src/assets/images/avatars-profiel/blue-hat-avatar-p.png';
+import avatar12 from '/src/assets/images/avatars-profiel/red-hat-avatar-p.png';
+import greyAvatar from '/src/assets/images/avatars-profiel/grey-avatar.png';
 import PinkButton from "./Components/PinkButton.jsx";
-
 
 function AvatarSelection() {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
+
     const avatars = [
         avatar1,
         avatar2,
@@ -38,7 +39,7 @@ function AvatarSelection() {
 
     const handleSave = async () => {
         if (!selectedAvatar) {
-            alert('Please select an avatar before saving.');
+            setShowAlert(true);
             return;
         }
 
@@ -67,6 +68,17 @@ function AvatarSelection() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-green-900 p-6">
+            {/* Modal Alert */}
+            {showAlert && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 w-[90vw] max-w-md shadow-xl relative text-center">
+                        <h2 className="text-2xl font-bold mb-4">⚠️ Avatar niet geselecteerd</h2>
+                        <p className="mb-6 text-lg">Selecteer een avatar voordat je opslaat.</p>
+                        <PinkButton onClick={() => setShowAlert(false)}>Oké</PinkButton>
+                    </div>
+                </div>
+            )}
+
             {/* Left Section: Selected Avatar */}
             <div className="flex-1 flex flex-col items-center justify-center">
                 {selectedAvatar ? (
@@ -82,10 +94,7 @@ function AvatarSelection() {
                         className="w-auto h-[50vh] border-4 px-2 py-5 border-orange-500 ring-4 ring-yellow-400 ring-inset"
                     />
                 )}
-                <PinkButton
-                    onClick={handleSave}
-                    className="mt-6"
-                >
+                <PinkButton onClick={handleSave} className="mt-6">
                     Save
                 </PinkButton>
             </div>
@@ -109,7 +118,6 @@ function AvatarSelection() {
                 ))}
             </div>
         </div>
-
     );
 }
 
