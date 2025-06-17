@@ -72,6 +72,7 @@ function WasteSorting() {
 // Effect 2: Navigeren als alles leeg is
     useEffect(() => {
         if (items.length === 0 && initialTotal > 0) {
+            localStorage.removeItem("gameDataWasteSorting");
             navigate("/resultaten");
         }
     }, [items, initialTotal, navigate]);

@@ -40,7 +40,7 @@ function WastePickup() {
     const [collectedCount, setCollectedCount] = useState(0);
     const [collectedItems, setCollectedItems] = useState([]);
     const [showOverview, setShowOverview] = useState(false);
-    // const [showFullMessage, setShowFullMessage] = useState(false);
+    const [showFullMessage, setShowFullMessage] = useState(false);
 
     const navigate = useNavigate();
 
@@ -112,15 +112,16 @@ function WastePickup() {
                 avatarPos,
                 randomItems: newRandomItems
             });
+            localStorage.setItem("collectedItems", JSON.stringify(newCollectedItems));
         }
     }, [avatarPos, randomItems, collectedCount]);
 
     // Nieuw: detecteer wanneer vuilniszak vol is en toon pop-up
-    // useEffect(() => {
-    //     if (collectedCount >= 15) {
-    //         setShowFullMessage(true);
-    //     }
-    // }, [collectedCount]);
+    useEffect(() => {
+        if (collectedCount >= 15) {
+            setShowFullMessage(true);
+        }
+    }, [collectedCount]);
 
     const getGroupedItems = () => {
         const grouped = {};
@@ -212,7 +213,10 @@ function WastePickup() {
                         <h2 className="text-2xl font-bold mb-4">🗑️ Je vuilniszak zit vol!</h2>
                         <p className="mb-6 text-lg">Klik op verder om het afval te sorteren.</p>
                         <button
-                            onClick={() => navigate("/afvalsorteren")}
+                            onClick={() => {
+                                saveGame();
+                                navigate("/afvalsorteren");
+                            }}
                             className="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700"
                         >
                             Verder
