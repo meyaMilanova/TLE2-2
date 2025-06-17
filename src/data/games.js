@@ -6,12 +6,9 @@ const games = [
         image: "../games/wasteGame.png",
         images: [
             "../games/wasteGame2.png",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
+            "../games/wasteGame3.png",
+            "../games/wasteGame4.png",
+            "../games/wasteGame5.png",
         ],
     },
     {
