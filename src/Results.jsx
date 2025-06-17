@@ -1,9 +1,6 @@
 
 // Results.jsx
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {motion} from "framer-motion";
 import woodBackground from '../public/images/wood.webp';
@@ -18,13 +15,13 @@ function Results() {
     useEffect(() => {
         async function fetchSortingData() {
             const userData = JSON.parse(localStorage.getItem("userData"));
-            const userId = userData?._id;
+            const userId = userData?.id;
             if (!userId) return;
 
             try {
-                const res = await fetch(`http://145.24.223.108:8000/sortingGame`);
+                const res = await fetch(`http://145.24.223.108:8000/sortingGame/${userId}/plus`);
                 const data = await res.json();
-                setSortingData(data);
+                setSortingData(data.items);
             } catch (error) {
                 console.error("Fout bij ophalen sorteerdata:", error);
             }
