@@ -4,6 +4,8 @@ import BackButton from "./Components/BackButton.jsx";
 import SortingModal from "./Components/SortingModal.jsx";
 import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 import { bins, map, explanations } from "./data/waste.js";
+import confetti from "canvas-confetti";
+
 
 async function updateSortingData(userId, type) {
     const body = {
@@ -51,6 +53,7 @@ function WasteSorting() {
     // const [score, setScore] = useState(0);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
+    const [showSuccess] = useState(false);
 
     // Check authenticatie bij laden component
     // Effect 1: Initialiseren bij laden
@@ -83,12 +86,24 @@ function WasteSorting() {
 
         if (currentItem && currentItem.id.toString() === itemId) {
             if (currentItem.type === binType) {
-                // setScore((prev) => prev + 1);
-                // setItems((prevItems) => prevItems.slice(1));
+                const dropX = e.clientX;
+                const dropY = e.clientY;
+
+                // Start confetti vanuit muispositie / droppositie
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: {
+                        x: dropX / window.innerWidth,
+                        y: dropY / window.innerHeight,
+                    },
+                });
+
                 await updateSortingData(userId, currentItem.type);
                 setItems((prevItems) => prevItems.slice(1));
 
-            } else {
+
+        } else {
                 const explanation = explanations[currentItem.type] || "Onbekend type afval.";
                 setModalMessage(explanation);
                 setModalOpen(true);
@@ -105,34 +120,51 @@ function WasteSorting() {
     return (
         <>
             <AntiDeeplink/>
-            <div className="waste-sorting min-h-screen bg-green-100 p-8">
-                <BackButton />
 
-                <h1 className="text-2xl md:text-3xl font-bold text-center mt-4 mb-8 text-green-800">
-                    Sleep het afval naar de juiste bak!
-                </h1>
+                <div className="waste-sorting min-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
+
+                    {/* Topbar met BackButton, Titel en Teller */}
+                    <div className="grid grid-cols-3 items-center mb-8 px-4">
+                        {/* BackButton links */}
+                        <div className="justify-self-start">
+                            <BackButton />
+                        </div>
+
+                        {/* Titel gecentreerd */}
+                        <h1
+                            className="text-xl md:text-2xl font-bold text-center justify-self-center"
+                            style={{
+                                background: "#FDE3CF",
+                                borderRadius: "1rem",
+                                padding: "0.5rem 1.2rem",
+                                color: "#632713",
+                                boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+                            }}
+                        >
+                            Sleep het afval naar de juiste bak!
+                        </h1>
+
+                        {/* Teller rechts */}
+                        <div className="justify-self-end">
+                            <div
+                                style={{
+                                    background: "#FDE3CF",
+                                    borderRadius: "1.25rem", // iets ronder
+                                    padding: "0.75rem 1.5rem", // iets meer ruimte
+                                    fontWeight: "bold",
+                                    fontSize: "1.5rem", // groter lettertype
+                                    color: remaining >= 15 ? "#632713" : "black",
+                                    border: initialTotal >= 15 ? "2px solid red" : "none",
+                                }}
+                            >
+                                🗑️ {remaining}/{initialTotal}
+                        </div>
+
+                    </div>
+                    </div>
 
 
-                {/* Teller rechtsboven */}
-                <div
-                    style={{
-                        position: "fixed",
-                        top: 20,
-                        right: 30,
-                        background: "#FDE3CF",
-                        borderRadius: "1rem",
-                        padding: "0.5rem 1.2rem",
-                        fontWeight: "bold",
-                        fontSize: "1.5rem",
-                        zIndex: 1000,
-                        color: remaining >= 15 ? "#632713" : "black",
-                        border: initialTotal >= 15 ? "2px solid red" : "none",
-                    }}
-                >
-                    🗑️ {remaining}/{initialTotal}
-                </div>
-
-                {/*/!* Score bovenin gecentreerd *!/*/}
+                    {/*/!* Score bovenin gecentreerd *!/*/}
                 {/*<div*/}
                 {/*    style={{*/}
                 {/*        position: "fixed",*/}
@@ -168,15 +200,23 @@ function WasteSorting() {
                 </div>
 
                 {/* Vuilnisbakken */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-16">
-                    {bins.map((bin) => (
+                <div className="flex flex-row justify-center md:grid-cols-4 gap-y-3.5 mt-32 justify-items-center">
+
+                {bins.map((bin) => (
                         <div
                             key={bin.id}
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={(e) => handleDrop(e, bin.id)}
-                            className="p-2 text-center"
+                            className="text-center p-0 m-0"
                         >
-                            <img src={bin.img} alt={bin.label} className="w-21 h-21 mx-auto" />
+                            <img
+                                src={bin.img}
+                                alt={bin.label}
+                                style={{ width: "150px", height: "150px", display: "block" }}
+                                className="mx-auto"
+                            />
+
+
                             {/*<p className="mt-1 text-sm font-medium">{bin.label}</p>*/}
                         </div>
                     ))}
@@ -189,6 +229,11 @@ function WasteSorting() {
                     title="Verkeerde bak!"
                     message={modalMessage}
                 />
+
+                {showSuccess && (
+                    <div className="...">🎉 Goed zo! 🎉</div>
+                )}
+
             </div>
         </>
     );

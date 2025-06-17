@@ -17,6 +17,10 @@ function AvatarSelection() {
             return;
         }
 
+        const userData = JSON.parse(localStorage.getItem('userData'))
+        const userId = userData?.id
+        console.log(userId)
+
         try {
             const response = await fetch('http://145.24.223.108:8000/user/avatar', {
                 method: 'POST',
@@ -24,7 +28,10 @@ function AvatarSelection() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ avatar: selectedAvatar }),
+                body: JSON.stringify({
+                    userId,
+                    avatar: selectedAvatar
+                }),
             });
 
             if (response.ok) {
