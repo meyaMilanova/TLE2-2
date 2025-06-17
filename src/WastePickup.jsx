@@ -213,13 +213,11 @@ function WastePickup() {
                         <h2 className="text-2xl font-bold mb-4">🗑️ Je vuilniszak zit vol!</h2>
                         <p className="mb-6 text-lg">Klik op verder om het afval te sorteren.</p>
                         <button
-                            onClick={() => navigate("/afvalsorteren")}
-                            className="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
                             onClick={() => {
                                 saveGame();
                                 navigate("/afvalsorteren");
                             }}
-                            className="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700"
+                            className="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
                         >
                             Verder
                         </button>
