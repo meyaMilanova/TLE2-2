@@ -1,5 +1,6 @@
+
 // Results.jsx
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {motion} from "framer-motion";
 import woodBackground from '../public/images/wood.webp';
@@ -9,6 +10,25 @@ import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 
 function Results() {
     const navigate = useNavigate();
+    const [sortingData, setSortingData] = useState(null);
+
+    useEffect(() => {
+        async function fetchSortingData() {
+            const userData = JSON.parse(localStorage.getItem("userData"));
+            const userId = userData?.id;
+            if (!userId) return;
+
+            try {
+                const res = await fetch(`http://145.24.223.108:8000/sortingGame/${userId}/plus`);
+                const data = await res.json();
+                setSortingData(data.items);
+            } catch (error) {
+                console.error("Fout bij ophalen sorteerdata:", error);
+            }
+        }
+
+        fetchSortingData();
+    }, []);
 
     return (
         <>
@@ -35,9 +55,19 @@ function Results() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
             >
-                <div className="bg-orange-50 w-[550px] h-[200px] rounded-xl flex flex-col items-center justify-center shadow-inner border-4 border-orange-200">
-                    <h2 className="text-6xl font-bold text-brown-900">10/15</h2>
-                    <p className="text-3xl font-semibold text-brown-800 mt-2">Goed bezig makker!</p>
+                <div className="bg-orange-50 w-[550px] rounded-xl flex flex-col items-center justify-center shadow-inner border-4 border-orange-200 p-6">
+                    <h2 className="text-4xl font-bold text-brown-900 mb-4">Sorteerresultaten</h2>
+                    {sortingData ? (
+                        <div className="text-2xl text-brown-800 space-y-2">
+                            <p>🧴 Plastic: {sortingData.plastic}</p>
+                            <p>🥦 GFT (eten): {sortingData.food}</p>
+                            <p>📄 Papier: {sortingData.paper}</p>
+                            <p>🗑️ Restafval: {sortingData.rest}</p>
+                            <p className="font-bold mt-4">🏆 Highscore: {sortingData.high_score}</p>
+                        </div>
+                    ) : (
+                        <p className="text-lg">Resultaten worden geladen...</p>
+                    )}
                 </div>
             </motion.div>
 
