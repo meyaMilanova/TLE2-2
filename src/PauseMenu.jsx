@@ -11,11 +11,11 @@ function PauseMenu() {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        localStorage.removeItem('userData');
         localStorage.removeItem("gameDataWasteSorting")
 
         navigate('/');
+        window.location.reload();
     };
 
     return(
@@ -23,7 +23,7 @@ function PauseMenu() {
             <div className="flex flex-col gap-y-4 w-full max-w-sm">
                 <PinkButton type="button" onClick={() => navigate(-1)}>DOORGAAN MET SPEL</PinkButton>
                 <PinkButton type="button" onClick={() => navigate('/hoofdpagina')}>TERUG NAAR SPELLEN</PinkButton>
-                <PinkButton type="button" onClick={() => navigate('/')}>NAAR PROFIEL</PinkButton>
+                <PinkButton type="button" onClick={() => navigate('/profiel')}>NAAR PROFIEL</PinkButton>
                 <OrangeButton type="button" onClick={handleCloseGame}>SPEL SLUITEN</OrangeButton>
                 <OrangeButton type="button" onClick={handleLogout}>UITLOGGEN</OrangeButton>
             </div>
