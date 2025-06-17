@@ -157,7 +157,7 @@ function WasteSorting() {
             {showFullMessage && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 w-[90vw] max-w-md shadow-xl relative text-center">
-                        <h2 className="text-2xl font-bold mb-4">🧺 Je vuilniszak zit vol!</h2>
+                        <h2 className="text-2xl font-bold mb-4">🗑️ Je vuilniszak zit vol!</h2>
                         <p className="mb-6 text-lg">Klik op verder om het afval te sorteren.</p>
                         <button
                             onClick={() => navigate("/sorting")}
