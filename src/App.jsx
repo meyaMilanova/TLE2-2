@@ -5,9 +5,9 @@ import LoginScreen from "./LoginScreen.jsx";
 import HomeScreen from "./HomeScreen.jsx";
 import GameExplainer from "./Components/GameExplainer.jsx";
 import PauseMenu from "./PauseMenu.jsx";
+import WastePickup from "./WastePickup.jsx";
+import AvatarMovement from "./Components/AvatarMovement.jsx";
 import WasteSorting from "./WasteSorting.jsx";
-import AvatarMovement from "./AvatarMovement.jsx";
-import Sorting from "./Sorting.jsx";
 import ToyCreation from "./ToyCreation.jsx"; // ✅ Import the new component
 import Profiel from "./Profiel.jsx";
 import Results from "./Results.jsx";
@@ -40,16 +40,16 @@ const router = createBrowserRouter([{
                 element: <PauseMenu />
             },
             {
-                path: "/afvalsorteren",
-                element: <WasteSorting />
+                path: "/afvalrapen",
+                element: <WastePickup />
             },
             {
                 path: "/avatar",
                 element: <AvatarMovement/>
             },
             {
-                path: "/sorting",
-                element: <Sorting/>
+                path: "/afvalsorteren",
+                element: <WasteSorting/>
             },
             {
                 path: "/profiel",
@@ -64,7 +64,7 @@ const router = createBrowserRouter([{
                 element: <ToyCreation />
             },
             {
-                path: "/chooseavatar",
+                path: "/avatarkiezen",
                 element: <AvatarSelection/>
             }
         ]

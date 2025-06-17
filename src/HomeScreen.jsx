@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {motion} from 'framer-motion';
 import BackButton from "./Components/BackButton.jsx";
 import woodBackground from '../public/images/wood.webp';
 import OrangeButton from "./Components/OrangeButton.jsx";
 import games from "./data/games.js";
 import funFact from "./Components/FunFact.jsx";
+import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 
 function HomeScreen() {
     const navigate = useNavigate();
-    const [voornaam, setVoornaam] = useState('Gebruiker');
-
-    useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem('userData'));
-
-        if (!userData) {
-            navigate('/inloggen'); //
-        } else {
-            setVoornaam(userData.voornaam || 'Gebruiker');
-        }
-    }, []);
+    const [name, setName] = useState('Gebruiker');
 
     return (
+        <>
+            <AntiDeeplink onNameFetched={setName}/>
+
         <motion.div
             className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden"
             style={{ backgroundColor: '#14532d' }}
@@ -30,7 +24,7 @@ function HomeScreen() {
             <BackButton onClick={() => navigate(-1)} />
 
             <h1 className="text-white text-4xl mb-5">
-                Hoi {voornaam}!
+                Hoi {name}!
             </h1>
 
             <motion.div
@@ -102,6 +96,7 @@ function HomeScreen() {
                 </div>
             </div>
         </motion.div>
+        </>
     );
 }
 
