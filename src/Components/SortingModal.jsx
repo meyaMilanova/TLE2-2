@@ -11,7 +11,7 @@ function SortingModal({ isOpen, onClose, title, message }) {
                 <p className="mb-6">{message}</p>
                 <button
                     onClick={onClose}
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    className=" px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition-colors duration-300"
                 >
                     Begrijp ik
                 </button>
