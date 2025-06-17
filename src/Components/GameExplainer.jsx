@@ -33,7 +33,7 @@ function GameExplainer() {
 
     const handlePlay = () => {
         if (game.id === 1) {
-            navigate("/afvalsorteren");
+            navigate("/afvalrapen");
         } else {
             // hier kun je andere spellen later toevoegen
             console.warn("Spel nog niet geïmplementeerd.");
