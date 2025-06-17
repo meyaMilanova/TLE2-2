@@ -10,6 +10,36 @@ const bins = [
     { id: "rest", label: "Rest", img: "../wastesorting/black.png" },
 ];
 
+async function updateSortingData(userId, type) {
+    const body = {
+        paper: type === "paper" ? 1 : 0,
+        food: type === "food" ? 1 : 0,
+        plastic: type === "plastic" ? 1 : 0,
+        rest: type === "rest" ? 1 : 0,
+    };
+//http://145.24.223.108:8000/sortingGame/${userId}/+
+    try {
+        const response = await fetch(`http://145.24.223.108:8000/sortingGame/${userId}/+`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+            throw new Error("Fout bij opslaan van sortering");
+        }
+
+        const data = await response.json();
+        console.log("Sorting saved:", data);
+    } catch (err) {
+        console.error("Opslaan mislukt:", err);
+    }
+}
+
+
 function convertCategoryToType(category) {
     const map = {
         gft: "organic",
@@ -24,12 +54,17 @@ function Sorting() {
     const navigate = useNavigate();
 
     const [items, setItems] = useState([]);
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const userId = userData?.id;
+    console.log(userId)
+
     const [initialTotal, setInitialTotal] = useState(0);
-    const [score, setScore] = useState(0);
+    // const [score, setScore] = useState(0);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
 
     // Check authenticatie bij laden component
+    // Effect 1: Initialiseren bij laden
     useEffect(() => {
         const userData = localStorage.getItem("userData");
         if (!userData) {
@@ -51,6 +86,14 @@ function Sorting() {
         }
     }, [navigate]);
 
+// Effect 2: Navigeren als alles leeg is
+    useEffect(() => {
+        if (items.length === 0 && initialTotal > 0) {
+            navigate("/resultaten");
+        }
+    }, [items, initialTotal, navigate]);
+
+
     const explanations = {
         plastic: "Dit is plastic. Plastic verpakkingen horen in de plasticbak zodat ze gerecycled kunnen worden.",
         organic: "Dit is organisch afval. Etensresten horen in de GFT-bak voor compostering.",
@@ -58,14 +101,17 @@ function Sorting() {
         rest: "Dit is restafval. Dit soort afval kan niet gerecycled worden en hoort in de restbak.",
     };
 
-    function handleDrop(e, binType) {
+    async function handleDrop(e, binType) {
         const itemId = e.dataTransfer.getData("text/plain");
         const currentItem = items[0];
 
         if (currentItem && currentItem.id.toString() === itemId) {
             if (currentItem.type === binType) {
-                setScore((prev) => prev + 1);
+                // setScore((prev) => prev + 1);
+                // setItems((prevItems) => prevItems.slice(1));
+                await updateSortingData(userId, currentItem.type);
                 setItems((prevItems) => prevItems.slice(1));
+
             } else {
                 const explanation = explanations[currentItem.type] || "Onbekend type afval.";
                 setModalMessage(explanation);
@@ -103,25 +149,25 @@ function Sorting() {
                 🗑️ {remaining}/{initialTotal}
             </div>
 
-            {/* Score bovenin gecentreerd */}
-            <div
-                style={{
-                    position: "fixed",
-                    top: 20,
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    background: "#FDE3CF",
-                    borderRadius: "1rem",
-                    padding: "0.5rem 1.2rem",
-                    fontWeight: "bold",
-                    fontSize: "1.5rem",
-                    zIndex: 1000,
-                    color: "#632713",
-                    border: "2px solid red",
-                }}
-            >
-                Score: {score}
-            </div>
+            {/*/!* Score bovenin gecentreerd *!/*/}
+            {/*<div*/}
+            {/*    style={{*/}
+            {/*        position: "fixed",*/}
+            {/*        top: 20,*/}
+            {/*        left: "50%",*/}
+            {/*        transform: "translateX(-50%)",*/}
+            {/*        background: "#FDE3CF",*/}
+            {/*        borderRadius: "1rem",*/}
+            {/*        padding: "0.5rem 1.2rem",*/}
+            {/*        fontWeight: "bold",*/}
+            {/*        fontSize: "1.5rem",*/}
+            {/*        zIndex: 1000,*/}
+            {/*        color: "#632713",*/}
+            {/*        border: "2px solid red",*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    Score: {score}*/}
+            {/*</div>*/}
 
             {/* Alleen huidige item tonen */}
             <div className="flex flex-wrap gap-4 mb-8 justify-center mt-20">

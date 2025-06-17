@@ -74,6 +74,8 @@ function WasteSorting() {
 
             setRandomItems(items => items.filter((_, idx) => idx !== foundIndex));
         }
+
+
     }, [avatarPos, randomItems, collectedCount]);
 
     const getGroupedItems = () => {
