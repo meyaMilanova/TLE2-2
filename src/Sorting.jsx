@@ -81,8 +81,8 @@ function Sorting() {
     const remaining = items.length;
 
     return (
-        <div className="waste-sorting min-h-screen bg-green-100 p-8">
-            <BackButton />
+        <div className="waste-sorting max-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
+            <BackButton/>
 
             {/* Teller rechtsboven */}
             <div
