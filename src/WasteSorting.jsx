@@ -107,6 +107,11 @@ function WasteSorting() {
             <div className="waste-sorting min-h-screen bg-green-100 p-8">
                 <BackButton />
 
+                <h1 className="text-2xl md:text-3xl font-bold text-center mt-4 mb-8 text-green-800">
+                    Sleep het afval naar de juiste bak!
+                </h1>
+
+
                 {/* Teller rechtsboven */}
                 <div
                     style={{
@@ -171,7 +176,7 @@ function WasteSorting() {
                             className="p-2 text-center"
                         >
                             <img src={bin.img} alt={bin.label} className="w-21 h-21 mx-auto" />
-                            <p className="mt-1 text-sm font-medium">{bin.label}</p>
+                            {/*<p className="mt-1 text-sm font-medium">{bin.label}</p>*/}
                         </div>
                     ))}
                 </div>
