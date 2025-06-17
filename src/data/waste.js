@@ -42,10 +42,10 @@ const wasteItems = [
 ];
 
 export const bins = [
-    { id: "plastic", label: "Plastic", img: "../wastesorting/red.png" },
-    { id: "organic", label: "GFT", img: "../wastesorting/green.png" },
-    { id: "paper", label: "Papier", img: "../wastesorting/blue.png" },
-    { id: "rest", label: "Rest", img: "../wastesorting/black.png" },
+    { id: "plastic", label: "Plastic", img: "../wastesorting/trash_orange.png" },
+    { id: "organic", label: "GFT", img: "../wastesorting/trash_green.png" },
+    { id: "paper", label: "Papier", img: "../wastesorting/trash_blue.png" },
+    { id: "rest", label: "Rest", img: "../wastesorting/trash_black.png" },
 ];
 
 export const explanations = {
