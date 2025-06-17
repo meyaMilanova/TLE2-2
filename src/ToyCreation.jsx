@@ -29,7 +29,7 @@ function ToyCreation() {
     // Functie om vuilniszak data op te halen
     async function fetchBagData() {
         try {
-            const response = await fetch(`http://145.24.223.108:8000/sortingGame/:id`, {
+            const response = await fetch(`http://145.24.223.108:8000/sortingGame`, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
