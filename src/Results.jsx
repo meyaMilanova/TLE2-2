@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+
 // Results.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import woodBackground from '../public/images/wood.webp';
