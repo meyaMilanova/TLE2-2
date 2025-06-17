@@ -7,6 +7,7 @@ function Profiel() {
     const navigate = useNavigate();
     const [voornaam, setVoornaam] = useState('Gebruiker');
     const [achternaam, setAchternaam] = useState('Gebruiker Achternaam');
+    const [image_url, setAvatar] = useState('/placeholder-profile.png'); // Default avatar
 
     useEffect(() => {
         const userData = localStorage.getItem('userData');
@@ -18,11 +19,12 @@ function Profiel() {
         const parsedData = JSON.parse(userData);
         setVoornaam(parsedData?.voornaam || 'Gebruiker');
         setAchternaam(parsedData?.achternaam || 'Gebruiker Achternaam');
+        setAvatar(parsedData?.image_url || '/placeholder-profile.png');
     }, [navigate]);
 
     return (
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
-            <BackButton onClick={() => navigate('/hoofdpagina')} />
+            <BackButton onClick={() => navigate('/hoofdpagina')}/>
 
             <h1 className="text-white text-8xl font-bold mb-10 font-itim">Profiel</h1>
 
@@ -41,12 +43,20 @@ function Profiel() {
                     </p>
                 </div>
 
-                {/* Profielfoto placeholder */}
+                {/* Display the user's selected avatar */}
                 <img
-                    src="/placeholder-profile.png"
+                    src={image_url}
                     alt="Profielfoto"
-                    className="w-[12vw] h-[12vw] rounded-full border-4 border-orange-100 object-cover"
+                    className="w-[20vw] h-[20vw] border-4 border-orange-100 object-cover"
                 />
+            </div>
+            <div className='mt-[4vw]'>
+                <button className={`bg-rozeButton text-white font-bold py-4 px-12 text-2xl rounded-full shadow-lg hover:bg-hoverButton font-itim `}>
+                    BEWERKEN
+                </button>
+                <button className={`bg-startButton text-white font-bold py-4 px-12 text-2xl rounded-full shadow-lg hover:bg-hoverButton font-itim `}>
+                    UITLOGGEN
+                </button>
             </div>
         </div>
     );

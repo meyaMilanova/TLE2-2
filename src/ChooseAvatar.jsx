@@ -33,8 +33,8 @@ function AvatarSelection() {
         avatar12,
     ];
 
-    const handleAvatarClick = (avatar) => {
-        setSelectedAvatar(avatar);
+    const handleAvatarClick = (image_url) => {
+        setSelectedAvatar(image_url);
     };
 
     const handleSave = async () => {
@@ -44,16 +44,21 @@ function AvatarSelection() {
         }
 
         try {
-            const response = await fetch('http://145.24.223.108:8000/user/avatar', {
+            const response = await fetch('http://145.24.223.108:8000/avatar', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ avatar: selectedAvatar }),
+                body: JSON.stringify({ image_url: selectedAvatar }),
             });
 
             if (response.ok) {
+                // Save selected avatar in localStorage
+                const userData = JSON.parse(localStorage.getItem('userData')) || {};
+                userData.image_url = selectedAvatar;
+                localStorage.setItem('userData', JSON.stringify(userData));
+
                 alert('Avatar saved successfully!');
             } else {
                 const errorData = await response.json();
@@ -85,17 +90,17 @@ function AvatarSelection() {
                     <img
                         src={selectedAvatar}
                         alt="Selected Avatar"
-                        className="w-auto h-[50vh] border-4 px-2 py-5 border-orange-500 ring-4 ring-yellow-400 ring-inset"
+                        className="w-auto h-[50vh] border-4 px-2 py-5 border-startButton ring-4 ring-hoverButton ring-inset"
                     />
                 ) : (
                     <img
                         src={greyAvatar}
                         alt="Unselected Avatar"
-                        className="w-auto h-[50vh] border-4 px-2 py-5 border-orange-500 ring-4 ring-yellow-400 ring-inset"
+                        className="w-auto h-[50vh] border-4 px-2 py-5 border-startButton ring-4 ring-hoverButton ring-inset"
                     />
                 )}
                 <PinkButton onClick={handleSave} className="mt-6">
-                    Save
+                    SAVE
                 </PinkButton>
             </div>
 
@@ -106,7 +111,7 @@ function AvatarSelection() {
                         key={index}
                         onClick={() => handleAvatarClick(avatar)}
                         className={`cursor-pointer p-2 bg-[#FDE3CF] ${
-                            selectedAvatar === avatar ? 'ring-4 ring-orange-500 ring-inset' : ''
+                            selectedAvatar === avatar ? 'ring-4 ring-startButton ring-inset' : ''
                         }`}
                     >
                         <img
