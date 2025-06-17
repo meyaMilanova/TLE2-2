@@ -3,13 +3,7 @@ import {useNavigate} from "react-router-dom";
 import BackButton from "./Components/BackButton.jsx";
 import SortingModal from "./Components/SortingModal.jsx";
 import AntiDeeplink from "./Components/AntiDeeplink.jsx";
-
-const bins = [
-    { id: "plastic", label: "Plastic", img: "../wastesorting/red.png" },
-    { id: "organic", label: "GFT", img: "../wastesorting/green.png" },
-    { id: "paper", label: "Papier", img: "../wastesorting/blue.png" },
-    { id: "rest", label: "Rest", img: "../wastesorting/black.png" },
-];
+import { bins, map, explanations } from "./data/waste.js";
 
 async function updateSortingData(userId, type) {
     const body = {
@@ -42,12 +36,6 @@ async function updateSortingData(userId, type) {
 
 
 function convertCategoryToType(category) {
-    const map = {
-        gft: "organic",
-        plastic: "plastic",
-        papier: "paper",
-        restafval: "rest",
-    };
     return map[category] || "rest";
 }
 
@@ -88,14 +76,6 @@ function WasteSorting() {
         }
     }, [items, initialTotal, navigate]);
 
-
-    const explanations = {
-        plastic: "Dit is plastic. Plastic verpakkingen horen in de plasticbak zodat ze gerecycled kunnen worden.",
-        organic: "Dit is organisch afval. Etensresten horen in de GFT-bak voor compostering.",
-        paper: "Dit is papier. Schoon en droog papier hoort in de papierbak om hergebruikt te worden.",
-        rest: "Dit is restafval. Dit soort afval kan niet gerecycled worden en hoort in de restbak.",
-    };
-
     async function handleDrop(e, binType) {
         const itemId = e.dataTransfer.getData("text/plain");
         const currentItem = items[0];
@@ -124,8 +104,13 @@ function WasteSorting() {
     return (
         <>
             <AntiDeeplink/>
-            <div className="waste-sorting min-h-screen bg-green-100 p-8">
-                <BackButton />
+            <div className="waste-sorting max-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
+                <BackButton/>
+
+                <h1 className="text-2xl md:text-3xl font-bold text-center mt-4 mb-8 text-green-800">
+                    Sleep het afval naar de juiste bak!
+                </h1>
+
 
                 {/* Teller rechtsboven */}
                 <div
@@ -191,7 +176,7 @@ function WasteSorting() {
                             className="p-2 text-center"
                         >
                             <img src={bin.img} alt={bin.label} className="w-21 h-21 mx-auto" />
-                            <p className="mt-1 text-sm font-medium">{bin.label}</p>
+                            {/*<p className="mt-1 text-sm font-medium">{bin.label}</p>*/}
                         </div>
                     ))}
                 </div>

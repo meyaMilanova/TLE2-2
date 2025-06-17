@@ -35,7 +35,7 @@ function HomeScreen() {
                 transition={{ delay: 0.2, duration: 0.5 }}
             >
                 <motion.p className="text-white text-2xl mr-4">
-                    feitje van de dag:
+                    Feitje van de dag:
                 </motion.p>
                 <motion.h1 className="text-black text-1.5xl">
                     {funFact}
@@ -84,12 +84,25 @@ function HomeScreen() {
                                 <p className="mt-2 mb-2 text-base text-black flex-1">{rectangle.description}</p>
                                 <OrangeButton
                                     type="button"
-                                    onClick={() => navigate(`/game/${rectangle.id}`)}
-                                    style={{ fontSize: '1.4rem', padding: '0.7rem 2rem' }}
+                                    onClick={() => {
+                                        if (rectangle.id !== 3 && rectangle.id !== 4) {
+                                            navigate(`/game/${rectangle.id}`);
+                                        }
+                                    }}
+                                    disabled={rectangle.id === 3 || rectangle.id === 4}
+                                    style={{
+                                        fontSize: '1.4rem',
+                                        padding: '0.7rem 2rem',
+                                        backgroundColor: rectangle.id === 3 || rectangle.id === 4 ? '#cccccc' : '#F97316', // grijs of oranje
+                                        color: rectangle.id === 3 || rectangle.id === 4 ? '#666666' : 'white',
+                                        opacity: rectangle.id === 3 || rectangle.id === 4 ? 0.8 : 1,
+                                        cursor: rectangle.id === 3 || rectangle.id === 4 ? 'not-allowed' : 'pointer',
+                                    }}
                                     className="self-end mb-4 mr-3"
                                 >
-                                    Start
+                                    {rectangle.id === 3 || rectangle.id === 4 ? 'Binnenkort' : 'Start'}
                                 </OrangeButton>
+
                             </div>
                         </motion.div>
                     ))}
