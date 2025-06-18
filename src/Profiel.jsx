@@ -28,7 +28,7 @@ function Profiel() {
     const handleLogout = () => {
         localStorage.removeItem('userData');
         localStorage.removeItem('selectedAvatar');
-        navigate('/login');
+        navigate('/');
     };
 
     return (
