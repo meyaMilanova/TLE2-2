@@ -1,12 +1,14 @@
-import React, {useEffect} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import woodBackground from "../../public/images/wood.webp";
 import GameSlideshow from "./GameSlideshow.jsx";
 import games from "../data/games.js";
 import OrangeButton from "./OrangeButton.jsx";
 import BackButton from "./BackButton.jsx";
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 import AntiDeeplink from "./AntiDeeplink.jsx";
+
+const MotionOrangeButton = motion(OrangeButton);
 
 function GameExplainer() {
     const { id } = useParams();
@@ -75,20 +77,17 @@ function GameExplainer() {
                     <GameSlideshow images={game.images} />
                 </motion.div>
 
-                <motion.div
+                <MotionOrangeButton
+                    type="button"
+                    onClick={handlePlay}
                     whileHover={{ scale: 1.08, rotate: -2 }}
                     whileTap={{ scale: 0.97 }}
                     transition={{ type: "spring", stiffness: 300 }}
+                    style={{ fontSize: '1.8rem', padding: '0.7rem 4rem' }}
                     className="mb-4"
                 >
-                    <OrangeButton
-                        type="button"
-                        onClick={handlePlay}
-                        style={{ fontSize: '1.8rem', padding: '0.7rem 4rem' }}
-                    >
-                        Spelen
-                    </OrangeButton>
-                </motion.div>
+                    Spelen
+                </MotionOrangeButton>
             </motion.div>
         </>
     );
