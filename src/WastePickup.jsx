@@ -1,9 +1,38 @@
 import wasteItems from "./data/waste.js";
 import AvatarMovement from './Components/AvatarMovement.jsx';
-import BackButton from "./Components/BackButton.jsx";
+import PauseButton from "./Components/PauseButton.jsx";
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import AntiDeeplink from "./Components/AntiDeeplink.jsx";
+
+const getRandomWasteItems = () => {
+    const items = [];
+    const rows = 4;
+    const cols = 5;
+    const cellWidth = 100 / cols;
+    const cellHeight = 100 / rows;
+    const usedIndexes = new Set();
+
+    for (let i = 0; i < rows * cols; i++) {
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * wasteItems.length);
+        } while (usedIndexes.has(randomIndex) && usedIndexes.size < wasteItems.length);
+        usedIndexes.add(randomIndex);
+
+        const row = Math.floor(i / cols);
+        const col = i % cols;
+        const left = col * cellWidth + Math.random() * (cellWidth * 0.7);
+        const top = row * cellHeight + Math.random() * (cellHeight * 0.7);
+
+        items.push({
+            ...wasteItems[randomIndex],
+            left,
+            top
+        });
+    }
+    return items;
+};
 
 function WastePickup() {
     const [randomItems, setRandomItems] = useState([]);
@@ -15,43 +44,43 @@ function WastePickup() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        localStorage.removeItem("collectedItems");
-        setCollectedItems([]);
-        setCollectedCount(0);
-    }, []);
+    const updateGameData = (updatedData) => {
+        const currentData = JSON.parse(localStorage.getItem("gameDataWasteSorting")) || {};
+        const newData = { ...currentData, ...updatedData };
+        localStorage.setItem("gameDataWasteSorting", JSON.stringify(newData));
+    };
 
-    useEffect(() => {
-        const getRandomWasteItems = () => {
-            const items = [];
-            const rows = 4;
-            const cols = 5;
-            const cellWidth = 100 / cols;
-            const cellHeight = 100 / rows;
-            const usedIndexes = new Set();
-
-            for (let i = 0; i < rows * cols; i++) {
-                let randomIndex;
-                do {
-                    randomIndex = Math.floor(Math.random() * wasteItems.length);
-                } while (usedIndexes.has(randomIndex) && usedIndexes.size < wasteItems.length);
-                usedIndexes.add(randomIndex);
-
-                const row = Math.floor(i / cols);
-                const col = i % cols;
-                const left = col * cellWidth + Math.random() * (cellWidth * 0.7);
-                const top = row * cellHeight + Math.random() * (cellHeight * 0.7);
-
-                items.push({
-                    ...wasteItems[randomIndex],
-                    left,
-                    top
-                });
-            }
-            return items;
+    const handleMove = (newPos) => {
+        setAvatarPos(newPos);
+        const currentData = JSON.parse(localStorage.getItem("gameDataWasteSorting")) || {};
+        const updatedData = {
+            ...currentData,
+            avatarPos: newPos,
         };
+        localStorage.setItem("gameDataWasteSorting", JSON.stringify(updatedData));
+    };
 
-        setRandomItems(getRandomWasteItems());
+    useEffect(() => {
+        const savedData = JSON.parse(localStorage.getItem("gameDataWasteSorting"));
+        if (savedData) {
+            setCollectedItems(savedData.collectedItems || []);
+            setCollectedCount(savedData.collectedCount || 0);
+            if (savedData.avatarPos && typeof savedData.avatarPos.left === 'number' && typeof savedData.avatarPos.top === 'number') {
+                setAvatarPos(savedData.avatarPos);
+            } else {
+                setAvatarPos({ left: 50, top: 50 });
+            }
+            setRandomItems(savedData.randomItems || getRandomWasteItems());
+        } else {
+            const items = getRandomWasteItems();
+            setRandomItems(items);
+            updateGameData({
+                collectedItems: [],
+                collectedCount: 0,
+                avatarPos: { left: 50, top: 50 },
+                randomItems: items
+            });
+        }
     }, []);
 
     const checkCollision = (avatar, item) => {
@@ -69,15 +98,21 @@ function WastePickup() {
         const foundIndex = randomItems.findIndex(item => checkCollision(avatarPos, item));
         if (foundIndex !== -1) {
             const foundItem = randomItems[foundIndex];
-            setCollectedCount(count => count + 1);
+            const newCollectedCount = collectedCount + 1;
+            const newCollectedItems = [...collectedItems, foundItem];
+            const newRandomItems = randomItems.filter((_, idx) => idx !== foundIndex);
 
-            setCollectedItems(items => {
-                const newCollected = [...items, foundItem];
-                localStorage.setItem("collectedItems", JSON.stringify(newCollected));
-                return newCollected;
+            setCollectedCount(newCollectedCount);
+            setCollectedItems(newCollectedItems);
+            setRandomItems(newRandomItems);
+
+            updateGameData({
+                collectedItems: newCollectedItems,
+                collectedCount: newCollectedCount,
+                avatarPos,
+                randomItems: newRandomItems
             });
-
-            setRandomItems(items => items.filter((_, idx) => idx !== foundIndex));
+            localStorage.setItem("collectedItems", JSON.stringify(newCollectedItems));
         }
     }, [avatarPos, randomItems, collectedCount]);
 
@@ -100,6 +135,21 @@ function WastePickup() {
         return grouped;
     };
 
+    const saveGame = () => {
+        const gameData  = {
+            collectedItems,
+            collectedCount,
+            avatarPos,
+            randomItems
+        };
+        localStorage.setItem("gameDataWasteSorting", JSON.stringify(gameData));
+    }
+
+    const handleBack = () => {
+        saveGame();
+        navigate('/pauze', { state: { gameKey: 'gameDataWasteSorting' } });
+    };
+
     return (
         <>
             <AntiDeeplink />
@@ -112,7 +162,7 @@ function WastePickup() {
                 backgroundPosition: "center",
             }}
         >
-            <BackButton onClick={() => { }} />
+            <PauseButton onClick={handleBack} />
             <div style={{
                 position: "fixed",
                 top: 20,
@@ -163,7 +213,10 @@ function WastePickup() {
                         <h2 className="text-2xl font-bold mb-4">🗑️ Je vuilniszak zit vol!</h2>
                         <p className="mb-6 text-lg">Klik op verder om het afval te sorteren.</p>
                         <button
-                            onClick={() => navigate("/afvalsorteren")}
+                            onClick={() => {
+                                saveGame();
+                                navigate("/afvalsorteren");
+                            }}
                             className="w-full bg-green-600 uppercase text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
                         >
                             Verder
@@ -173,7 +226,7 @@ function WastePickup() {
             )}
 
             <div className="relative w-[100vw] h-[100vh] rounded-xl overflow-hidden">
-                <AvatarMovement onMove={setAvatarPos} />
+                <AvatarMovement position={avatarPos} onMove={handleMove} />
                 {randomItems.map((item, index) => (
                     <div
                         key={index}

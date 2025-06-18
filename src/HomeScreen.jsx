@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {motion} from 'framer-motion';
-import BackButton from "./Components/BackButton.jsx";
+import LogoutButton from "./Components/LogoutButton.jsx";
 import woodBackground from '../public/images/wood.webp';
 import OrangeButton from "./Components/OrangeButton.jsx";
 import games from "./data/games.js";
@@ -36,7 +36,7 @@ function HomeScreen() {
             style={{ backgroundColor: '#14532d' }}
             animate={{ opacity: 1, y: 0 }}
         >
-                <BackButton onClick={() => navigate(-1)} />
+            <LogoutButton onClick={() => navigate('/')} />
 
                 <div className='flex justify-center items-center gap-[1vw] pl-[86vw] mt-[-3vw]' onClick={() => navigate('/profiel')}>
                     <p className='text-right text-white text-[1.6vw] leading-none'>{name}</p>

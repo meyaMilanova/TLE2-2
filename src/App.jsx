@@ -4,6 +4,7 @@ import RegisterScreen from "./RegisterScreen.jsx";
 import LoginScreen from "./LoginScreen.jsx";
 import HomeScreen from "./HomeScreen.jsx";
 import GameExplainer from "./Components/GameExplainer.jsx";
+import PauseMenu from "./PauseMenu.jsx";
 import WastePickup from "./WastePickup.jsx";
 import AvatarMovement from "./Components/AvatarMovement.jsx";
 import WasteSorting from "./WasteSorting.jsx";
@@ -33,6 +34,10 @@ const router = createBrowserRouter([{
             {
                 path: "/game/:id",
                 element: <GameExplainer />
+            },
+            {
+                path: "/pauze",
+                element: <PauseMenu />
             },
             {
                 path: "/afvalrapen",
