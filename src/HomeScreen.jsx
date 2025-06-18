@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {motion} from 'framer-motion';
 import LogoutButton from "./Components/LogoutButton.jsx";
@@ -7,10 +7,25 @@ import OrangeButton from "./Components/OrangeButton.jsx";
 import games from "./data/games.js";
 import funFact from "./Components/FunFact.jsx";
 import AntiDeeplink from "./Components/AntiDeeplink.jsx";
+import {greyAvatar} from "./data/avatars.js";
+
+
 
 function HomeScreen() {
     const navigate = useNavigate();
     const [name, setName] = useState('Gebruiker');
+    const [avatar, setAvatar] = useState('Profielfoto');
+
+    useEffect(() => {
+        const userData = localStorage.getItem('userData');
+        const avatarData = localStorage.getItem('selectedAvatar');
+
+        if (userData && avatarData) {
+            const parsedUserData = JSON.parse(userData);
+            setName(parsedUserData?.voornaam || 'Gebruiker');
+            setAvatar(avatarData || 'Profielfoto');
+        }
+    }, []);
 
     return (
         <>
@@ -23,9 +38,24 @@ function HomeScreen() {
         >
             <LogoutButton onClick={() => navigate('/')} />
 
-            <h1 className="text-white text-4xl mb-5">
-                Hoi {name}!
-            </h1>
+                <div className='flex justify-center items-center gap-[1vw] pl-[86vw] mt-[-3vw]' onClick={() => navigate('/profiel')}>
+                    <p className='text-right text-white text-[1.6vw] leading-none'>{name}</p>
+                    {avatar ? (
+                        <img
+                            src={avatar}
+                            alt="Profielfoto"
+                            className="w-[5vw] h-[5vw] p-2 rounded-full border-2 border-startButton object-cover ring-2 ring-hoverButton"                            />
+                    ) : (
+                        <img
+                            src={greyAvatar}
+                            alt="Grey Profielfoto"
+                            className="w-[5vw] h-[5vw] p-2 rounded-full border-2 border-startButton object-cover ring-2 ring-hoverButton"                            />
+                    )}
+                </div>
+
+            {/*<h1 className="text-white text-4xl mb-5">*/}
+            {/*    Hoi {name}!*/}
+            {/*</h1>*/}
 
             <motion.div
                 style={{ backgroundColor: '#72AC43' }}
