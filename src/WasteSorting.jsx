@@ -4,7 +4,7 @@ import BackButton from "./Components/BackButton.jsx";
 import SortingModal from "./Components/SortingModal.jsx";
 import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 import { bins, map, explanations } from "./data/waste.js";
-import confetti from "canvas-confetti";
+// import confetti from "canvas-confetti";
 
 
 async function updateSortingData(userId, type) {
