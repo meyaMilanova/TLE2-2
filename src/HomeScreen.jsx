@@ -21,7 +21,15 @@ function HomeScreen() {
             style={{ backgroundColor: '#14532d' }}
             animate={{ opacity: 1, y: 0 }}
         >
-            <BackButton onClick={() => navigate(-1)} />
+            <div className='flex justify-between mx-[3vw]'>
+                <BackButton onClick={() => navigate(-1)} />
+
+                <div>
+                    <p>Hoi<br/>{name}</p>
+                    <img/>
+                </div>
+
+            </div>
 
             <h1 className="text-white text-4xl mb-5">
                 Hoi {name}!
