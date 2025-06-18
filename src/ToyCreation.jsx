@@ -17,13 +17,12 @@ function ToyCreation() {
     const [speelgoedData, setSpeelgoedData] = useState(null)
 
     const parsedData = JSON.parse(localStorage.getItem('userData'))
-    // const userId = parsedData?.id
-    const userId = '684abee8a291c2dfb2a5eda1'
+    const userId = parsedData?.id
 
     // Functie om vuilniszak data op te halen
     async function fetchBagData() {
         try {
-            const response = await fetch(`http://localhost:8000/sortingGame/user/${userId}`, {
+            const response = await fetch(`http://145.24.223.108:8000/sortingGame/user/${userId}`, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -42,7 +41,7 @@ function ToyCreation() {
     // Functie om craftable speelgoed op te halen
     async function fetchToyData() {
         try {
-            const response = await fetch(`http://localhost:8000/pet/craftable/${userId}`, {
+            const response = await fetch(`http://145.24.223.108:8000/pet/craftable/${userId}`, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -60,7 +59,7 @@ function ToyCreation() {
 
     async function handlePetCrafting(toyId) {
         try {
-            const response = await fetch(`http://localhost:8000/sortingGame/${userId}/min`, {
+            const response = await fetch(`http://145.24.223.108:8000/sortingGame/${userId}/min`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -130,7 +129,7 @@ function ToyCreation() {
                                         transition={{ delay: 0.1 * idx, duration: 0.4 }}
                                     >
                                         <h2 className="text-lg font-semibold text-gray-800 mb-2">{toy.name}</h2>
-                                        <img src={toy.image_url} alt={toy.name} className="w-20 h-20 mb-2" />
+                                        <img src={toy.image_url} alt={toy.name} className="w-20  mb-2" />
 
                                         {toy.plastic > 0 && (
                                             <p className="text-sm text-gray-700 mb-1">{toy.plastic} plastic</p>
