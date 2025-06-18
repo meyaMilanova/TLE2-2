@@ -18,11 +18,12 @@ function HomeScreen() {
 
     useEffect(() => {
         const userData = localStorage.getItem('userData');
+        const avatarData = localStorage.getItem('selectedAvatar');
 
-        if (userData) {
-            const parsedData = JSON.parse(userData);
-            setName(parsedData?.voornaam || 'Gebruiker');
-            setAvatar(parsedData?.avatar || 'Profielfoto');
+        if (userData && avatarData) {
+            const parsedUserData = JSON.parse(userData);
+            setName(parsedUserData?.voornaam || 'Gebruiker');
+            setAvatar(avatarData || 'Profielfoto');
         }
     }, []);
 
