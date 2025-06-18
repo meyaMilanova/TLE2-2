@@ -44,12 +44,12 @@ function HomeScreen() {
                         <img
                             src={avatar}
                             alt="Profielfoto"
-                            className="w-[5vw] h-[5vw] p-1 rounded-full border-2 border-startButton object-cover ring-2 ring-hoverButton"                            />
+                            className="w-[5vw] h-[5vw] p-2 rounded-full border-2 border-startButton object-cover ring-2 ring-hoverButton"                            />
                     ) : (
                         <img
                             src={greyAvatar}
                             alt="Grey Profielfoto"
-                            className="w-[5vw] h-[5vw] p-1 rounded-full border-2 border-startButton object-cover ring-2 ring-hoverButton"                            />
+                            className="w-[5vw] h-[5vw] p-2 rounded-full border-2 border-startButton object-cover ring-2 ring-hoverButton"                            />
                     )}
                 </div>
 
