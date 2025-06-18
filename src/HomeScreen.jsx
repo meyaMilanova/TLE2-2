@@ -14,14 +14,15 @@ import {greyAvatar} from "./data/avatars.js";
 function HomeScreen() {
     const navigate = useNavigate();
     const [name, setName] = useState('Gebruiker');
-    const [avatar, setAvatar] = useState({greyAvatar});
+    const [avatar, setAvatar] = useState('Profielfoto');
 
     useEffect(() => {
         const userData = localStorage.getItem('userData');
+
         if (userData) {
             const parsedData = JSON.parse(userData);
             setName(parsedData?.voornaam || 'Gebruiker');
-            setAvatar(parsedData?.avatar || './data/avatars.js');
+            setAvatar(parsedData?.avatar || 'Profielfoto');
         }
     }, []);
 
@@ -38,11 +39,18 @@ function HomeScreen() {
 
                 <div className='flex justify-center items-center gap-[1vw] pl-[86vw] mt-[-3vw]' onClick={() => navigate('/profiel')}>
                     <p className='text-right text-white text-[1.6vw] leading-none'>{name}</p>
-                    <img
-                        src={avatar}
-                        alt="Profielfoto"
-                        className="w-[5vw] h-[5vw] p-1 rounded-full border-2 border-startButton object-cover ring-2 ring-hoverButton"
-                    /></div>
+                    {avatar ? (
+                        <img
+                            src={avatar}
+                            alt="Profielfoto"
+                            className="w-[5vw] h-[5vw] p-1 rounded-full border-2 border-startButton object-cover ring-2 ring-hoverButton"                            />
+                    ) : (
+                        <img
+                            src={greyAvatar}
+                            alt="Grey Profielfoto"
+                            className="w-[5vw] h-[5vw] p-1 rounded-full border-2 border-startButton object-cover ring-2 ring-hoverButton"                            />
+                    )}
+                </div>
 
             {/*<h1 className="text-white text-4xl mb-5">*/}
             {/*    Hoi {name}!*/}
