@@ -148,7 +148,7 @@ function WastePickup() {
                         </div>
                         <button
                             onClick={() => setShowOverview(false)}
-                            className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600"
+                            className="w-full bg-red-500 uppercase text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600"
                         >
                             Sluiten
                         </button>
@@ -164,7 +164,7 @@ function WastePickup() {
                         <p className="mb-6 text-lg">Klik op verder om het afval te sorteren.</p>
                         <button
                             onClick={() => navigate("/afvalsorteren")}
-                            className="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
+                            className="w-full bg-green-600 uppercase text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
                         >
                             Verder
                         </button>
