@@ -4,7 +4,7 @@ function PinkButton({ type = "button", children, className = "", style = {}, ...
     return (
         <button
             type={type}
-            className={`bg-rozeButton text-white font-bold py-4 px-12 text-2xl rounded-full shadow-lg hover:bg-hoverButton font-itim ${className}`}
+            className={`bg-rozeButton uppercase text-white font-bold py-4 px-12 text-2xl rounded-full shadow-lg hover:bg-hoverButton font-itim ${className}`}
             style={style}
             {...props}
         >
