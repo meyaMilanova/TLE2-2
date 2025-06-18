@@ -16,13 +16,14 @@ function ToyCreation() {
     // State voor speelgoeddata
     const [speelgoedData, setSpeelgoedData] = useState(null)
 
+    const parsedData = JSON.parse(localStorage.getItem('userData'))
+    // const userId = parsedData?.id
+    const userId = '684abee8a291c2dfb2a5eda1'
+
     // Functie om vuilniszak data op te halen
     async function fetchBagData() {
         try {
-            const parsedData = JSON.parse(localStorage.getItem('userData'))
-            const userId = parsedData?.id
-
-            const response = await fetch(`http://145.24.223.108:8000/sortingGame/user/${userId}`, {
+            const response = await fetch(`http://localhost:8000/sortingGame/user/${userId}`, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -41,10 +42,7 @@ function ToyCreation() {
     // Functie om craftable speelgoed op te halen
     async function fetchToyData() {
         try {
-            const parsedData = JSON.parse(localStorage.getItem('userData'))
-            const userId = parsedData?.id
-
-            const response = await fetch(`http://localhost:8000/pet/craftable/684abee8a291c2dfb2a5eda1`, {
+            const response = await fetch(`http://localhost:8000/pet/craftable/${userId}`, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -57,6 +55,30 @@ function ToyCreation() {
         } catch (error) {
             console.error(error);
             setSpeelgoedData(null);
+        }
+    }
+
+    async function handlePetCrafting(toyId) {
+        try {
+            const response = await fetch(`http://localhost:8000/sortingGame/${userId}/min`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({ toyId })
+            });
+
+            const data = await response.json()
+            if (!response.ok) {
+                throw new Error(data.error || "Fout bij het maken van speelgoed")
+            }
+            await fetchToyData()
+            await fetchBagData()
+            console.log(data)
+        } catch (error) {
+            console.error("Maken van speelgoed mislukt:", error)
+            alert(error.message)
         }
     }
 
@@ -110,29 +132,29 @@ function ToyCreation() {
                                         <h2 className="text-lg font-semibold text-gray-800 mb-2">{toy.name}</h2>
                                         <img src={toy.image_url} alt={toy.name} className="w-20 h-20 mb-2" />
 
-                                        {toy.required_plastic > 0 && (
-                                            <p className="text-sm text-gray-700 mb-1">{toy.required_plastic} plastic</p>
+                                        {toy.plastic > 0 && (
+                                            <p className="text-sm text-gray-700 mb-1">{toy.plastic} plastic</p>
                                         )}
-                                        {toy.required_paper > 0 && (
-                                            <p className="text-sm text-gray-700 mb-1">{toy.required_paper} papier</p>
+                                        {toy.paper > 0 && (
+                                            <p className="text-sm text-gray-700 mb-1">{toy.paper} papier</p>
                                         )}
-                                        {toy.required_food > 0 && (
-                                            <p className="text-sm text-gray-700 mb-1">{toy.required_food} voedsel</p>
+                                        {toy.food > 0 && (
+                                            <p className="text-sm text-gray-700 mb-1">{toy.food} gft</p>
                                         )}
-                                        {toy.required_rest > 0 && (
-                                            <p className="text-sm text-gray-700 mb-3">{toy.required_rest} restafval</p>
+                                        {toy.rest > 0 && (
+                                            <p className="text-sm text-gray-700 mb-3">{toy.rest} restafval</p>
                                         )}
 
                                         {toy.isUnlocked ? (
                                             <div className="text-white text-sm px-4 py-1 rounded-full bg-orange-400">
-                                                Gekocht
+                                                Gemaakt
                                             </div>
                                         ) : (
                                             <button
-                                                onClick={() => console.log(`Crafting ${toy.name}`)}
+                                                onClick={() => handlePetCrafting(toy._id)}
                                                 className="text-black text-sm px-4 py-1 rounded-full bg-pink-300 hover:bg-pink-400"
                                             >
-                                                Kopen
+                                                Maken
                                             </button>
                                         )}
                                     </motion.div>
