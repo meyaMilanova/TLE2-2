@@ -41,6 +41,10 @@ function LoginScreen() {
                 if (!localStorage.getItem('userData')) {
                     localStorage.setItem('userData', JSON.stringify(data.user))
                 }
+                if (!localStorage.getItem('selectedAvatar')) {
+                    localStorage.setItem('selectedAvatar', JSON.stringify(data.user.avatar))
+                    console.log(JSON.stringify(data.user.avatar))
+                }
 
                 navigate('/hoofdpagina');
 
