@@ -19,6 +19,7 @@ const games = [
         images: [
             "../games/toyGame2.png",
             "../games/toyGame3.png",
+            "../games/toyGame4.png",
         ],
     },
     {
