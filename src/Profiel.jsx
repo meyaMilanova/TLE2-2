@@ -25,6 +25,17 @@ function Profiel() {
         }
     }, []);
 
+    useEffect(() => {
+        const raw = localStorage.getItem('selectedAvatar');
+        if (raw) {
+            try {
+                setAvatar(JSON.parse(raw));
+            } catch {
+                setAvatar(raw);
+            }
+        }
+    }, []);
+
     const handleLogout = () => {
         localStorage.removeItem('userData');
         localStorage.removeItem('selectedAvatar');

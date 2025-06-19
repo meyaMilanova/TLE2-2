@@ -14,7 +14,7 @@ import {greyAvatar} from "./data/avatars.js";
 function HomeScreen() {
     const navigate = useNavigate();
     const [name, setName] = useState('Gebruiker');
-    const [avatar, setAvatar] = useState('Profielfoto');
+    const [avatar, setAvatar] = useState(null);
 
     useEffect(() => {
         const userData = localStorage.getItem('userData');
@@ -24,8 +24,21 @@ function HomeScreen() {
             const parsedUserData = JSON.parse(userData);
             setName(parsedUserData?.voornaam || 'Gebruiker');
             setAvatar(avatarData || 'Profielfoto');
+            console.log(avatarData)
         }
     }, []);
+
+    useEffect(() => {
+        const raw = localStorage.getItem('selectedAvatar');
+        if (raw) {
+            try {
+                setAvatar(JSON.parse(raw));
+            } catch {
+                setAvatar(raw);
+            }
+        }
+    }, []);
+
 
     return (
         <>
