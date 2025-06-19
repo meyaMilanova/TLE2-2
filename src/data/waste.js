@@ -7,12 +7,12 @@ const wasteItems = [
     {
         name: "Appel",
         image: "../wastesorting/appel.png",
-        category: "gft",
+        category: "organic",
     },
     {
         name: "Broodje",
         image: "../wastesorting/broodje.png",
-        category: "gft",
+        category: "organic",
     },
     {
         name: "Flesje",
@@ -57,9 +57,13 @@ export const explanations = {
 
 export const map = {
     gft: "organic",
+    organic: "organic",
     plastic: "plastic",
     papier: "paper",
+    paper: "paper",          // extra safety
     restafval: "rest",
+    rest: "rest",
 };
+
 
 export default wasteItems;

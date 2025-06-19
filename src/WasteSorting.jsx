@@ -10,10 +10,13 @@ import confetti from "canvas-confetti";
 async function updateSortingData(userId, type) {
     const body = {
         paper: type === "paper" ? 1 : 0,
-        organic: type === "organic" ? 1 : 0,
+        food: type === "organic" ? 1 : 0,
         plastic: type === "plastic" ? 1 : 0,
         rest: type === "rest" ? 1 : 0,
     };
+
+    // 👇 Dit toont wat er gestuurd wordt
+    console.log(`📤 Verstuur PATCH voor ${type}:`, body);
 
     try {
         const response = await fetch(`http://145.24.223.108:8000/sortingGame/${userId}/plus`, {
@@ -30,11 +33,14 @@ async function updateSortingData(userId, type) {
         }
 
         const data = await response.json();
-        console.log("Sorting saved:", data);
+
+        // 👇 Dit toont wat je terugkrijgt van de backend
+        console.log("✅ Response van backend:", data);
     } catch (err) {
-        console.error("Opslaan mislukt:", err);
+        console.error("❌ Opslaan mislukt:", err);
     }
 }
+
 
 function convertCategoryToType(category) {
     return map[category] || "rest";
