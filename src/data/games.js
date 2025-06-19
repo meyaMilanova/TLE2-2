@@ -15,15 +15,10 @@ const games = [
         id: 2,
         title: "Speelgoed maken",
         description: "Maak je eigen speelgoed van gerecycled materiaal.",
-        image: "../images/placeholder.jpg",
+        image: "../games/toyGame.png",
         images: [
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
-            "../images/placeholder.jpg",
+            "../games/toyGame2.png",
+            "../games/toyGame3.png",
         ],
     },
     {
