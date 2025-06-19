@@ -57,7 +57,6 @@ function LoginScreen() {
 
     return (
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
-            <BackButton onClick={() => { /* handle navigation here */ }} />
 
             <h1
                 className="text-white text-8xl font-bold mb-10 font-itim">Inloggen</h1>

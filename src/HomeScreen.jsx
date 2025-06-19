@@ -36,7 +36,6 @@ function HomeScreen() {
             style={{ backgroundColor: '#14532d' }}
             animate={{ opacity: 1, y: 0 }}
         >
-            <LogoutButton onClick={() => navigate('/')} />
 
                 <div className='flex justify-center items-center gap-[1vw] pl-[86vw] mt-[-3vw]' onClick={() => navigate('/profiel')}>
                     <p className='text-right text-white text-[1.6vw] leading-none'>{name}</p>

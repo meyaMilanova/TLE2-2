@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PinkButton from './components/PinkButton';
 import BackButton from "./Components/BackButton.jsx";
+import OrangeButton from "./Components/OrangeButton.jsx";
 
 function RegisterScreen() {
     const [form, setForm] = useState({
@@ -47,7 +48,6 @@ function RegisterScreen() {
 
     return (
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
-            <BackButton onClick={() => { /* handle navigation here */ }} />
 
             <h1
                 className="text-white text-8xl font-bold mb-10 font-itim" >Aanmelden</h1>
@@ -92,7 +92,7 @@ function RegisterScreen() {
 
                 <div className="flex justify-around mt-6">
                     <PinkButton type="button" onClick={() => navigate('/inloggen')}>INLOGGEN</PinkButton>
-                    <PinkButton type="submit">VOLGENDE</PinkButton>
+                    <OrangeButton type="submit">VOLGENDE</OrangeButton>
                 </div>
             </form>
         </div>

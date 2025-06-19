@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "./Components/BackButton.jsx";
 import SortingModal from "./Components/SortingModal.jsx";
 import AntiDeeplink from "./Components/AntiDeeplink.jsx";
+import PauseButton from "./Components/PauseButton.jsx";
 import { bins, map, explanations } from "./data/waste.js";
 import confetti from "canvas-confetti";
 
@@ -93,7 +94,6 @@ function WasteSorting() {
 
         if (currentItem && currentItem.id.toString() === itemId) {
             if (currentItem.type === binType) {
-                // Confetti animation at drop position
                 confetti({
                     particleCount: 100,
                     spread: 70,
@@ -118,7 +118,6 @@ function WasteSorting() {
         if (!currentItem) return;
 
         if (currentItem.type === binType) {
-            // Confetti animation in center
             confetti({
                 particleCount: 100,
                 spread: 70,
@@ -138,15 +137,29 @@ function WasteSorting() {
         e.dataTransfer.setData("text/plain", id);
     }
 
+    function saveGame() {
+        const gameData = {
+            items,
+            initialTotal
+        };
+        localStorage.setItem("gameDataWasteSorting", JSON.stringify(gameData));
+    }
+
+    function handlePause() {
+        saveGame();
+        navigate("/pauze", { state: { gameKey: "gameDataWasteSorting" } });
+    }
+
     const remaining = items.length;
 
     return (
         <>
             <AntiDeeplink />
             <div className="waste-sorting min-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
+                <PauseButton onClick={handlePause} />
+
                 <div className="grid grid-cols-3 items-center mb-8 px-4">
                     <div className="justify-self-start">
-                        <BackButton />
                     </div>
 
                     <h1

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import PinkButton from "./Components/PinkButton.jsx";
-import OrangeButton from "./Components/OrangeButton.jsx";
+import PinkButton from "./PinkButton.jsx";
+import OrangeButton from "./OrangeButton.jsx";
 
 function PauseMenu() {
     const navigate = useNavigate();

@@ -2,35 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import BackButton from "./Components/BackButton.jsx";
+import PauseButton from "./Components/PauseButton.jsx";
 import woodTexture from '../public/images/wood.webp';
 import AntiDeeplink from "./Components/AntiDeeplink.jsx";
 import toys from './data/toys.js';
-
 
 function ToyCreation() {
     const navigate = useNavigate();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-    // State voor vuilniszak data
     const [bagData, setBagData] = useState(null);
-    // State voor speelgoeddata
-    const [speelgoedData, setSpeelgoedData] = useState(null)
+    const [speelgoedData, setSpeelgoedData] = useState(null);
 
-    const parsedData = JSON.parse(localStorage.getItem('userData'))
-    const userId = parsedData?.id
+    const parsedData = JSON.parse(localStorage.getItem('userData'));
+    const userId = parsedData?.id;
 
-    // Functie om vuilniszak data op te halen
+    // Ophalen vuilnisdata
     async function fetchBagData() {
         try {
             const response = await fetch(`http://145.24.223.108:8000/sortingGame/user/${userId}`, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
-            if (!response.ok) {
-                throw new Error("Fout bij ophalen van vuilniszak data");
-            }
+            if (!response.ok) throw new Error("Fout bij ophalen van vuilniszak data");
             const data = await response.json();
-            console.log(data)
             setBagData(data);
         } catch (error) {
             console.error(error);
@@ -38,18 +33,15 @@ function ToyCreation() {
         }
     }
 
-    // Functie om craftable speelgoed op te halen
+    // Ophalen speelgoeddata
     async function fetchToyData() {
         try {
             const response = await fetch(`http://145.24.223.108:8000/pet/craftable/${userId}`, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
-            if (!response.ok) {
-                throw new Error("Fout bij ophalen van speelgoed data");
-            }
+            if (!response.ok) throw new Error("Fout bij ophalen van speelgoed data");
             const data = await response.json();
-            console.log(data)
             setSpeelgoedData(data);
         } catch (error) {
             console.error(error);
@@ -57,6 +49,7 @@ function ToyCreation() {
         }
     }
 
+    // Speelgoed maken
     async function handlePetCrafting(toyId) {
         try {
             const response = await fetch(`http://145.24.223.108:8000/sortingGame/${userId}/min`, {
@@ -68,16 +61,14 @@ function ToyCreation() {
                 body: JSON.stringify({ toyId })
             });
 
-            const data = await response.json()
-            if (!response.ok) {
-                throw new Error(data.error || "Fout bij het maken van speelgoed")
-            }
-            await fetchToyData()
-            await fetchBagData()
-            console.log(data)
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "Fout bij het maken van speelgoed");
+
+            await fetchToyData();
+            await fetchBagData();
         } catch (error) {
-            console.error("Maken van speelgoed mislukt:", error)
-            alert(error.message)
+            console.error("Maken van speelgoed mislukt:", error);
+            alert(error.message);
         }
     }
 
@@ -85,28 +76,36 @@ function ToyCreation() {
         fetchToyData();
     }, []);
 
-
-    // Haal data op zodra popup opent
     useEffect(() => {
         if (isPopupOpen) {
             fetchBagData();
         }
     }, [isPopupOpen]);
 
+    // 🔴 Pauze functionaliteit
+    function handlePause() {
+        const gameData = {
+            speelgoedData,
+            bagData
+        };
+        localStorage.setItem("gameDataToyCreation", JSON.stringify(gameData));
+        navigate("/pauze", { state: { gameKey: "gameDataToyCreation" } });
+    }
+
     return (
         <>
             <AntiDeeplink />
             <motion.div
                 className="min-h-screen bg-green-900 flex flex-col items-center py-10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{opacity: 0}}
+                animate={{opacity: 1}}
             >
-                <BackButton onClick={() => navigate(-1)} />
-                <h1 className="text-white text-5xl font-bold mb-10">Speelgoed</h1>
+                <PauseButton onClick={handlePause}/>
+                <h1 className="text-white text-5xl font-bold mb-10">Speelgoed Maken</h1>
 
                 <div className="flex flex-col gap-8">
                     {speelgoedData?.items && speelgoedData.items.length > 0 ? (
-                        Array.from({ length: Math.ceil(speelgoedData.items.length / 3) }).map((_, rowIndex) => (
+                        Array.from({length: Math.ceil(speelgoedData.items.length / 3)}).map((_, rowIndex) => (
                             <div
                                 key={rowIndex}
                                 className="flex gap-4 justify-center px-6 py-4"
@@ -123,13 +122,13 @@ function ToyCreation() {
                                     <motion.div
                                         key={toy._id}
                                         className="flex flex-col items-center p-4 w-64 rounded shadow relative"
-                                        style={{ backgroundColor: '#D9D9D9' }}
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ delay: 0.1 * idx, duration: 0.4 }}
+                                        style={{backgroundColor: '#D9D9D9'}}
+                                        initial={{opacity: 0, scale: 0.9}}
+                                        animate={{opacity: 1, scale: 1}}
+                                        transition={{delay: 0.1 * idx, duration: 0.4}}
                                     >
                                         <h2 className="text-lg font-semibold text-gray-800 mb-2">{toy.name}</h2>
-                                        <img src={toy.image_url} alt={toy.name} className="w-20  mb-2" />
+                                        <img src={toy.image_url} alt={toy.name} className="w-20  mb-2"/>
 
                                         {toy.plastic > 0 && (
                                             <p className="text-sm text-gray-700 mb-1">{toy.plastic} plastic</p>
@@ -167,7 +166,7 @@ function ToyCreation() {
 
                 <button
                     onClick={() => setIsPopupOpen(true)}
-                    className="mt-12 px-8 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg shadow-lg transition"
+                    className="absolute top-6 right-6 px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg shadow-lg transition z-50 text-xl"
                 >
                     Mijn vuilniszak
                 </button>
@@ -180,15 +179,15 @@ function ToyCreation() {
                         <motion.div
                             className="bg-white rounded-lg p-6 max-w-md w-full shadow-lg relative"
                             onClick={(e) => e.stopPropagation()}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
+                            initial={{opacity: 0, scale: 0.8}}
+                            animate={{opacity: 1, scale: 1}}
+                            exit={{opacity: 0, scale: 0.8}}
                         >
                             <h2 className="text-2xl font-bold mb-4">Mijn Vuilniszak</h2>
                             {bagData ? (
                                 <div>
                                     <p>Papier: <strong>{bagData.paper}</strong></p>
-                                    <p>Voedsel: <strong>{bagData.food}</strong></p>
+                                    <p>Gft: <strong>{bagData.food}</strong></p>
                                     <p>Plastic: <strong>{bagData.plastic}</strong></p>
                                     <p>Rest: <strong>{bagData.rest}</strong></p>
                                 </div>
