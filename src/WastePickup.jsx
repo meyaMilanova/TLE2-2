@@ -41,6 +41,8 @@ function WastePickup() {
     const [collectedItems, setCollectedItems] = useState([]);
     const [showOverview, setShowOverview] = useState(false);
     const [showFullMessage, setShowFullMessage] = useState(false);
+    const [avatar, setAvatar] = useState(""); // Add state for avatar
+
 
     const navigate = useNavigate();
 
@@ -80,6 +82,13 @@ function WastePickup() {
                 avatarPos: { left: 50, top: 50 },
                 randomItems: items
             });
+        };
+
+
+        const savedAvatar = localStorage.getItem("selectedAvatar");
+        if (savedAvatar) {
+            const movementAvatar = savedAvatar.replace(".png", "1.png");
+            setAvatar(movementAvatar);
         }
     }, []);
 
@@ -226,7 +235,7 @@ function WastePickup() {
             )}
 
             <div className="relative w-[100vw] h-[100vh] rounded-xl overflow-hidden">
-                <AvatarMovement position={avatarPos} onMove={handleMove} />
+                <AvatarMovement position={avatarPos} onMove={handleMove} avatar={avatar}/>
                 {randomItems.map((item, index) => (
                     <div
                         key={index}
