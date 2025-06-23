@@ -15,6 +15,16 @@ function AvatarMovement({ position, onMove }) {
         up: [7, 8],
     };
 
+    const [avatar, setAvatar] = useState("blond-hair-girl-avatar-p.png");
+
+    useEffect(() => {
+        const savedAvatar = localStorage.getItem("selectedAvatar");
+        if (savedAvatar) {
+            const baseName = savedAvatar.replace("-p.png", ".png");
+            setAvatar(baseName);
+        }
+    }, []);
+
     useEffect(() => {
         if (
             position &&
@@ -23,7 +33,6 @@ function AvatarMovement({ position, onMove }) {
             setPos(position);
         }
     }, [position]);
-
 
     const handleKeyDown = (event) => {
         const key = event.key;
@@ -131,23 +140,24 @@ function AvatarMovement({ position, onMove }) {
             <div
                 className="absolute w-[100px] h-[100px] bg-no-repeat bg-cover"
                 style={{
-                    top: `${position.top}%`,
-                    left: `${position.left}%`,
-                    backgroundImage: "url('src/assets/images/avatars/pink-hair-avatar.png')",
+                    top: `${pos.top}%`,
+                    left: `${pos.left}%`,
+                    backgroundImage: `url('${avatar}')`,
                     backgroundPosition: `-${frame * 100}px 0`,
                     zIndex: 10,
+                    imageRendering: "pixelated"
                 }}
             ></div>
-
-            {/* Smaller Avatar */}
+            {/* Small Avatar */}
             <div
-                className="absolute w-[50px] h-[50px] bg-no-repeat bg-cover opacity-80"
+                className="absolute w-[50px] h-[50px] bg-no-repeat bg-cover"
                 style={{
-                    top: `${position.top + 6}%`,
-                    left: `${position.left - 3}%`,
-                    backgroundImage: "url('src/assets/images/avatars/red-hat-avatar.png')",
+                    top: `${pos.top + 6}%`,
+                    left: `${pos.left - 3}%`,
+                    backgroundImage: `url('${avatar}')`,
                     backgroundPosition: `-${frame * 50}px 0`,
                     zIndex: 9,
+                    imageRendering: "pixelated"
                 }}
             ></div>
         </div>
