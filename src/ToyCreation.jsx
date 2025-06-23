@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import BackButton from "./Components/BackButton.jsx";
-import PauseButton from "./Components/PauseButton.jsx";
+import BackButton from "./components/BackButton.jsx";
+import PauseButton from "./components/PauseButton.jsx";
 import woodTexture from '../public/images/wood.webp';
-import AntiDeeplink from "./Components/AntiDeeplink.jsx";
+import AntiDeeplink from "./components/AntiDeeplink.jsx";
 import toys from './data/toys.js';
 import { useRef } from 'react';
 

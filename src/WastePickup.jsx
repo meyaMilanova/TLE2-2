@@ -1,9 +1,9 @@
 import wasteItems from "./data/waste.js";
-import AvatarMovement from './Components/AvatarMovement.jsx';
-import PauseButton from "./Components/PauseButton.jsx";
+import AvatarMovement from './components/AvatarMovement.jsx';
+import PauseButton from "./components/PauseButton.jsx";
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import AntiDeeplink from "./Components/AntiDeeplink.jsx";
+import AntiDeeplink from "./components/AntiDeeplink.jsx";
 
 const getRandomWasteItems = () => {
     const items = [];

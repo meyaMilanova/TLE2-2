@@ -3,10 +3,10 @@ import TitleScreen from "./TitleScreen.jsx";
 import RegisterScreen from "./RegisterScreen.jsx";
 import LoginScreen from "./LoginScreen.jsx";
 import HomeScreen from "./HomeScreen.jsx";
-import GameExplainer from "./Components/GameExplainer.jsx";
-import PauseMenu from "./Components/PauseMenu.jsx";
+import GameExplainer from "./components/GameExplainer.jsx";
+import PauseMenu from "./components/PauseMenu.jsx";
 import WastePickup from "./WastePickup.jsx";
-import AvatarMovement from "./Components/AvatarMovement.jsx";
+import AvatarMovement from "./components/AvatarMovement.jsx";
 import WasteSorting from "./WasteSorting.jsx";
 import ToyCreation from "./ToyCreation.jsx"; // ✅ Import the new component
 import Profiel from "./Profiel.jsx";

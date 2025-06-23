@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import BackButton from "./Components/BackButton.jsx";
-import SortingModal from "./Components/SortingModal.jsx";
-import AntiDeeplink from "./Components/AntiDeeplink.jsx";
-import PauseButton from "./Components/PauseButton.jsx";
+import BackButton from "./components/BackButton.jsx";
+import SortingModal from "./components/SortingModal.jsx";
+import AntiDeeplink from "./components/AntiDeeplink.jsx";
+import PauseButton from "./components/PauseButton.jsx";
 import { bins, map, explanations } from "./data/waste.js";
 import confetti from "canvas-confetti";
 

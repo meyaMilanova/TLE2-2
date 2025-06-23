@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BackButton from './Components/BackButton.jsx';
-import AntiDeeplink from './Components/AntiDeeplink.jsx';
-import PinkButton from "./Components/PinkButton.jsx";
-import OrangeButton from "./Components/OrangeButton.jsx";
+import BackButton from './components/BackButton.jsx';
+import AntiDeeplink from './components/AntiDeeplink.jsx';
+import PinkButton from "./components/PinkButton.jsx";
+import OrangeButton from "./components/OrangeButton.jsx";
 import {greyAvatar} from "./data/avatars.js";
 
 function Profiel() {

@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {motion} from 'framer-motion';
-import LogoutButton from "./Components/LogoutButton.jsx";
+import LogoutButton from "./components/LogoutButton.jsx";
 import woodBackground from '../public/images/wood.webp';
-import OrangeButton from "./Components/OrangeButton.jsx";
+import OrangeButton from "./components/OrangeButton.jsx";
 import games from "./data/games.js";
-import funFact from "./Components/FunFact.jsx";
-import AntiDeeplink from "./Components/AntiDeeplink.jsx";
+import funFact from "./components/FunFact.jsx";
+import AntiDeeplink from "./components/AntiDeeplink.jsx";
 import {greyAvatar} from "./data/avatars.js";
 
 

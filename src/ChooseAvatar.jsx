@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import avatars, { greyAvatar } from './data/avatars.js';
-import PinkButton from "./Components/PinkButton.jsx";
-import AntiDeeplink from "./Components/AntiDeeplink.jsx";
-import BackButton from "./Components/BackButton.jsx";
+import PinkButton from "./components/PinkButton.jsx";
+import AntiDeeplink from "./components/AntiDeeplink.jsx";
+import BackButton from "./components/BackButton.jsx";
 
 function AvatarSelection() {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
