@@ -82,6 +82,7 @@ function WasteSorting() {
 
     useEffect(() => {
         function handleKeyDown(e) {
+            if (modalOpen) return;
             if (!items[0]) return;
 
             if (e.key === "1") handleDropByKey("plastic");
@@ -92,7 +93,7 @@ function WasteSorting() {
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [items]);
+    }, [items, modalOpen]);
 
     async function handleDrop(e, binType) {
         const itemId = e.dataTransfer.getData("text/plain");
