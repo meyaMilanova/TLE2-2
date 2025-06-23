@@ -57,6 +57,8 @@ function WasteSorting() {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [showSuccess] = useState(false);
+    const [showIntro, setShowIntro] = useState(true);
+
 
     useEffect(() => {
         const stored = localStorage.getItem("collectedItems");
@@ -82,7 +84,7 @@ function WasteSorting() {
 
     useEffect(() => {
         function handleKeyDown(e) {
-            if (modalOpen) return;
+            if (showIntro || modalOpen) return;
             if (!items[0]) return;
 
             if (e.key === "1") handleDropByKey("plastic");
@@ -93,7 +95,7 @@ function WasteSorting() {
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [items, modalOpen]);
+    }, [items, modalOpen, showIntro]);
 
     async function handleDrop(e, binType) {
         const itemId = e.dataTransfer.getData("text/plain");
@@ -238,6 +240,30 @@ function WasteSorting() {
                         </div>
                     ))}
                 </div>
+
+                {showIntro && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg p-6 w-[90vw] max-w-lg shadow-xl relative text-center">
+                            <h2 className="text-2xl font-bold mb-4">♻️ Afval scheiden in Rotterdam</h2>
+                            <p className="mb-4 text-base leading-relaxed">
+                                In de gemeente Rotterdam is het scheiden van afval enorm belangrijk.
+                                Door afval goed te sorteren, kunnen meer materialen worden hergebruikt.
+                                Dat is beter voor het milieu én voor de stad. Zo blijft Rotterdam schoner,
+                                en kunnen we samen zwerfafval en vervuiling tegengaan.
+                            </p>
+                            <p className="mb-6 text-base">
+                                Help jij mee om het afval op de juiste manier te scheiden?
+                            </p>
+                            <button
+                                onClick={() => setShowIntro(false)}
+                                className="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
+                            >
+                                Aan de slag!
+                            </button>
+                        </div>
+                    </div>
+                )}
+
 
                 <SortingModal
                     isOpen={modalOpen}
