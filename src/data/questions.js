@@ -2,7 +2,7 @@ const questions = [
     {
         id: 1,
         question: "Wat doe je met een plastic fles waar nog een beetje water in zit?",
-        options: ["Plastic", "GFT", "Papier"],
+        options: ["GFT", "Papier", "Plastic"],
         answer: "Plastic"
     },
     {
@@ -14,7 +14,7 @@ const questions = [
     {
         id: 3,
         question: "Welke bak gebruik je voor koffiedik?",
-        options: ["GFT", "Plastic", "Papier"],
+        options: ["Plastic ", "GFT", "Papier"],
         answer: "GFT"
     },
     {
@@ -32,7 +32,7 @@ const questions = [
     {
         id: 6,
         question: "Waar gooi je een appelmoespotje zonder deksel?",
-        options: ["Plastic", "GFT", "Rest"],
+        options: ["Rest", "GFT", "Plastic"],
         answer: "Plastic"
     },
     {
@@ -44,13 +44,13 @@ const questions = [
     {
         id: 8,
         question: "Waar gooi je gebruikt keukenpapier dat vet is?",
-        options: ["Rest", "Papier", "GFT"],
+        options: ["Papier", "Rest", "GFT"],
         answer: "Rest"
     },
     {
         id: 9,
         question: "Waar hoort een lege kartonnen melkpak thuis?",
-        options: ["Papier", "Plastic", "Rest"],
+        options: ["Rest", "Plastic", "Papier"],
         answer: "Papier"
     },
     {
@@ -62,7 +62,7 @@ const questions = [
     {
         id: 11,
         question: "Welk afval hoort in de papierbak?",
-        options: ["Schoon papier", "Tissues", "Plastic zakken"],
+        options: ["Tissues", "Schoon papier", "Plastic zakken"],
         answer: "Schoon papier"
     },
     {
@@ -74,13 +74,13 @@ const questions = [
     {
         id: 13,
         question: "Een plastic rietje hoort in welke bak?",
-        options: ["Plastic", "Rest", "Papier"],
+        options: ["Papier", "Rest", "Plastic"],
         answer: "Plastic"
     },
     {
         id: 14,
         question: "Wat doe je met een lege pizzadoos zonder eten?",
-        options: ["Papier", "Rest", "Plastic"],
+        options: ["Rest", "PapierRest", "Plastic"],
         answer: "Papier"
     },
     {
@@ -92,7 +92,7 @@ const questions = [
     {
         id: 16,
         question: "Waar gooi je kapotte keramiek of porselein?",
-        options: ["Rest", "Plastic", "GFT"],
+        options: ["Plastic", "Rest", "GFT"],
         answer: "Rest"
     },
     {
@@ -104,13 +104,13 @@ const questions = [
     {
         id: 18,
         question: "Wat gebeurt er met GFT afval na inzameling?",
-        options: ["Het wordt gecomposteerd", "Het wordt verbrand", "Het wordt gestort"],
+        options: ["Het wordt gestort", "Het wordt verbrand", "Het wordt gecomposteerd"],
         answer: "Het wordt gecomposteerd"
     },
     {
         id: 19,
         question: "Mag een papieren koffiebekertje in de papierbak?",
-        options: ["Nee, vanwege de plastic coating", "Ja, altijd", "Alleen als het schoon is"],
+        options: ["Ja, altijd", "Alleen als het schoon is", "Nee, vanwege de plastic coating"],
         answer: "Nee, vanwege de plastic coating"
     },
     {
@@ -123,9 +123,9 @@ const questions = [
         id: 21,
         question: "Waarom mag vet voedsel niet in de papierbak?",
         options: [
-            "Het maakt papier onbruikbaar voor recycling",
             "Het trekt insecten aan",
-            "Het is te zwaar"
+            "Het is te zwaar",
+            "Het maakt papier onbruikbaar voor recycling"
         ],
         answer: "Het maakt papier onbruikbaar voor recycling"
     },
@@ -134,8 +134,8 @@ const questions = [
         question: "Wat gebeurt er met plastic afval na inzameling?",
         options: [
             "Het wordt opnieuw verwerkt tot nieuwe producten",
-            "Het wordt verbrand voor energie",
-            "Het wordt in de grond gestopt"
+            "Het wordt in de grond gestopt",
+            "Het wordt verbrand voor energie"
         ],
         answer: "Het wordt opnieuw verwerkt tot nieuwe producten"
     },
@@ -154,8 +154,8 @@ const questions = [
         question: "Mag je etensresten zoals sauzen en soep in de GFT bak gooien?",
         options: [
             "Ja, maar alleen kleine hoeveelheden",
-            "Nee, nooit",
-            "Ja, altijd"
+            "Ja, altijd",
+            "Nee, nooit"
         ],
         answer: "Ja, maar alleen kleine hoeveelheden"
     },

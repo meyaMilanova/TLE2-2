@@ -5,6 +5,7 @@ import SortingModal from "./components/SortingModal.jsx";
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
 import PauseButton from "./components/PauseButton.jsx";
 import { bins, map, explanations } from "./data/waste.js";
+import questions from "./data/questions.js";
 import confetti from "canvas-confetti";
 
 async function updateSortingData(userId, type) {
@@ -161,6 +162,42 @@ function WasteSorting() {
 
     const remaining = items.length;
 
+
+    const [currentQuestion, setCurrentQuestion] = useState(null);
+    const [feedbackMessage, setFeedbackMessage] = useState(""); // State for feedback
+
+
+    function getRandomQuestion() {
+        return questions[Math.floor(Math.random() * questions.length)];
+    }
+
+    useEffect(() => {
+        if (remaining === 10 || remaining === 5) {
+            const randomQuestion = getRandomQuestion();
+            setCurrentQuestion(randomQuestion); // Set the current question
+            setModalMessage(
+                `Je hebt nog maar ${remaining} items over!\n\nVraag: ${randomQuestion.question}`
+            );
+            setModalOpen(true);
+        }
+    }, [remaining]);
+
+
+    function handleOptionClick(selectedOption) {
+        if (selectedOption === currentQuestion.answer) {
+            setFeedbackMessage("🎉 Correct!");
+
+        } else {
+            setFeedbackMessage("Fout!");
+        }
+
+        setTimeout(() => {
+            setModalOpen(false);
+            setCurrentQuestion(null);
+            setFeedbackMessage("");
+        }, 2000);
+    }
+
     return (
         <>
             <AntiDeeplink />
@@ -168,8 +205,7 @@ function WasteSorting() {
                 <PauseButton onClick={handlePause} />
 
                 <div className="grid grid-cols-3 items-center mb-8 px-4">
-                    <div className="justify-self-start">
-                    </div>
+                    <div className="justify-self-start"></div>
 
                     <h1
                         className="text-xl md:text-2xl font-bold text-center justify-self-center"
@@ -230,12 +266,12 @@ function WasteSorting() {
                                 className="mx-auto"
                             />
                             <div className="mt-2">
-                                <span
-                                    className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
-                                    style={{ minWidth: "2.5rem" }}
-                                >
-                                    {index + 1}
-                                </span>
+                        <span
+                            className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
+                            style={{ minWidth: "2.5rem" }}
+                        >
+                            {index + 1}
+                        </span>
                             </div>
                         </div>
                     ))}
@@ -264,15 +300,51 @@ function WasteSorting() {
                     </div>
                 )}
 
-
-                <SortingModal
-                    isOpen={modalOpen}
-                    onClose={() => setModalOpen(false)}
-                    title="Verkeerde bak!"
-                    message={modalMessage}
-                />
+                {modalOpen && !currentQuestion && (
+                    <SortingModal
+                        isOpen={modalOpen}
+                        onClose={() => setModalOpen(false)}
+                        title="Verkeerde bak!"
+                        message={modalMessage}
+                    />
+                )}
 
                 {showSuccess && <div className="...">🎉 Goed zo! 🎉</div>}
+
+                {modalOpen && currentQuestion && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg p-6 w-[90vw] max-w-md shadow-xl text-center relative">
+                            {feedbackMessage ? (
+                                <>
+                                    <p className="mb-4 text-[1.5vw] text-base">{feedbackMessage}</p>
+                                    <button
+                                        onClick={() => setModalOpen(false)}
+                                        className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                                    >
+                                        ✖
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <h2 className="text-xl font-bold mb-4">📝 Vraag</h2>
+                                    <p className="mb-4 text-base">{currentQuestion.question}</p>
+                                    <div className="flex flex-col gap-4">
+                                        {currentQuestion.options.map((option, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => handleOptionClick(option)}
+                                                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-300"
+                                            >
+                                                {option}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     );
