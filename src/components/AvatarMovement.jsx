@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import petSprites from '../data/petSpritesMap.js';
 
 function AvatarMovement({ position, onMove, avatar, disabled }) {
     const [pos, setPos] = useState(position || { top: 50, left: 50 });
@@ -6,6 +7,10 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
     const [currentKey, setCurrentKey] = useState(null);
     const pressedKeysRef = useRef(new Set());
     const requestRef = useRef();
+    const petId = JSON.parse(localStorage.getItem("userData"))?.pet_id
+    const petSprite = petSprites[petId]
+    const petFrameSize = 16
+    const petFrameHeight = 64
 
     const spriteFrames = {
         stand: 0,
@@ -158,17 +163,25 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
                 }}
             ></div>
             {/* Small Avatar */}
-            <div
-                className="absolute w-[50px] h-[50px] bg-no-repeat bg-cover"
-                style={{
-                    top: `${pos.top + 6}%`,
-                    left: `${pos.left - 3}%`,
-                    backgroundImage: `url('${avatarImage}')`,
-                    backgroundPosition: `-${frame * 50}px 0`,
-                    zIndex: 9,
-                    imageRendering: "pixelated"
-                }}
-            ></div>
+            {petSprite && (
+                <div
+                    className="absolute bg-no-repeat bg-cover"
+                    style={{
+                        width: `${petFrameSize}px`,
+                        height: `${petFrameHeight}px`,
+                        top: `${pos.top}%`,
+                        left: `${pos.left - 4}%`,
+                        backgroundImage: `url('${petSprite}')`,
+                        backgroundPosition: `-${frame * petFrameSize}px 0`,
+                        backgroundSize: 'auto',
+                        zIndex: 9,
+                        imageRendering: 'pixelated',
+                        transform: 'scale(4)',
+                        transformOrigin: 'top left',
+                    }}
+
+                />
+            )}
         </div>
     );
 }
