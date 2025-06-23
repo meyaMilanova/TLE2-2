@@ -30,7 +30,7 @@ const wasteItems = [
         category: "papier",
     },
     {
-        name: "Pizzadoos",
+        name: "Schone pizzadoos",
         image: "../wastesorting/pizzadoos.png",
         category: "papier",
     },
@@ -40,7 +40,7 @@ const wasteItems = [
         category: "plastic",
     },
     {
-        name: "Pizzadoos",
+        name: "Vuile pizzadoos",
         image: "../wastesorting/pizzadoos2.png",
         category: "restafval",
     },
