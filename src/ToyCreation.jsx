@@ -154,6 +154,10 @@ function ToyCreation() {
                                     <div className="space-y-2 text-lg" >
                                         <h3 className="text-xl font-bold text-gray-800 mb-2">Inhoud Vuilniszak</h3>
                                         <div className="gap-2 flex flex-col" >
+                                            <div className="flex items-center gap-2 p-2 rounded ">
+                                                ♻️ <span className="text-gray-700">Plastic:</span>
+                                                <strong>{bagData.plastic}</strong>
+                                            </div>
                                             <div className="flex items-center gap-2 p-2 ">
                                                 🧻 <span className="text-gray-700">Papier:</span>
                                                 <strong>{bagData.paper}</strong>
@@ -161,10 +165,6 @@ function ToyCreation() {
                                             <div className="flex items-center gap-2 p-2 rounded ">
                                                 🥦 <span className="text-gray-700">Gft:</span>
                                                 <strong>{bagData.food}</strong>
-                                            </div>
-                                            <div className="flex items-center gap-2 p-2 rounded ">
-                                                ♻️ <span className="text-gray-700">Plastic:</span>
-                                                <strong>{bagData.plastic}</strong>
                                             </div>
                                             <div className="flex items-center gap-2 p-2 rounded ">
                                                 🗑️ <span className="text-gray-700">Rest:</span>
