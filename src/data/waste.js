@@ -40,20 +40,20 @@ const wasteItems = [
         category: "plastic",
     },
     {
-        name: "Pizzadoos2",
+        name: "Pizzadoos",
         image: "../wastesorting/pizzadoos2.png",
         category: "restafval",
     },
     {
-        name: "Gum1",
+        name: "Kauwgum",
         image: "../wastesorting/gum1.png",
         category: "restafval",
     },
-    {
-        name: "Can1",
-        image: "../wastesorting/can1.png",
-        category: "plastic",
-    },
+    // {
+    //     name: "Blik",
+    //     image: "../wastesorting/can1.png",
+    //     category: "restafval",
+    // },
 ];
 
 export const bins = [
