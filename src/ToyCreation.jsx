@@ -13,11 +13,13 @@ function ToyCreation() {
     const navigate = useNavigate();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-    const [bagData, setBagData] = useState(null);
-    const [speelgoedData, setSpeelgoedData] = useState(null);
-
     const parsedData = JSON.parse(localStorage.getItem('userData'));
     const userId = parsedData?.id;
+
+    const [bagData, setBagData] = useState(null);
+    const [speelgoedData, setSpeelgoedData] = useState(null);
+    const [activePetId, setActivePetId] = useState(parsedData?.pet_id)
+
 
     const dropdownRef = useRef();
 
@@ -74,6 +76,35 @@ function ToyCreation() {
         } catch (error) {
             console.error("Maken van speelgoed mislukt:", error);
             alert(error.message);
+        }
+    }
+
+    async function handleSetActivePet(petId) {
+        try {
+            const response = await fetch("http://145.24.223.108:8000/user/pet", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    userId,
+                    pet: petId
+                })
+            });
+
+            const data = await response.json
+            if (!response.ok) throw new Error(data.error || "Fout bij het instellen van actieve speelgoed")
+
+            const updatedUserData = {
+                ...parsedData,
+                pet_id: petId
+            };
+            localStorage.setItem("userData", JSON.stringify(updatedUserData));
+            setActivePetId(petId)
+        } catch (error) {
+            console.error("Instellen van speelgoed mislukt:", error);
+            alert(error.message)
         }
     }
 
@@ -243,9 +274,18 @@ function ToyCreation() {
                                         </div>
 
                                         {toy.isUnlocked ? (
-                                            <div className="text-white text-sm px-4 py-1 rounded-full bg-orange-400 mt-2">
-                                                Gemaakt
-                                            </div>
+                                            activePetId === toy._id ? (
+                                                <div className="text-white text-sm px-4 py-1 rounded-full bg-green-500 mt-2">
+                                                    In gebruik
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handleSetActivePet(toy._id)}
+                                                    className="text-white text-sm px-4 py-1 rounded-full bg-orange-400 mt-2 hover:bg-orange-500"
+                                                >
+                                                    Gemaakt (klik om te kiezen)
+                                                </button>
+                                            )
                                         ) : (
                                             <button
                                                 onClick={() => handlePetCrafting(toy._id)}
