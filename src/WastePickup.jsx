@@ -5,6 +5,59 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
 
+const facts = {
+    "Afvalzak": [
+        "Wist je dat restafval niet gerecycled kan worden? Minder restafval is beter voor de aarde!",
+        "Restafval wordt meestal verbrand. Dat kost energie en is slecht voor het milieu.",
+        "Hoe minder restafval je hebt, hoe beter je aan het scheiden bent!"
+    ],
+    "Appel": [
+        "Wist je dat groente- en fruitafval omgezet wordt in compost voor planten?",
+        "Een appelklokhuis hoort in de groene bak: daar wordt nieuwe aarde van gemaakt!",
+        "Fruitafval helpt planten groeien als het goed gescheiden wordt."
+    ],
+    "Broodje": [
+        "GFT-afval zoals brood helpt bij het maken van nieuwe aarde!",
+        "Wist je dat oud brood beter in de GFT-bak kan dan in de prullenbak?",
+        "Van etensresten zoals brood wordt compost of biogas gemaakt."
+    ],
+    "Flesje": [
+        "Plastic flesjes kun je recyclen tot fleece truien of nieuwe flessen!",
+        "Wist je dat een plastic flesje wel 450 jaar kan blijven liggen in de natuur?",
+        "Door flesjes te recyclen bespaar je veel energie en grondstoffen."
+    ],
+    "Karton": [
+        "Karton hoort bij papier en kan goed worden hergebruikt.",
+        "Wist je dat van oud karton weer nieuwe dozen worden gemaakt?",
+        "Gooi karton zonder etensresten in de papierbak!"
+    ],
+    "Papier": [
+        "Papier kan wel 7 keer hergebruikt worden als je het goed sorteert!",
+        "Wist je dat 1 kilo oud papier wel 3 kilo hout kan besparen?",
+        "Gooi nat of vies papier niet in de papierbak, dat kan niet gerecycled worden."
+    ],
+    "Pizzadoos": [
+        "Een schone pizzadoos mag bij het papier. Een vette niet!",
+        "Wist je dat vet papier niet gerecycled kan worden?",
+        "Tip: scheur de schone helft van de pizzadoos af en gooi die bij het papier."
+    ],
+    "Tasje": [
+        "Wist je dat plastic tasjes soms in de natuur blijven liggen? Ze horen bij het plastic afval.",
+        "Gebruik een herbruikbare tas, dat is veel beter voor het milieu!",
+        "Wist je dat dieren plastic tasjes soms opeten? Dat is gevaarlijk voor ze."
+    ],
+    "Kauwgum": [
+        "Kauwgom hoort bij restafval, het kan niet gerecycled worden.",
+        "Wist je dat kauwgom wel 20 jaar op straat kan blijven plakken?",
+        "Gooi kauwgom altijd in de prullenbak, anders blijft het overal kleven."
+    ],
+    "Pizzadoos (vuil)": [
+        "Vette pizzadozen horen bij het restafval. Vet papier kan niet worden hergebruikt.",
+        "Probeer de schone stukken af te scheuren en die wel bij het papier te doen.",
+        "Wist je dat vet karton machines verstopt in de papierfabriek?"
+    ]
+};
+
 const getRandomWasteItems = () => {
     const items = [];
     const rows = 4;
@@ -42,7 +95,7 @@ function WastePickup() {
     const [showOverview, setShowOverview] = useState(false);
     const [showFullMessage, setShowFullMessage] = useState(false);
     const [avatar, setAvatar] = useState(""); // Add state for avatar
-
+    const [factMessage, setFactMessage] = useState(null);
 
     const navigate = useNavigate();
 
@@ -115,6 +168,13 @@ function WastePickup() {
             setCollectedItems(newCollectedItems);
             setRandomItems(newRandomItems);
 
+            const messages = facts[foundItem.name];
+            if (messages && messages.length > 0) {
+                const randomIndex = Math.floor(Math.random() * messages.length);
+                setFactMessage(messages[randomIndex]);
+                setTimeout(() => setFactMessage(null), 1000000);
+            }
+
             updateGameData({
                 collectedItems: newCollectedItems,
                 collectedCount: newCollectedCount,
@@ -124,6 +184,7 @@ function WastePickup() {
             localStorage.setItem("collectedItems", JSON.stringify(newCollectedItems));
         }
     }, [avatarPos, randomItems, collectedCount]);
+
 
     // Nieuw: detecteer wanneer vuilniszak vol is en toon pop-up
     useEffect(() => {
@@ -249,6 +310,14 @@ function WastePickup() {
                         <img src={item.image} alt={item.name} className="w-20 h-20 object-contain" />
                     </div>
                 ))}
+
+                {/* Pop-up met wist-je-datje */}
+                {factMessage && (
+                    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-yellow-100 text-black text-center font-semibold p-4 rounded-xl shadow-lg z-[999] w-[90%] max-w-md border border-yellow-400">
+                        📘 {factMessage}
+                    </div>
+                )}
+
             </div>
         </div>
         </>
