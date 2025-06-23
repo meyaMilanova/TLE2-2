@@ -270,8 +270,9 @@ function WastePickup() {
                     position={avatarPos}
                     onMove={handleMove}
                     avatar={avatar}
-                    disabled={showIntro}
+                    disabled={showIntro || showFullMessage}
                 />
+
                 {randomItems.map((item, index) => (
                     <div
                         key={index}
