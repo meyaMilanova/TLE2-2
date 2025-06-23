@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import avatars, { greyAvatar } from './data/avatars.js';
 import PinkButton from "./components/PinkButton.jsx";
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
-import BackButton from "./components/BackButton.jsx";
+import BackButtonProfiel from "./components/BackButtonProfiel.jsx";
 
 function AvatarSelection() {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
@@ -38,7 +38,7 @@ function AvatarSelection() {
 
             if (response.ok) {
                 localStorage.setItem('selectedAvatar', selectedAvatar);
-                navigate('/profiel'); // Redirect to profile page
+                navigate(-1); // Redirect to profile page
             } else {
                 const errorData = await response.json();
                 console.error('Error saving avatar:', errorData);
@@ -54,7 +54,7 @@ function AvatarSelection() {
         <>
             <AntiDeeplink />
             <div className="flex min-h-screen items-center justify-center bg-green-900 p-6">
-                <BackButton onClick={() => navigate('/profiel')} />
+                <BackButtonProfiel onClick={() => navigate('/profiel')} />
 
                 {/* Modal Alert */}
                 {showAlert && (
