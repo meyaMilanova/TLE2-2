@@ -147,7 +147,7 @@ function AvatarMovement({ position, onMove }) {
                     zIndex: 10,
                 }}
             ></div>
-
+            {/* Small Avatar */}
             <div
                 className="absolute w-[50px] h-[50px] bg-no-repeat bg-cover"
                 style={{
