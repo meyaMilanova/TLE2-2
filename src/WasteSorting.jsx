@@ -184,19 +184,21 @@ function WasteSorting() {
 
 
     function handleOptionClick(selectedOption) {
-        if (selectedOption === currentQuestion.answer) {
-            setFeedbackMessage("🎉 Correct!");
+        if (!currentQuestion) return;
 
+        if (selectedOption === currentQuestion.answer) {
+            setFeedbackMessage(`✅ Goed zo! ${currentQuestion.explanation}`);
         } else {
-            setFeedbackMessage("Fout!");
+            setFeedbackMessage(`❌ Fout. Het juiste antwoord is "${currentQuestion.answer}". ${currentQuestion.explanation}`);
         }
 
         setTimeout(() => {
             setModalOpen(false);
             setCurrentQuestion(null);
             setFeedbackMessage("");
-        }, 2000);
+        }, 5000); // Geef gebruiker 5 seconden om uitleg te lezen
     }
+
 
     return (
         <>
