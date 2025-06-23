@@ -1,5 +1,5 @@
 import React from 'react';
-import PinkButton from "./Components/PinkButton.jsx";
+import PinkButton from "./components/PinkButton.jsx";
 import {useNavigate} from "react-router-dom";
 import batcat from '/src/assets/images/pets-single/batcat1_single.webp';
 import grass from '/public/backgrounds/Pixilart_-_gramado-removebg-preview 1.png';

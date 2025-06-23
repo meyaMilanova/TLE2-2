@@ -39,6 +39,21 @@ const wasteItems = [
         image: "../wastesorting/tasje.png",
         category: "plastic",
     },
+    {
+        name: "Pizzadoos2",
+        image: "../wastesorting/pizzadoos2.png",
+        category: "restafval",
+    },
+    {
+        name: "Gum1",
+        image: "../wastesorting/gum1.png",
+        category: "restafval",
+    },
+    {
+        name: "Can1",
+        image: "../wastesorting/can1.png",
+        category: "plastic",
+    },
 ];
 
 export const bins = [

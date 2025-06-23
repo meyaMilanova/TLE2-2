@@ -1,4 +1,4 @@
-// Components/Modal.jsx
+// components/Modal.jsx
 import React from "react";
 
 function SortingModal({ isOpen, onClose, title, message }) {

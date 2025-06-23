@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PinkButton from './components/PinkButton';
-import BackButton from "./Components/BackButton.jsx";
-import OrangeButton from "./Components/OrangeButton.jsx";
+import OrangeButton from "./components/OrangeButton.jsx";
 
 function LoginScreen() {
     const [form, setForm] = useState({

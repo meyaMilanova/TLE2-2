@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import woodBackground from "../public/images/wood.webp";
-import OrangeButton from "./Components/OrangeButton.jsx";
-import BackButton from "./Components/BackButton.jsx";
-import AntiDeeplink from "./Components/AntiDeeplink.jsx";
+import OrangeButton from "./components/OrangeButton.jsx";
+import BackButton from "./components/BackButton.jsx";
+import AntiDeeplink from "./components/AntiDeeplink.jsx";
 
 function Results() {
     const navigate = useNavigate();
