@@ -45,10 +45,18 @@ const facts = {
         "Wist je dat plastic tasjes soms in de natuur blijven liggen? Ze horen bij het plastic afval.",
         "Gebruik een herbruikbare tas, dat is veel beter voor het milieu!",
         "Wist je dat dieren plastic tasjes soms opeten? Dat is gevaarlijk voor ze."
+    ],
+    "Kauwgum": [
+        "Kauwgom hoort bij restafval, het kan niet gerecycled worden.",
+        "Wist je dat kauwgom wel 20 jaar op straat kan blijven plakken?",
+        "Gooi kauwgom altijd in de prullenbak, anders blijft het overal kleven."
+    ],
+    "Pizzadoos (vuil)": [
+        "Vette pizzadozen horen bij het restafval. Vet papier kan niet worden hergebruikt.",
+        "Probeer de schone stukken af te scheuren en die wel bij het papier te doen.",
+        "Wist je dat vet karton machines verstopt in de papierfabriek?"
     ]
 };
-
-
 
 const getRandomWasteItems = () => {
     const items = [];

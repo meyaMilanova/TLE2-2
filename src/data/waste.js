@@ -49,11 +49,6 @@ const wasteItems = [
         image: "../wastesorting/gum1.png",
         category: "restafval",
     },
-    // {
-    //     name: "Blik",
-    //     image: "../wastesorting/can1.png",
-    //     category: "restafval",
-    // },
 ];
 
 export const bins = [
