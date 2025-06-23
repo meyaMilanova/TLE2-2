@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
-function AvatarMovement({ position, onMove }) {
-    const [pos, setPos] = useState(position || { top: 50, left: 50 }); // Main avatar position
+function AvatarMovement({ position, onMove, avatar, disabled }) {
+    const [pos, setPos] = useState(position || { top: 50, left: 50 });
     const [frame, setFrame] = useState(0);
     const [currentKey, setCurrentKey] = useState(null);
     const pressedKeysRef = useRef(new Set());
@@ -15,87 +15,103 @@ function AvatarMovement({ position, onMove }) {
         up: [7, 8],
     };
 
-    const [avatar, setAvatar] = useState("blond-hair-girl-avatar-p.png");
+    const [avatarImage, setAvatarImage] = useState("blond-hair-girl-avatar-p.png");
 
     useEffect(() => {
         const savedAvatar = localStorage.getItem("selectedAvatar");
         if (savedAvatar) {
             const baseName = savedAvatar.replace("-p.png", ".png");
-            setAvatar(baseName);
+            setAvatarImage(baseName);
         }
     }, []);
 
     useEffect(() => {
         if (
             position &&
-            (position.top !== pos.top || pos.left !== pos.left)
+            (position.top !== pos.top || position.left !== pos.left)
         ) {
             setPos(position);
         }
     }, [position]);
 
-    const handleKeyDown = (event) => {
-        const key = event.key;
-        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d"].includes(key)) {
-            pressedKeysRef.current.add(key);
-            setCurrentKey(key);
-        }
-    };
+    useEffect(() => {
+        if (disabled) return;
 
-    const handleKeyUp = (event) => {
-        const key = event.key;
-        pressedKeysRef.current.delete(key);
-
-        if (key === currentKey) {
-            const remainingKeys = Array.from(pressedKeysRef.current);
-            if (remainingKeys.length > 0) {
-                setCurrentKey(remainingKeys[remainingKeys.length - 1]);
-            } else {
-                setCurrentKey(null);
-                setFrame(spriteFrames.stand);
+        const handleKeyDown = (event) => {
+            const key = event.key;
+            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d"].includes(key)) {
+                pressedKeysRef.current.add(key);
+                setCurrentKey((prev) => (prev !== key ? key : prev));
             }
-        }
-    };
+        };
+
+        const handleKeyUp = (event) => {
+            const key = event.key;
+            pressedKeysRef.current.delete(key);
+
+            if (key === currentKey) {
+                const remainingKeys = Array.from(pressedKeysRef.current);
+                if (remainingKeys.length > 0) {
+                    setCurrentKey(remainingKeys[remainingKeys.length - 1]);
+                } else {
+                    setCurrentKey(null);
+                    setFrame(spriteFrames.stand);
+                }
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keyup", handleKeyUp);
+        };
+    }, [currentKey, disabled]);
 
     useEffect(() => {
-        const move = () => {
-            if (currentKey) {
-                setPos((prevPosition) => {
-                    let { top, left } = prevPosition;
-                    const step = 0.5;
+        if (disabled || !currentKey) return;
 
-                    switch (currentKey) {
-                        case "ArrowUp":
-                        case "w":
-                            top = Math.max(0, top - step);
-                            break;
-                        case "ArrowDown":
-                        case "s":
-                            top = Math.min(90, top + step);
-                            break;
-                        case "ArrowLeft":
-                        case "a":
-                            left = Math.max(0, left - step);
-                            break;
-                        case "ArrowRight":
-                        case "d":
-                            left = Math.min(90, left + step);
-                            break;
-                        default:
-                            break;
-                    }
-                    if (onMove) onMove({ left, top });
-                    return { top, left };
-                });
-            }
+        const move = () => {
+            setPos((prevPosition) => {
+                let { top, left } = prevPosition;
+                const step = 0.5;
+
+                switch (currentKey) {
+                    case "ArrowUp":
+                    case "w":
+                        top = Math.max(0, top - step);
+                        break;
+                    case "ArrowDown":
+                    case "s":
+                        top = Math.min(90, top + step);
+                        break;
+                    case "ArrowLeft":
+                    case "a":
+                        left = Math.max(0, left - step);
+                        break;
+                    case "ArrowRight":
+                    case "d":
+                        left = Math.min(90, left + step);
+                        break;
+                    default:
+                        break;
+                }
+
+                onMove?.({ left, top });
+                return { top, left };
+            });
+
             requestRef.current = requestAnimationFrame(move);
         };
 
         requestRef.current = requestAnimationFrame(move);
         return () => cancelAnimationFrame(requestRef.current);
-    }, [currentKey, onMove]);
+    }, [currentKey, onMove, disabled]);
 
     useEffect(() => {
+        if (disabled) return;
+
         let animationInterval;
 
         if (currentKey) {
@@ -118,21 +134,14 @@ function AvatarMovement({ position, onMove }) {
                 }
             })();
 
-            setFrame((prevFrame) => (prevFrame === frames[0] ? frames[1] : frames[0]));
+            setFrame(frames[0]);
             animationInterval = setInterval(() => {
                 setFrame((prevFrame) => (prevFrame === frames[0] ? frames[1] : frames[0]));
             }, 200);
         }
 
-        window.addEventListener("keydown", handleKeyDown);
-        window.addEventListener("keyup", handleKeyUp);
-
-        return () => {
-            clearInterval(animationInterval);
-            window.removeEventListener("keydown", handleKeyDown);
-            window.removeEventListener("keyup", handleKeyUp);
-        };
-    }, [currentKey]);
+        return () => clearInterval(animationInterval);
+    }, [currentKey, disabled]);
 
     return (
         <div className="relative w-screen h-screen overflow-hidden flex justify-center items-center">
@@ -142,7 +151,7 @@ function AvatarMovement({ position, onMove }) {
                 style={{
                     top: `${pos.top}%`,
                     left: `${pos.left}%`,
-                    backgroundImage: `url('${avatar}')`,
+                    backgroundImage: `url('${avatarImage}')`,
                     backgroundPosition: `-${frame * 100}px 0`,
                     zIndex: 10,
                     imageRendering: "pixelated"
@@ -154,7 +163,7 @@ function AvatarMovement({ position, onMove }) {
                 style={{
                     top: `${pos.top + 6}%`,
                     left: `${pos.left - 3}%`,
-                    backgroundImage: `url('${avatar}')`,
+                    backgroundImage: `url('${avatarImage}')`,
                     backgroundPosition: `-${frame * 50}px 0`,
                     zIndex: 9,
                     imageRendering: "pixelated"

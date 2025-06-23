@@ -43,6 +43,7 @@ function WastePickup() {
     const [showFullMessage, setShowFullMessage] = useState(false);
     const [avatar, setAvatar] = useState(""); // Add state for avatar
     const [factMessage, setFactMessage] = useState(null);
+    const [showIntro, setShowIntro] = useState(true);
 
     const navigate = useNavigate();
 
@@ -170,7 +171,29 @@ function WastePickup() {
     return (
         <>
             <AntiDeeplink />
-        <div
+
+            {showIntro && (
+                <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[1000]">
+                    <div className="bg-white rounded-lg p-6 w-[90vw] max-w-lg shadow-xl relative text-center">
+                        <h2 className="text-2xl font-bold mb-4">🌳 Help het park schoonmaken!</h2>
+                        <p className="mb-4 text-lg">
+                            Er is veel afval achtergelaten in het park na een groot buurtfeest.
+                            Help mee door het afval op te ruimen en het park weer schoon en veilig te maken voor iedereen!
+                        </p>
+                        <p className="mb-6 text-base text-gray-700 italic">
+                            Gebruik de pijltjestoetsen om je avatar te bewegen en verzamel 15 stukken afval.
+                        </p>
+                        <button
+                            onClick={() => setShowIntro(false)}
+                            className="w-full bg-green-600 uppercase text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
+                        >
+                            Begin!
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            <div
             className="waste-sorting min-h-screen flex flex-col items-center justify-center relative"
             style={{
                 overflow: "hidden",
@@ -243,7 +266,12 @@ function WastePickup() {
             )}
 
             <div className="relative w-[100vw] h-[100vh] rounded-xl overflow-hidden">
-                <AvatarMovement position={avatarPos} onMove={handleMove} avatar={avatar}/>
+                <AvatarMovement
+                    position={avatarPos}
+                    onMove={handleMove}
+                    avatar={avatar}
+                    disabled={showIntro}
+                />
                 {randomItems.map((item, index) => (
                     <div
                         key={index}
