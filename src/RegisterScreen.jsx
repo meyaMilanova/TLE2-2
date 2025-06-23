@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PinkButton from './components/PinkButton';
-import BackButton from "./Components/BackButton.jsx";
 import OrangeButton from "./Components/OrangeButton.jsx";
 
 function RegisterScreen() {
