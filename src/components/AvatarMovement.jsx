@@ -145,6 +145,7 @@ function AvatarMovement({ position, onMove }) {
                     backgroundImage: `url('${avatar}')`,
                     backgroundPosition: `-${frame * 100}px 0`,
                     zIndex: 10,
+                    imageRendering: "pixelated"
                 }}
             ></div>
             {/* Small Avatar */}
@@ -156,6 +157,7 @@ function AvatarMovement({ position, onMove }) {
                     backgroundImage: `url('${avatar}')`,
                     backgroundPosition: `-${frame * 50}px 0`,
                     zIndex: 9,
+                    imageRendering: "pixelated"
                 }}
             ></div>
         </div>
