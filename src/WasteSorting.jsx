@@ -41,7 +41,6 @@ async function updateSortingData(userId, type) {
     }
 }
 
-
 function convertCategoryToType(category) {
     return map[category] || "rest";
 }
@@ -59,8 +58,14 @@ function WasteSorting() {
     const [showSuccess] = useState(false);
     const [showIntro, setShowIntro] = useState(true);
 
-
     useEffect(() => {
+        const navigationEntries = window.performance.getEntriesByType("navigation");
+        if (navigationEntries.length > 0 && navigationEntries[0].type === "reload") {
+            localStorage.removeItem("collectedItems");
+            navigate("/hoofdpagina");  // Ga terug naar de hoofdpagina na refresh
+            return; // stop verder uitvoeren van deze useEffect
+        }
+
         const stored = localStorage.getItem("collectedItems");
         if (stored) {
             const parsed = JSON.parse(stored);
@@ -161,10 +166,8 @@ function WasteSorting() {
 
     const remaining = items.length;
 
-
     const [currentQuestion, setCurrentQuestion] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState(""); // State for feedback
-
 
     function getRandomQuestion() {
         return questions[Math.floor(Math.random() * questions.length)];
@@ -181,7 +184,6 @@ function WasteSorting() {
         }
     }, [remaining]);
 
-
     async function handleOptionClick(selectedOption) {
         if (!currentQuestion) return;
 
@@ -189,7 +191,7 @@ function WasteSorting() {
             const types = ["paper", "organic", "plastic", "rest"];
             const randomType = types[Math.floor(Math.random() * types.length)];
 
-// Voeg +2 toe aan willekeurig type afval
+            // Voeg +2 toe aan willekeurig type afval
             await updateSortingData(userId, randomType);
             await updateSortingData(userId, randomType);
 
@@ -205,7 +207,6 @@ function WasteSorting() {
             setFeedbackMessage("");
         }, 15000); // Geef gebruiker 15 seconden om uitleg te lezen
     }
-
 
     return (
         <>
@@ -275,12 +276,12 @@ function WasteSorting() {
                                 className="mx-auto"
                             />
                             <div className="mt-2">
-                        <span
-                            className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
-                            style={{minWidth: "2.5rem"}}
-                        >
-                            {index + 1}
-                        </span>
+                                <span
+                                    className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
+                                    style={{ minWidth: "2.5rem" }}
+                                >
+                                    {index + 1}
+                                </span>
                                 <div className="text-lg font-bold text-gray-800 mt-1">
                                     {["Plastic", "GFT", "Papier", "Restafval"][index]}
                                 </div>
