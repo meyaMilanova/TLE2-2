@@ -249,6 +249,7 @@ function WasteSorting() {
                             onDragStart={(e) => handleDragStart(e, items[0].id)}
                             className="w-20 h-20 cursor-move"
                             title={items[0].name}
+                            style={{imageRendering: "pixelated"}}
                         />
                     )}
                 </div>
@@ -264,7 +265,7 @@ function WasteSorting() {
                             <img
                                 src={bin.img}
                                 alt={bin.label}
-                                style={{ width: "150px", height: "150px", display: "block" }}
+                                style={{ width: "150px", height: "150px", display: "block", imageRendering: "pixelated"}}
                                 className="mx-auto"
                             />
                             <div className="mt-2">

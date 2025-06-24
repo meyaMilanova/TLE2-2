@@ -4,13 +4,17 @@ import avatars, { greyAvatar } from './data/avatars.js';
 import PinkButton from "./components/PinkButton.jsx";
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
 import BackButtonProfiel from "./components/BackButtonProfiel.jsx";
+import characters from "./components/AvatarManager.jsx";
 
 function AvatarSelection() {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
     const navigate = useNavigate();
+    // const { avatarStates, toggleAvatar, getAvatar } = useAvatarManager();
+
 
     const handleAvatarClick = (avatar) => {
+        console.log(avatar)
         setSelectedAvatar(avatar);
     };
 
@@ -38,7 +42,7 @@ function AvatarSelection() {
 
             if (response.ok) {
                 localStorage.setItem('selectedAvatar', selectedAvatar);
-                navigate(-1); // Redirect to profile page
+                navigate('/profiel');
             } else {
                 const errorData = await response.json();
                 console.error('Error saving avatar:', errorData);
@@ -54,7 +58,7 @@ function AvatarSelection() {
         <>
             <AntiDeeplink />
             <div className="flex min-h-screen items-center justify-center bg-green-900 p-6">
-                <BackButtonProfiel onClick={() => navigate('/profiel')} />
+                <BackButtonProfiel onClick={() => navigate('/profiel')}/>
 
                 {/* Modal Alert */}
                 {showAlert && (
@@ -91,17 +95,17 @@ function AvatarSelection() {
 
                 {/* Right Section: Avatar Gallery */}
                 <div className="flex-1 flex flex-wrap items-center justify-center gap-[0.2vw]">
-                    {avatars.map((avatar, index) => (
+                    {characters.map((character) => (
                         <div
-                            key={index}
-                            onClick={() => handleAvatarClick(avatar)}
+                            key={character.id}
+                            onClick={() => handleAvatarClick(character.id)}
                             className={`cursor-pointer p-2 bg-[#FDE3CF] ${
-                                selectedAvatar === avatar ? 'ring-4 ring-orange-500 ring-inset' : ''
+                                selectedAvatar === character.id ? 'ring-4 ring-orange-500 ring-inset' : ''
                             }`}
                         >
                             <img
-                                src={avatar}
-                                alt={`Avatar ${index + 1}`}
+                                src={character.default}
+                                alt={`Avatar ${character.id}`}
                                 className="w-[9vw] h-[9vw] object-cover"
                                 style={{imageRendering: "pixelated"}}
                             />

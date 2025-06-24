@@ -6,6 +6,7 @@ import PinkButton from "./components/PinkButton.jsx";
 import OrangeButton from "./components/OrangeButton.jsx";
 import {greyAvatar} from "./data/avatars.js";
 
+
 function Profiel() {
     const navigate = useNavigate();
     const [voornaam, setVoornaam] = useState('Gebruiker');

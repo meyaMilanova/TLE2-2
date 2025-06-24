@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import petSprites from '../data/petSpritesMap.js';
+import characters from "./AvatarManager.jsx";
 
 function AvatarMovement({ position, onMove, avatar, disabled }) {
     const [pos, setPos] = useState(position || { top: 50, left: 50 });
@@ -24,6 +25,7 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
 
     useEffect(() => {
         const savedAvatar = localStorage.getItem("selectedAvatar");
+        console.log(savedAvatar)
         if (savedAvatar) {
             const baseName = savedAvatar.replace("-p.png", ".png");
             setAvatarImage(baseName);
