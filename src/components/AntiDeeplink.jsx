@@ -1,43 +1,52 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AntiDeeplink({ onNameFetched, requireCollectedItems = false, requireGameFlag = false }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        const collectedItems = localStorage.getItem('collectedItems');
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        const collectedItems = localStorage.getItem("collectedItems");
+
+        console.log("AntiDeeplink userData:", userData);
+        console.log("AntiDeeplink collectedItems raw:", collectedItems);
 
         if (!userData) {
-            navigate('/inloggen');
+            console.log("AntiDeeplink: geen userData, redirect naar inloggen");
+            navigate("/inloggen");
             return;
         }
 
         if (requireCollectedItems) {
             if (!collectedItems) {
-                navigate('/hoofdpagina');
+                console.log("AntiDeeplink: geen collectedItems, redirect naar hoofdpagina");
+                navigate("/hoofdpagina");
                 return;
             }
             try {
                 const parsed = JSON.parse(collectedItems);
+                console.log("AntiDeeplink parsed collectedItems:", parsed);
+
                 if (!Array.isArray(parsed) || parsed.length !== 15) {
-                    navigate('/hoofdpagina');
+                    console.log("AntiDeeplink: collectedItems is geen array of lengte !== 15, redirect");
+                    navigate("/hoofdpagina");
                     return;
                 }
-            } catch {
-                // Bij parse-fout ook terug
-                navigate('/hoofdpagina');
+            } catch (e) {
+                console.log("AntiDeeplink: parse error collectedItems", e);
+                navigate("/hoofdpagina");
                 return;
             }
         }
 
         if (requireGameFlag) {
-            navigate('/hoofdpagina');
+            console.log("AntiDeeplink: requireGameFlag true, redirect naar hoofdpagina");
+            navigate("/hoofdpagina");
             return;
         }
 
-        if (onNameFetched && typeof onNameFetched === 'function') {
-            onNameFetched(userData.voornaam || 'Gebruiker');
+        if (onNameFetched && userData.name) {
+            onNameFetched(userData.name);
         }
     }, [navigate, onNameFetched, requireCollectedItems, requireGameFlag]);
 

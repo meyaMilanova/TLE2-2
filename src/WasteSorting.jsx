@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./components/BackButton.jsx";
 import SortingModal from "./components/SortingModal.jsx";
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
 import PauseButton from "./components/PauseButton.jsx";
-import {bins, map, explanations, wasteItems} from "./data/waste.js";
+import { bins, map, explanations, wasteItems } from "./data/waste.js";
 import questions from "./data/questions.js";
 import confetti from "canvas-confetti";
 import { motion } from "framer-motion";
@@ -24,7 +24,7 @@ async function updateSortingData(userId, type) {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json",
+                Accept: "application/json",
             },
             body: JSON.stringify(body),
         });
@@ -47,6 +47,7 @@ function convertCategoryToType(category) {
 
 function WasteSorting() {
     const navigate = useNavigate();
+    const dropdownRef = useRef();
 
     const [items, setItems] = useState([]);
     const userData = JSON.parse(localStorage.getItem("userData"));
@@ -58,7 +59,6 @@ function WasteSorting() {
     const [showSuccess] = useState(false);
     const [showIntro, setShowIntro] = useState(true);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const dropdownRef = React.useRef();
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -79,20 +79,26 @@ function WasteSorting() {
     }, [isPopupOpen]);
 
     useEffect(() => {
-        // Check of de pagina gerefreshed is, dan collectedItems verwijderen en terug naar hoofdpagina
         const navigationEntries = window.performance.getEntriesByType("navigation");
+        console.log("navigationEntries:", navigationEntries);
+
+        // Pas reload check aan: niet direct verwijderen, maar loggen
         if (navigationEntries.length > 0 && navigationEntries[0].type === "reload") {
-            localStorage.removeItem("collectedItems");
-            navigate("/hoofdpagina");
-            return;
+            console.log("Pagina gerefreshed, collectedItems blijven behouden");
+            // localStorage.removeItem("collectedItems"); // UITGESCHAKELD
+            // Niet navigeren want dat veroorzaakte direct redirect
+            // Je kunt hier eventueel iets anders doen, zoals resetten of tonen van melding
         }
 
-        // Alleen laden als collectedItems aanwezig en exact 15 zijn (AntiDeeplink checkt ook, maar dubbel check kan geen kwaad)
         const stored = localStorage.getItem("collectedItems");
+        console.log("WasteSorting collectedItems raw:", stored);
+
         if (stored) {
             try {
                 const parsed = JSON.parse(stored);
-                if (parsed.length === 15) {
+                console.log("WasteSorting parsed collectedItems:", parsed);
+
+                if (Array.isArray(parsed) && parsed.length === 15) {
                     const itemsWithIds = parsed.map((item, index) => ({
                         ...item,
                         id: index + 1,
@@ -102,13 +108,15 @@ function WasteSorting() {
                     setItems(itemsWithIds);
                     setInitialTotal(parsed.length);
                 } else {
-                    // Onverwachte situatie, terug naar hoofdpagina
+                    console.log("WasteSorting: collectedItems lengte is niet 15, redirect");
                     navigate("/hoofdpagina");
                 }
-            } catch {
+            } catch (e) {
+                console.log("WasteSorting parse error:", e);
                 navigate("/hoofdpagina");
             }
         } else {
+            console.log("WasteSorting: geen collectedItems gevonden, redirect");
             navigate("/hoofdpagina");
         }
     }, [navigate]);
@@ -187,7 +195,7 @@ function WasteSorting() {
     function saveGame() {
         const gameData = {
             items,
-            initialTotal
+            initialTotal,
         };
         localStorage.setItem("gameDataWasteSorting", JSON.stringify(gameData));
     }
@@ -227,9 +235,13 @@ function WasteSorting() {
             await updateSortingData(userId, randomType);
             await updateSortingData(userId, randomType);
 
-            setFeedbackMessage(`✅ Goed zo! ${currentQuestion.explanation}\nJe hebt +2 gekregen voor "${randomType}" afval!`);
+            setFeedbackMessage(
+                `✅ Goed zo! ${currentQuestion.explanation}\nJe hebt +2 gekregen voor "${randomType}" afval!`
+            );
         } else {
-            setFeedbackMessage(`❌ Fout. Het juiste antwoord is "${currentQuestion.answer}". ${currentQuestion.explanation}`);
+            setFeedbackMessage(
+                `❌ Fout. Het juiste antwoord is "${currentQuestion.answer}". ${currentQuestion.explanation}`
+            );
         }
 
         setTimeout(() => {
@@ -242,9 +254,10 @@ function WasteSorting() {
     return (
         <>
             <AntiDeeplink requireCollectedItems={true} />
-            <div className="waste-sorting min-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
+            <div
+                className="waste-sorting min-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8"
+            >
                 <PauseButton onClick={handlePause} />
-
 
                 <div className="grid grid-cols-3 items-center mb-8 px-4">
                     <div className="justify-self-start"></div>
@@ -261,11 +274,9 @@ function WasteSorting() {
                     >
                         Sleep het afval naar de juiste bak!
                     </h1>
-
-
                 </div>
-                <div className="absolute top-6 right-6 z-50 flex flex-col items-end gap-2">
 
+                <div className="absolute top-6 right-6 z-50 flex flex-col items-end gap-2">
                     {/* Teller */}
                     <div
                         style={{
@@ -276,8 +287,8 @@ function WasteSorting() {
                             fontSize: "1.5rem",
                             color: remaining >= 15 ? "#632713" : "black",
                             border: initialTotal >= 15 ? "2px solid red" : "none",
-                            minWidth: '6rem',
-                            textAlign: 'center',
+                            minWidth: "6rem",
+                            textAlign: "center",
                         }}
                     >
                         🗑️ {remaining}/{initialTotal}
@@ -307,11 +318,7 @@ function WasteSorting() {
                                             key={item.name}
                                             className="flex flex-col items-center gap-1 bg-white p-2 rounded shadow-sm"
                                         >
-                                            <img
-                                                src={item.image}
-                                                alt={item.name}
-                                                className="h-12 w-12 object-contain"
-                                            />
+                                            <img src={item.image} alt={item.name} className="h-12 w-12 object-contain" />
                                             <span className="text-gray-800 font-medium text-sm text-center">{item.name}</span>
                                         </div>
                                     ))}
@@ -324,7 +331,6 @@ function WasteSorting() {
                         )}
                     </motion.div>
                 </div>
-
 
                 <div className="flex flex-wrap gap-4 mb-8 justify-center mt-20">
                     {items[0] && (
@@ -355,12 +361,12 @@ function WasteSorting() {
                                 className="mx-auto"
                             />
                             <div className="mt-2">
-                                <span
-                                    className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
-                                    style={{ minWidth: "2.5rem" }}
-                                >
-                                    {index + 1}
-                                </span>
+                <span
+                    className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
+                    style={{ minWidth: "2.5rem" }}
+                >
+                  {index + 1}
+                </span>
                                 <div className="text-lg font-bold text-gray-800 mt-1">
                                     {["Plastic", "GFT", "Papier", "Restafval"][index]}
                                 </div>
