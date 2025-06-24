@@ -251,7 +251,7 @@ function ToyCreation() {
                                         transition={{ delay: 0.1 * idx, duration: 0.4 }}
                                     >
                                         <h2 className="text-lg font-semibold text-gray-800 mb-2">{toy.name}</h2>
-                                        <img src={toy.image_url} alt={toy.name} className="w-20 mb-2" />
+                                        <img src={toy.image_url} alt={toy.name} className="w-20 mb-2" style={{imageRendering: "pixelated"}} />
 
                                         {/* Resource container met vaste hoogte */}
                                         <div className="min-h-[120px] flex flex-col justify-start">
