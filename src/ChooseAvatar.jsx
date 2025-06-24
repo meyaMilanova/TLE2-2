@@ -38,7 +38,7 @@ function AvatarSelection() {
 
             if (response.ok) {
                 localStorage.setItem('selectedAvatar', selectedAvatar);
-                navigate(-1); // Redirect to profile page
+                navigate('/profiel'); // Redirect to profile page
             } else {
                 const errorData = await response.json();
                 console.error('Error saving avatar:', errorData);
