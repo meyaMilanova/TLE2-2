@@ -61,6 +61,8 @@ function WasteSorting() {
     const [showIntro, setShowIntro] = useState(true);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const dropdownRef = React.useRef();
+    const [feedbackHandled, setFeedbackHandled] = useState(false);
+
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -139,6 +141,7 @@ function WasteSorting() {
                 const explanation = explanations[currentItem.type] || "Onbekend type afval.";
                 setModalMessage(explanation);
                 setModalOpen(true);
+                setFeedbackHandled(true);
             }
         }
     }
@@ -156,12 +159,19 @@ function WasteSorting() {
 
             await updateSortingData(userId, currentItem.type);
             setItems((prevItems) => prevItems.slice(1));
+
+            // Reset feedbackHandled, want we gaan door naar volgende item
+            setFeedbackHandled(false);
+
         } else {
-            const explanation = explanations[currentItem.type] || "Onbekend type afval.";
-            setModalMessage(explanation);
-            setModalOpen(true);
+            if (!feedbackHandled) {  // alleen feedback tonen als nog niet afgehandeld
+                const explanation = explanations[currentItem.type] || "Onbekend type afval.";
+                setModalMessage(explanation);
+                setModalOpen(true);
+            }
         }
     }
+
 
     function handleDragStart(e, id) {
         e.dataTransfer.setData("text/plain", id);
@@ -210,22 +220,20 @@ function WasteSorting() {
             const types = ["paper", "organic", "plastic", "rest"];
             const randomType = types[Math.floor(Math.random() * types.length)];
 
-// Voeg +2 toe aan willekeurig type afval
             await updateSortingData(userId, randomType);
             await updateSortingData(userId, randomType);
 
             setFeedbackMessage(`✅ Goed zo! ${currentQuestion.explanation}\nJe hebt +2 gekregen voor "${randomType}" afval!`);
-
         } else {
             setFeedbackMessage(`❌ Fout. Het juiste antwoord is "${currentQuestion.answer}". ${currentQuestion.explanation}`);
         }
 
-        setTimeout(() => {
-            setModalOpen(false);
-            setCurrentQuestion(null);
-            setFeedbackMessage("");
-        }, 15000); // Geef gebruiker 15 seconden om uitleg te lezen
+        setFeedbackHandled(false);  // Reset zodat feedback straks weer kan tonen
+
+        // Laat feedback zien tot gebruiker op "Doorgaan" klikt
+        // Verwijder setTimeout, want dat veroorzaakt de feedback steeds opnieuw
     }
+
 
 
     return (
@@ -384,10 +392,14 @@ function WasteSorting() {
                 {modalOpen && !currentQuestion && (
                     <SortingModal
                         isOpen={modalOpen}
-                        onClose={() => setModalOpen(false)}
+                        onClose={() => {
+                            setModalOpen(false);
+                            setFeedbackHandled(false); // reset na sluiten van foutmodal
+                        }}
                         title="Verkeerde bak!"
                         message={modalMessage}
                     />
+
                 )}
 
                 {showSuccess && <div className="...">🎉 Goed zo! 🎉</div>}
@@ -399,11 +411,17 @@ function WasteSorting() {
                                 <>
                                     <p className="mb-4 text-[1.5vw] text-base whitespace-pre-line">{feedbackMessage}</p>
                                     <button
-                                        onClick={() => setModalOpen(false)}
+                                        onClick={() => {
+                                            setModalOpen(false);
+                                            setCurrentQuestion(null);
+                                            setFeedbackMessage("");
+                                            setFeedbackHandled(false);  // Gebruiker heeft feedback afgevinkt
+                                        }}
                                         className="mt-6 w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
                                     >
                                         Doorgaan
                                     </button>
+
                                 </>
                             ) : (
                                 <>
