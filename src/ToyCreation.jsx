@@ -140,8 +140,10 @@ function ToyCreation() {
             bagData
         };
         localStorage.setItem("gameDataToyCreation", JSON.stringify(gameData));
-        navigate("/pauze", { state: { gameKey: "gameDataToyCreation" } });
+        navigate("/hoofdpagina", { state: { gameKey: "gameDataToyCreation" } });
     }
+
+
 
     return (
         <>
@@ -164,7 +166,13 @@ function ToyCreation() {
                     </p>
                 </div>
 
-                <PauseButton onClick={handlePause} />
+                <button
+                    className="absolute uppercase top-6 left-6 bg-orange-500 rounded-full w-16 h-16 flex items-center justify-center text-white text-3xl z-50"
+                    onClick={handlePause}
+                    type="button"
+                >
+                    <span className="font-bold">&#8592;</span>
+                </button>
 
                 <div className="absolute top-6 right-6 z-50">
                     <div className="relative inline-block text-left">
