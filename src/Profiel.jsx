@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BackButton from './components/BackButton.jsx';
+import BackButtonProfiel from './components/BackButtonProfiel.jsx';
 import AntiDeeplink from './components/AntiDeeplink.jsx';
 import PinkButton from "./components/PinkButton.jsx";
 import OrangeButton from "./components/OrangeButton.jsx";
@@ -46,7 +46,7 @@ function Profiel() {
         <>
             <AntiDeeplink />
             <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
-                <BackButton/>
+                <BackButtonProfiel />
 
                 <h1 className="text-white text-8xl font-bold mb-10 font-itim">Profiel</h1>
 

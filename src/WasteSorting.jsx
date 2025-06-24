@@ -5,6 +5,7 @@ import SortingModal from "./components/SortingModal.jsx";
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
 import PauseButton from "./components/PauseButton.jsx";
 import { bins, map, explanations } from "./data/waste.js";
+import questions from "./data/questions.js";
 import confetti from "canvas-confetti";
 
 async function updateSortingData(userId, type) {
@@ -15,7 +16,6 @@ async function updateSortingData(userId, type) {
         rest: type === "rest" ? 1 : 0,
     };
 
-    // 👇 Dit toont wat er gestuurd wordt
     console.log(`📤 Verstuur PATCH voor ${type}:`, body);
 
     try {
@@ -57,6 +57,8 @@ function WasteSorting() {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [showSuccess] = useState(false);
+    const [showIntro, setShowIntro] = useState(true);
+
 
     useEffect(() => {
         const stored = localStorage.getItem("collectedItems");
@@ -82,6 +84,7 @@ function WasteSorting() {
 
     useEffect(() => {
         function handleKeyDown(e) {
+            if (showIntro || modalOpen) return;
             if (!items[0]) return;
 
             if (e.key === "1") handleDropByKey("plastic");
@@ -92,7 +95,7 @@ function WasteSorting() {
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [items]);
+    }, [items, modalOpen, showIntro]);
 
     async function handleDrop(e, binType) {
         const itemId = e.dataTransfer.getData("text/plain");
@@ -158,6 +161,52 @@ function WasteSorting() {
 
     const remaining = items.length;
 
+
+    const [currentQuestion, setCurrentQuestion] = useState(null);
+    const [feedbackMessage, setFeedbackMessage] = useState(""); // State for feedback
+
+
+    function getRandomQuestion() {
+        return questions[Math.floor(Math.random() * questions.length)];
+    }
+
+    useEffect(() => {
+        if (remaining === 10 || remaining === 5) {
+            const randomQuestion = getRandomQuestion();
+            setCurrentQuestion(randomQuestion); // Set the current question
+            setModalMessage(
+                `Je hebt nog maar ${remaining} items over!\n\nVraag: ${randomQuestion.question}`
+            );
+            setModalOpen(true);
+        }
+    }, [remaining]);
+
+
+    async function handleOptionClick(selectedOption) {
+        if (!currentQuestion) return;
+
+        if (selectedOption === currentQuestion.answer) {
+            const types = ["paper", "organic", "plastic", "rest"];
+            const randomType = types[Math.floor(Math.random() * types.length)];
+
+// Voeg +2 toe aan willekeurig type afval
+            await updateSortingData(userId, randomType);
+            await updateSortingData(userId, randomType);
+
+            setFeedbackMessage(`✅ Goed zo! ${currentQuestion.explanation}\nJe hebt +2 gekregen voor "${randomType}" afval!`);
+
+        } else {
+            setFeedbackMessage(`❌ Fout. Het juiste antwoord is "${currentQuestion.answer}". ${currentQuestion.explanation}`);
+        }
+
+        setTimeout(() => {
+            setModalOpen(false);
+            setCurrentQuestion(null);
+            setFeedbackMessage("");
+        }, 15000); // Geef gebruiker 15 seconden om uitleg te lezen
+    }
+
+
     return (
         <>
             <AntiDeeplink />
@@ -165,8 +214,7 @@ function WasteSorting() {
                 <PauseButton onClick={handlePause} />
 
                 <div className="grid grid-cols-3 items-center mb-8 px-4">
-                    <div className="justify-self-start">
-                    </div>
+                    <div className="justify-self-start"></div>
 
                     <h1
                         className="text-xl md:text-2xl font-bold text-center justify-self-center"
@@ -227,25 +275,85 @@ function WasteSorting() {
                                 className="mx-auto"
                             />
                             <div className="mt-2">
-                                <span
-                                    className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
-                                    style={{ minWidth: "2.5rem" }}
-                                >
-                                    {index + 1}
-                                </span>
+                        <span
+                            className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
+                            style={{ minWidth: "2.5rem" }}
+                        >
+                            {index + 1}
+                        </span>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <SortingModal
-                    isOpen={modalOpen}
-                    onClose={() => setModalOpen(false)}
-                    title="Verkeerde bak!"
-                    message={modalMessage}
-                />
+                {showIntro && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg p-6 w-[90vw] max-w-lg shadow-xl relative text-center">
+                            <h2 className="text-2xl font-bold mb-4">♻️ Afval scheiden in Rotterdam</h2>
+                            <p className="mb-4 text-base leading-relaxed">
+                                In de gemeente Rotterdam is het scheiden van afval enorm belangrijk.
+                                Door afval goed te sorteren, kunnen meer materialen worden hergebruikt.
+                                Dat is beter voor het milieu én voor de stad. Zo blijft Rotterdam schoner,
+                                en kunnen we samen zwerfafval en vervuiling tegengaan.
+                            </p>
+                            <p className="mb-6 text-base">
+                                Help jij mee om het afval op de juiste manier te scheiden?
+                            </p>
+                            <button
+                                onClick={() => setShowIntro(false)}
+                                className="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
+                            >
+                                Aan de slag!
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {modalOpen && !currentQuestion && (
+                    <SortingModal
+                        isOpen={modalOpen}
+                        onClose={() => setModalOpen(false)}
+                        title="Verkeerde bak!"
+                        message={modalMessage}
+                    />
+                )}
 
                 {showSuccess && <div className="...">🎉 Goed zo! 🎉</div>}
+
+                {modalOpen && currentQuestion && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg p-6 w-[90vw] max-w-md shadow-xl text-center relative">
+                            {feedbackMessage ? (
+                                <>
+                                    <p className="mb-4 text-[1.5vw] text-base whitespace-pre-line">{feedbackMessage}</p>
+                                    <button
+                                        onClick={() => setModalOpen(false)}
+                                        className="mt-6 w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
+                                    >
+                                        Doorgaan
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <h2 className="text-xl font-bold mb-4">📝 Vraag</h2>
+                                    <p className="mb-4 text-base">{currentQuestion.question}</p>
+                                    <div className="flex flex-col gap-4">
+                                        {currentQuestion.options.map((option, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => handleOptionClick(option)}
+                                                className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
+                                            >
+                                                {option}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                )}
+
             </div>
         </>
     );

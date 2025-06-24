@@ -5,6 +5,7 @@ import woodBackground from "../public/images/wood.webp";
 import OrangeButton from "./components/OrangeButton.jsx";
 import BackButton from "./components/BackButton.jsx";
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
+import PinkButton from "./components/PinkButton.jsx";
 
 function Results() {
     const navigate = useNavigate();
@@ -24,6 +25,14 @@ function Results() {
 
         setGroupedItems(grouped);
     }, []);
+
+
+    useEffect(() => {
+        if (Object.keys(groupedItems).length > 0) {
+            localStorage.removeItem("collectedItems");
+        }
+    }, [groupedItems]);
+
 
     return (
         <>
@@ -73,13 +82,16 @@ function Results() {
                     </div>
                 </motion.div>
 
-                <div className="flex gap-8 mt-8">
+                <div className="flex gap-4 mt-8">
                     <OrangeButton onClick={() => navigate("/afvalrapen")}>
                         Opnieuw
                     </OrangeButton>
                     <OrangeButton onClick={() => navigate("/hoofdpagina")}>
                         Hoofdpagina
                     </OrangeButton>
+                    <PinkButton onClick={() => navigate("/speelgoedmaken")}>
+                        Speelgoed maken
+                    </PinkButton>
                 </div>
             </motion.div>
         </>

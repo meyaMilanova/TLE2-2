@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import BackButton from "./components/BackButton.jsx";
@@ -6,21 +6,19 @@ import PauseButton from "./components/PauseButton.jsx";
 import woodTexture from '../public/images/wood.webp';
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
 import toys from './data/toys.js';
-import { useRef } from 'react';
-
 
 function ToyCreation() {
     const navigate = useNavigate();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-    const [bagData, setBagData] = useState(null);
-    const [speelgoedData, setSpeelgoedData] = useState(null);
-
     const parsedData = JSON.parse(localStorage.getItem('userData'));
     const userId = parsedData?.id;
 
-    const dropdownRef = useRef();
+    const [bagData, setBagData] = useState(null);
+    const [speelgoedData, setSpeelgoedData] = useState(null);
+    const [activePetId, setActivePetId] = useState(parsedData?.pet_id);
 
+    const dropdownRef = useRef();
 
     // Ophalen vuilnisdata
     async function fetchBagData() {
@@ -77,6 +75,35 @@ function ToyCreation() {
         }
     }
 
+    async function handleSetActivePet(petId) {
+        try {
+            const response = await fetch("http://145.24.223.108:8000/user/pet", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    userId,
+                    pet: petId
+                })
+            });
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "Fout bij het instellen van actieve speelgoed");
+
+            const updatedUserData = {
+                ...parsedData,
+                pet_id: petId
+            };
+            localStorage.setItem("userData", JSON.stringify(updatedUserData));
+            setActivePetId(petId);
+        } catch (error) {
+            console.error("Instellen van speelgoed mislukt:", error);
+            alert(error.message);
+        }
+    }
+
     useEffect(() => {
         fetchToyData();
         fetchBagData();
@@ -106,7 +133,6 @@ function ToyCreation() {
         };
     }, [isPopupOpen]);
 
-
     // 🔴 Pauze functionaliteit
     function handlePause() {
         const gameData = {
@@ -114,18 +140,40 @@ function ToyCreation() {
             bagData
         };
         localStorage.setItem("gameDataToyCreation", JSON.stringify(gameData));
-        navigate("/pauze", { state: { gameKey: "gameDataToyCreation" } });
+        navigate("/hoofdpagina", { state: { gameKey: "gameDataToyCreation" } });
     }
+
+
 
     return (
         <>
             <AntiDeeplink />
             <motion.div
-                className="min-h-screen bg-green-900 flex flex-col items-center py-10"
-                initial={{opacity: 0}}
-                animate={{opacity: 1}}
+                className="min-h-screen bg-green-900 flex flex-col items-center py-10 px-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
             >
-                <PauseButton onClick={handlePause}/>
+                {/* Introductie */}
+                <div
+                    className="max-w-3xl bg-yellow-200 text-green-900 rounded-lg p-6 mb-10 shadow-lg text-center"
+                    style={{ fontFamily: "'Comic Sans MS', cursive, sans-serif" }}
+                >
+                    <h2 className="text-3xl font-bold mb-4">Welkom bij de Speelgoedmaker!</h2>
+                    <p className="text-lg">
+                        Hier recycle je afval om er nieuw speelgoed van te maken. <br />
+                        Door afval te scheiden en opnieuw te gebruiken, help je onze planeet schoon en gezond te houden. <br />
+                        Samen zorgen we voor minder afval en meer plezier! ♻️🌍
+                    </p>
+                </div>
+
+                <button
+                    className="absolute uppercase top-6 left-6 bg-orange-500 rounded-full w-16 h-16 flex items-center justify-center text-white text-3xl z-50"
+                    onClick={handlePause}
+                    type="button"
+                >
+                    <span className="font-bold">&#8592;</span>
+                </button>
+
                 <div className="absolute top-6 right-6 z-50">
                     <div className="relative inline-block text-left">
                         <button
@@ -175,19 +223,14 @@ function ToyCreation() {
                                 ) : (
                                     <p className="text-sm text-gray-600 italic">Bezig met laden of geen data gevonden...</p>
                                 )}
-
                             </motion.div>
                         )}
                     </div>
                 </div>
 
-
-
-                <h1 className="text-white text-5xl font-bold mb-10">Speelgoed Maken</h1>
-
                 <div className="flex flex-col gap-8">
                     {speelgoedData?.items && speelgoedData.items.length > 0 ? (
-                        Array.from({length: Math.ceil(speelgoedData.items.length / 3)}).map((_, rowIndex) => (
+                        Array.from({ length: Math.ceil(speelgoedData.items.length / 3) }).map((_, rowIndex) => (
                             <div
                                 key={rowIndex}
                                 className="flex gap-4 justify-center px-6 py-4"
@@ -211,12 +254,12 @@ function ToyCreation() {
                                             color: "#632713",
                                             boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
                                         }}
-                                        initial={{opacity: 0, scale: 0.9}}
-                                        animate={{opacity: 1, scale: 1}}
-                                        transition={{delay: 0.1 * idx, duration: 0.4}}
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: 0.1 * idx, duration: 0.4 }}
                                     >
                                         <h2 className="text-lg font-semibold text-gray-800 mb-2">{toy.name}</h2>
-                                        <img src={toy.image_url} alt={toy.name} className="w-20 mb-2"/>
+                                        <img src={toy.image_url} alt={toy.name} className="w-20 mb-2" style={{imageRendering: "pixelated"}} />
 
                                         {/* Resource container met vaste hoogte */}
                                         <div className="min-h-[120px] flex flex-col justify-start">
@@ -243,9 +286,18 @@ function ToyCreation() {
                                         </div>
 
                                         {toy.isUnlocked ? (
-                                            <div className="text-white text-sm px-4 py-1 rounded-full bg-orange-400 mt-2">
-                                                Gemaakt
-                                            </div>
+                                            activePetId === toy._id ? (
+                                                <div className="text-white text-sm px-4 py-1 rounded-full bg-green-500 mt-2">
+                                                    In gebruik
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handleSetActivePet(toy._id)}
+                                                    className="text-white text-sm px-4 py-1 rounded-full bg-orange-400 mt-2 hover:bg-orange-500"
+                                                >
+                                                    Gemaakt (klik om te kiezen)
+                                                </button>
+                                            )
                                         ) : (
                                             <button
                                                 onClick={() => handlePetCrafting(toy._id)}
@@ -253,10 +305,8 @@ function ToyCreation() {
                                             >
                                                 Maken
                                             </button>
-
                                         )}
                                     </motion.div>
-
                                 ))}
                             </div>
                         ))
@@ -264,46 +314,6 @@ function ToyCreation() {
                         <p className="text-white text-center text-lg">Geen speelgoed beschikbaar om te kopen.</p>
                     )}
                 </div>
-
-                {/*<button*/}
-                {/*    onClick={() => setIsPopupOpen(true)}*/}
-                {/*    className="absolute top-6 right-6 px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg shadow-lg transition z-50 text-xl"*/}
-                {/*>*/}
-                {/*    Mijn vuilniszak*/}
-                {/*</button>*/}
-
-                {/*{isPopupOpen && (*/}
-                {/*    <div*/}
-                {/*        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"*/}
-                {/*        onClick={() => setIsPopupOpen(false)}*/}
-                {/*    >*/}
-                {/*        <motion.div*/}
-                {/*            className="bg-white rounded-lg p-6 max-w-md w-full shadow-lg relative"*/}
-                {/*            onClick={(e) => e.stopPropagation()}*/}
-                {/*            initial={{opacity: 0, scale: 0.8}}*/}
-                {/*            animate={{opacity: 1, scale: 1}}*/}
-                {/*            exit={{opacity: 0, scale: 0.8}}*/}
-                {/*        >*/}
-                {/*            <h2 className="text-2xl font-bold mb-4">Mijn Vuilniszak</h2>*/}
-                {/*            {bagData ? (*/}
-                {/*                <div>*/}
-                {/*                    <p>Papier: <strong>{bagData.paper}</strong></p>*/}
-                {/*                    <p>Gft: <strong>{bagData.food}</strong></p>*/}
-                {/*                    <p>Plastic: <strong>{bagData.plastic}</strong></p>*/}
-                {/*                    <p>Rest: <strong>{bagData.rest}</strong></p>*/}
-                {/*                </div>*/}
-                {/*            ) : (*/}
-                {/*                <p>Bezig met laden of geen data gevonden...</p>*/}
-                {/*            )}*/}
-                {/*            <button*/}
-                {/*                onClick={() => setIsPopupOpen(false)}*/}
-                {/*                className="mt-6 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"*/}
-                {/*            >*/}
-                {/*                Sluiten*/}
-                {/*            </button>*/}
-                {/*        </motion.div>*/}
-                {/*    </div>*/}
-                {/*)}*/}
             </motion.div>
         </>
     );
