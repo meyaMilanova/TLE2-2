@@ -82,19 +82,38 @@ function WasteSorting() {
         };
     }, [isPopupOpen]);
 
-
     useEffect(() => {
+        // Check of de pagina gerefreshed is, dan collectedItems verwijderen en terug naar hoofdpagina
+        const navigationEntries = window.performance.getEntriesByType("navigation");
+        if (navigationEntries.length > 0 && navigationEntries[0].type === "reload") {
+            localStorage.removeItem("collectedItems");
+            navigate("/hoofdpagina");
+            return;
+        }
+
+        // Alleen laden als collectedItems aanwezig en exact 15 zijn (AntiDeeplink checkt ook, maar dubbel check kan geen kwaad)
         const stored = localStorage.getItem("collectedItems");
         if (stored) {
-            const parsed = JSON.parse(stored);
-            const itemsWithIds = parsed.map((item, index) => ({
-                ...item,
-                id: index + 1,
-                type: convertCategoryToType(item.category),
-                img: item.image,
-            }));
-            setItems(itemsWithIds);
-            setInitialTotal(parsed.length);
+            try {
+                const parsed = JSON.parse(stored);
+                if (parsed.length === 15) {
+                    const itemsWithIds = parsed.map((item, index) => ({
+                        ...item,
+                        id: index + 1,
+                        type: convertCategoryToType(item.category),
+                        img: item.image,
+                    }));
+                    setItems(itemsWithIds);
+                    setInitialTotal(parsed.length);
+                } else {
+                    // Onverwachte situatie, terug naar hoofdpagina
+                    navigate("/hoofdpagina");
+                }
+            } catch {
+                navigate("/hoofdpagina");
+            }
+        } else {
+            navigate("/hoofdpagina");
         }
     }, [navigate]);
 
@@ -192,10 +211,8 @@ function WasteSorting() {
 
     const remaining = items.length;
 
-
     const [currentQuestion, setCurrentQuestion] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState(""); // State for feedback
-
 
     function getRandomQuestion() {
         return questions[Math.floor(Math.random() * questions.length)];
@@ -204,14 +221,13 @@ function WasteSorting() {
     useEffect(() => {
         if (remaining === 10 || remaining === 5) {
             const randomQuestion = getRandomQuestion();
-            setCurrentQuestion(randomQuestion); // Set the current question
+            setCurrentQuestion(randomQuestion);
             setModalMessage(
                 `Je hebt nog maar ${remaining} items over!\n\nVraag: ${randomQuestion.question}`
             );
             setModalOpen(true);
         }
     }, [remaining]);
-
 
     async function handleOptionClick(selectedOption) {
         if (!currentQuestion) return;
@@ -238,7 +254,7 @@ function WasteSorting() {
 
     return (
         <>
-            <AntiDeeplink />
+            <AntiDeeplink requireCollectedItems={true} />
             <div className="waste-sorting min-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
                 <PauseButton onClick={handlePause} />
 
@@ -352,12 +368,12 @@ function WasteSorting() {
                                 className="mx-auto"
                             />
                             <div className="mt-2">
-                        <span
-                            className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
-                            style={{minWidth: "2.5rem"}}
-                        >
-                            {index + 1}
-                        </span>
+                                <span
+                                    className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
+                                    style={{ minWidth: "2.5rem" }}
+                                >
+                                    {index + 1}
+                                </span>
                                 <div className="text-lg font-bold text-gray-800 mt-1">
                                     {["Plastic", "GFT", "Papier", "Restafval"][index]}
                                 </div>
@@ -443,7 +459,6 @@ function WasteSorting() {
                         </div>
                     </div>
                 )}
-
             </div>
         </>
     );
