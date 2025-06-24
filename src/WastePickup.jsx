@@ -131,8 +131,8 @@ function WastePickup() {
                 const randomIndex = Math.floor(Math.random() * messages.length);
                 setFactMessage(messages[randomIndex]);
                 setCooldownActive(true);
-                setCountdown(8);
-                setTimeout(() => setFactMessage(null), 8000);
+                setCountdown(5);
+                setTimeout(() => setFactMessage(null), 5000);
             }
 
             updateGameData({
@@ -278,7 +278,7 @@ function WastePickup() {
                     position={avatarPos}
                     onMove={handleMove}
                     avatar={avatar}
-                    disabled={showIntro || showFullMessage}
+                    disabled={showIntro || showFullMessage || cooldownActive}
                 />
 
                 {randomItems.map((item, index) => (
