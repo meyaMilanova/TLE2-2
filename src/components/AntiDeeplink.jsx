@@ -13,9 +13,22 @@ function AntiDeeplink({ onNameFetched, requireCollectedItems = false, requireGam
             return;
         }
 
-        if (requireCollectedItems && !collectedItems) {
-            navigate('/hoofdpagina');
-            return;
+        if (requireCollectedItems) {
+            if (!collectedItems) {
+                navigate('/hoofdpagina');
+                return;
+            }
+            try {
+                const parsed = JSON.parse(collectedItems);
+                if (!Array.isArray(parsed) || parsed.length !== 15) {
+                    navigate('/hoofdpagina');
+                    return;
+                }
+            } catch {
+                // Bij parse-fout ook terug
+                navigate('/hoofdpagina');
+                return;
+            }
         }
 
         if (requireGameFlag) {

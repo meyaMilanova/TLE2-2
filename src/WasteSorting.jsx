@@ -34,7 +34,6 @@ async function updateSortingData(userId, type) {
 
         const data = await response.json();
 
-        // 👇 Dit toont wat je terugkrijgt van de backend
         console.log("✅ Response van backend:", data);
     } catch (err) {
         console.error("❌ Opslaan mislukt:", err);
@@ -59,24 +58,37 @@ function WasteSorting() {
     const [showIntro, setShowIntro] = useState(true);
 
     useEffect(() => {
+        // Check of de pagina gerefreshed is, dan collectedItems verwijderen en terug naar hoofdpagina
         const navigationEntries = window.performance.getEntriesByType("navigation");
         if (navigationEntries.length > 0 && navigationEntries[0].type === "reload") {
             localStorage.removeItem("collectedItems");
-            navigate("/hoofdpagina");  // Ga terug naar de hoofdpagina na refresh
-            return; // stop verder uitvoeren van deze useEffect
+            navigate("/hoofdpagina");
+            return;
         }
 
+        // Alleen laden als collectedItems aanwezig en exact 15 zijn (AntiDeeplink checkt ook, maar dubbel check kan geen kwaad)
         const stored = localStorage.getItem("collectedItems");
         if (stored) {
-            const parsed = JSON.parse(stored);
-            const itemsWithIds = parsed.map((item, index) => ({
-                ...item,
-                id: index + 1,
-                type: convertCategoryToType(item.category),
-                img: item.image,
-            }));
-            setItems(itemsWithIds);
-            setInitialTotal(parsed.length);
+            try {
+                const parsed = JSON.parse(stored);
+                if (parsed.length === 15) {
+                    const itemsWithIds = parsed.map((item, index) => ({
+                        ...item,
+                        id: index + 1,
+                        type: convertCategoryToType(item.category),
+                        img: item.image,
+                    }));
+                    setItems(itemsWithIds);
+                    setInitialTotal(parsed.length);
+                } else {
+                    // Onverwachte situatie, terug naar hoofdpagina
+                    navigate("/hoofdpagina");
+                }
+            } catch {
+                navigate("/hoofdpagina");
+            }
+        } else {
+            navigate("/hoofdpagina");
         }
     }, [navigate]);
 
@@ -176,7 +188,7 @@ function WasteSorting() {
     useEffect(() => {
         if (remaining === 10 || remaining === 5) {
             const randomQuestion = getRandomQuestion();
-            setCurrentQuestion(randomQuestion); // Set the current question
+            setCurrentQuestion(randomQuestion);
             setModalMessage(
                 `Je hebt nog maar ${remaining} items over!\n\nVraag: ${randomQuestion.question}`
             );
@@ -191,12 +203,10 @@ function WasteSorting() {
             const types = ["paper", "organic", "plastic", "rest"];
             const randomType = types[Math.floor(Math.random() * types.length)];
 
-            // Voeg +2 toe aan willekeurig type afval
             await updateSortingData(userId, randomType);
             await updateSortingData(userId, randomType);
 
             setFeedbackMessage(`✅ Goed zo! ${currentQuestion.explanation}\nJe hebt +2 gekregen voor "${randomType}" afval!`);
-
         } else {
             setFeedbackMessage(`❌ Fout. Het juiste antwoord is "${currentQuestion.answer}". ${currentQuestion.explanation}`);
         }
@@ -205,12 +215,12 @@ function WasteSorting() {
             setModalOpen(false);
             setCurrentQuestion(null);
             setFeedbackMessage("");
-        }, 15000); // Geef gebruiker 15 seconden om uitleg te lezen
+        }, 15000);
     }
 
     return (
         <>
-            <AntiDeeplink />
+            <AntiDeeplink requireCollectedItems={true} />
             <div className="waste-sorting min-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
                 <PauseButton onClick={handlePause} />
 
@@ -357,7 +367,6 @@ function WasteSorting() {
                         </div>
                     </div>
                 )}
-
             </div>
         </>
     );
