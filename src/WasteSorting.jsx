@@ -4,9 +4,10 @@ import BackButton from "./components/BackButton.jsx";
 import SortingModal from "./components/SortingModal.jsx";
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
 import PauseButton from "./components/PauseButton.jsx";
-import { bins, map, explanations } from "./data/waste.js";
+import {bins, map, explanations, wasteItems} from "./data/waste.js";
 import questions from "./data/questions.js";
 import confetti from "canvas-confetti";
+import { motion } from "framer-motion";
 
 async function updateSortingData(userId, type) {
     const body = {
@@ -58,6 +59,26 @@ function WasteSorting() {
     const [modalMessage, setModalMessage] = useState("");
     const [showSuccess] = useState(false);
     const [showIntro, setShowIntro] = useState(true);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const dropdownRef = React.useRef();
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsPopupOpen(false);
+            }
+        }
+
+        if (isPopupOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isPopupOpen]);
 
 
     useEffect(() => {
@@ -213,6 +234,7 @@ function WasteSorting() {
             <div className="waste-sorting min-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
                 <PauseButton onClick={handlePause} />
 
+
                 <div className="grid grid-cols-3 items-center mb-8 px-4">
                     <div className="justify-self-start"></div>
 
@@ -229,22 +251,69 @@ function WasteSorting() {
                         Sleep het afval naar de juiste bak!
                     </h1>
 
-                    <div className="justify-self-end">
-                        <div
-                            style={{
-                                background: "#FDE3CF",
-                                borderRadius: "1.25rem",
-                                padding: "0.75rem 1.5rem",
-                                fontWeight: "bold",
-                                fontSize: "1.5rem",
-                                color: remaining >= 15 ? "#632713" : "black",
-                                border: initialTotal >= 15 ? "2px solid red" : "none",
-                            }}
-                        >
-                            🗑️ {remaining}/{initialTotal}
-                        </div>
-                    </div>
+
                 </div>
+                <div className="absolute top-6 right-6 z-50 flex flex-col items-end gap-2">
+
+                    {/* Teller */}
+                    <div
+                        style={{
+                            background: "#FDE3CF",
+                            borderRadius: "1.25rem",
+                            padding: "0.75rem 1.5rem",
+                            fontWeight: "bold",
+                            fontSize: "1.5rem",
+                            color: remaining >= 15 ? "#632713" : "black",
+                            border: initialTotal >= 15 ? "2px solid red" : "none",
+                            minWidth: '6rem',
+                            textAlign: 'center',
+                        }}
+                    >
+                        🗑️ {remaining}/{initialTotal}
+                    </div>
+
+                    {/* Dropdown altijd zichtbaar */}
+                    <motion.div
+                        ref={dropdownRef}
+                        initial={{ opacity: 1, y: 0 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-2 w-64 bg-white rounded shadow-lg p-3 z-50"
+                        style={{
+                            background: "#FDE3CF",
+                            borderRadius: "1rem",
+                            padding: "0.5rem 1rem",
+                            color: "#632713",
+                            boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+                        }}
+                    >
+                        {wasteItems && wasteItems.length > 0 ? (
+                            <div className="space-y-1 text-base">
+                                <h3 className="text-lg font-bold text-gray-800 mb-1">Inhoud Vuilniszak</h3>
+
+                                <div className="grid grid-cols-3 gap-2">
+                                    {wasteItems.map((item) => (
+                                        <div
+                                            key={item.name}
+                                            className="flex flex-col items-center gap-1 bg-white p-2 rounded shadow-sm"
+                                        >
+                                            <img
+                                                src={item.image}
+                                                alt={item.name}
+                                                className="h-12 w-12 object-contain"
+                                            />
+                                            <span className="text-gray-800 font-medium text-sm text-center">{item.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="text-xs text-gray-600 italic">
+                                Bezig met laden of geen data gevonden...
+                            </p>
+                        )}
+                    </motion.div>
+                </div>
+
 
                 <div className="flex flex-wrap gap-4 mb-8 justify-center mt-20">
                     {items[0] && (
