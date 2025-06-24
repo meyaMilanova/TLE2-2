@@ -26,6 +26,14 @@ function Results() {
         setGroupedItems(grouped);
     }, []);
 
+
+    useEffect(() => {
+        if (Object.keys(groupedItems).length > 0) {
+            localStorage.removeItem("collectedItems");
+        }
+    }, [groupedItems]);
+
+
     return (
         <>
             <AntiDeeplink />

@@ -16,7 +16,6 @@ async function updateSortingData(userId, type) {
         rest: type === "rest" ? 1 : 0,
     };
 
-    // 👇 Dit toont wat er gestuurd wordt
     console.log(`📤 Verstuur PATCH voor ${type}:`, body);
 
     try {
