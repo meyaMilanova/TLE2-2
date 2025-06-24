@@ -33,7 +33,7 @@ function RegisterScreen() {
             if (response.ok) {
                 const data = await response.json()
                 console.log('Registratie succesvol:', data)
-                navigate('/hoofdpagina')
+                navigate('/avatarkiezen')
             } else {
                 const errorData = await response.json()
                 console.error('Fout bij registratie:', errorData)

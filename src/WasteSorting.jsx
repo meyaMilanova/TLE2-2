@@ -4,9 +4,10 @@ import BackButton from "./components/BackButton.jsx";
 import SortingModal from "./components/SortingModal.jsx";
 import AntiDeeplink from "./components/AntiDeeplink.jsx";
 import PauseButton from "./components/PauseButton.jsx";
-import { bins, map, explanations } from "./data/waste.js";
+import {bins, map, explanations, wasteItems} from "./data/waste.js";
 import questions from "./data/questions.js";
 import confetti from "canvas-confetti";
+import { motion } from "framer-motion";
 
 async function updateSortingData(userId, type) {
     const body = {
@@ -16,7 +17,6 @@ async function updateSortingData(userId, type) {
         rest: type === "rest" ? 1 : 0,
     };
 
-    // 👇 Dit toont wat er gestuurd wordt
     console.log(`📤 Verstuur PATCH voor ${type}:`, body);
 
     try {
@@ -35,13 +35,11 @@ async function updateSortingData(userId, type) {
 
         const data = await response.json();
 
-        // 👇 Dit toont wat je terugkrijgt van de backend
         console.log("✅ Response van backend:", data);
     } catch (err) {
         console.error("❌ Opslaan mislukt:", err);
     }
 }
-
 
 function convertCategoryToType(category) {
     return map[category] || "rest";
@@ -59,20 +57,59 @@ function WasteSorting() {
     const [modalMessage, setModalMessage] = useState("");
     const [showSuccess] = useState(false);
     const [showIntro, setShowIntro] = useState(true);
-
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const dropdownRef = React.useRef();
 
     useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsPopupOpen(false);
+            }
+        }
+
+        if (isPopupOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isPopupOpen]);
+
+    useEffect(() => {
+        // Check of de pagina gerefreshed is, dan collectedItems verwijderen en terug naar hoofdpagina
+        const navigationEntries = window.performance.getEntriesByType("navigation");
+        if (navigationEntries.length > 0 && navigationEntries[0].type === "reload") {
+            localStorage.removeItem("collectedItems");
+            navigate("/hoofdpagina");
+            return;
+        }
+
+        // Alleen laden als collectedItems aanwezig en exact 15 zijn (AntiDeeplink checkt ook, maar dubbel check kan geen kwaad)
         const stored = localStorage.getItem("collectedItems");
         if (stored) {
-            const parsed = JSON.parse(stored);
-            const itemsWithIds = parsed.map((item, index) => ({
-                ...item,
-                id: index + 1,
-                type: convertCategoryToType(item.category),
-                img: item.image,
-            }));
-            setItems(itemsWithIds);
-            setInitialTotal(parsed.length);
+            try {
+                const parsed = JSON.parse(stored);
+                if (parsed.length === 15) {
+                    const itemsWithIds = parsed.map((item, index) => ({
+                        ...item,
+                        id: index + 1,
+                        type: convertCategoryToType(item.category),
+                        img: item.image,
+                    }));
+                    setItems(itemsWithIds);
+                    setInitialTotal(parsed.length);
+                } else {
+                    // Onverwachte situatie, terug naar hoofdpagina
+                    navigate("/hoofdpagina");
+                }
+            } catch {
+                navigate("/hoofdpagina");
+            }
+        } else {
+            navigate("/hoofdpagina");
         }
     }, [navigate]);
 
@@ -162,10 +199,8 @@ function WasteSorting() {
 
     const remaining = items.length;
 
-
     const [currentQuestion, setCurrentQuestion] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState(""); // State for feedback
-
 
     function getRandomQuestion() {
         return questions[Math.floor(Math.random() * questions.length)];
@@ -174,7 +209,7 @@ function WasteSorting() {
     useEffect(() => {
         if (remaining === 10 || remaining === 5) {
             const randomQuestion = getRandomQuestion();
-            setCurrentQuestion(randomQuestion); // Set the current question
+            setCurrentQuestion(randomQuestion);
             setModalMessage(
                 `Je hebt nog maar ${remaining} items over!\n\nVraag: ${randomQuestion.question}`
             );
@@ -182,12 +217,17 @@ function WasteSorting() {
         }
     }, [remaining]);
 
-
-    function handleOptionClick(selectedOption) {
+    async function handleOptionClick(selectedOption) {
         if (!currentQuestion) return;
 
         if (selectedOption === currentQuestion.answer) {
-            setFeedbackMessage(`✅ Goed zo! ${currentQuestion.explanation}`);
+            const types = ["paper", "organic", "plastic", "rest"];
+            const randomType = types[Math.floor(Math.random() * types.length)];
+
+            await updateSortingData(userId, randomType);
+            await updateSortingData(userId, randomType);
+
+            setFeedbackMessage(`✅ Goed zo! ${currentQuestion.explanation}\nJe hebt +2 gekregen voor "${randomType}" afval!`);
         } else {
             setFeedbackMessage(`❌ Fout. Het juiste antwoord is "${currentQuestion.answer}". ${currentQuestion.explanation}`);
         }
@@ -199,12 +239,12 @@ function WasteSorting() {
         }, 15000);
     }
 
-
     return (
         <>
-            <AntiDeeplink />
+            <AntiDeeplink requireCollectedItems={true} />
             <div className="waste-sorting min-h-screen bg-[url('/public/backgrounds/background-recycle.png')] bg-cover bg-center p-8">
                 <PauseButton onClick={handlePause} />
+
 
                 <div className="grid grid-cols-3 items-center mb-8 px-4">
                     <div className="justify-self-start"></div>
@@ -222,22 +262,69 @@ function WasteSorting() {
                         Sleep het afval naar de juiste bak!
                     </h1>
 
-                    <div className="justify-self-end">
-                        <div
-                            style={{
-                                background: "#FDE3CF",
-                                borderRadius: "1.25rem",
-                                padding: "0.75rem 1.5rem",
-                                fontWeight: "bold",
-                                fontSize: "1.5rem",
-                                color: remaining >= 15 ? "#632713" : "black",
-                                border: initialTotal >= 15 ? "2px solid red" : "none",
-                            }}
-                        >
-                            🗑️ {remaining}/{initialTotal}
-                        </div>
-                    </div>
+
                 </div>
+                <div className="absolute top-6 right-6 z-50 flex flex-col items-end gap-2">
+
+                    {/* Teller */}
+                    <div
+                        style={{
+                            background: "#FDE3CF",
+                            borderRadius: "1.25rem",
+                            padding: "0.75rem 1.5rem",
+                            fontWeight: "bold",
+                            fontSize: "1.5rem",
+                            color: remaining >= 15 ? "#632713" : "black",
+                            border: initialTotal >= 15 ? "2px solid red" : "none",
+                            minWidth: '6rem',
+                            textAlign: 'center',
+                        }}
+                    >
+                        🗑️ {remaining}/{initialTotal}
+                    </div>
+
+                    {/* Dropdown altijd zichtbaar */}
+                    <motion.div
+                        ref={dropdownRef}
+                        initial={{ opacity: 1, y: 0 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-2 w-64 bg-white rounded shadow-lg p-3 z-50"
+                        style={{
+                            background: "#FDE3CF",
+                            borderRadius: "1rem",
+                            padding: "0.5rem 1rem",
+                            color: "#632713",
+                            boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+                        }}
+                    >
+                        {wasteItems && wasteItems.length > 0 ? (
+                            <div className="space-y-1 text-base">
+                                <h3 className="text-lg font-bold text-gray-800 mb-1">Inhoud Vuilniszak</h3>
+
+                                <div className="grid grid-cols-3 gap-2">
+                                    {wasteItems.map((item) => (
+                                        <div
+                                            key={item.name}
+                                            className="flex flex-col items-center gap-1 bg-white p-2 rounded shadow-sm"
+                                        >
+                                            <img
+                                                src={item.image}
+                                                alt={item.name}
+                                                className="h-12 w-12 object-contain"
+                                            />
+                                            <span className="text-gray-800 font-medium text-sm text-center">{item.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="text-xs text-gray-600 italic">
+                                Bezig met laden of geen data gevonden...
+                            </p>
+                        )}
+                    </motion.div>
+                </div>
+
 
                 <div className="flex flex-wrap gap-4 mb-8 justify-center mt-20">
                     {items[0] && (
@@ -269,12 +356,15 @@ function WasteSorting() {
                                 className="mx-auto"
                             />
                             <div className="mt-2">
-                        <span
-                            className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
-                            style={{ minWidth: "2.5rem" }}
-                        >
-                            {index + 1}
-                        </span>
+                                <span
+                                    className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
+                                    style={{ minWidth: "2.5rem" }}
+                                >
+                                    {index + 1}
+                                </span>
+                                <div className="text-lg font-bold text-gray-800 mt-1">
+                                    {["Plastic", "GFT", "Papier", "Restafval"][index]}
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -319,12 +409,12 @@ function WasteSorting() {
                         <div className="bg-white rounded-lg p-6 w-[90vw] max-w-md shadow-xl text-center relative">
                             {feedbackMessage ? (
                                 <>
-                                    <p className="mb-4 text-[1.5vw] text-base">{feedbackMessage}</p>
+                                    <p className="mb-4 text-[1.5vw] text-base whitespace-pre-line">{feedbackMessage}</p>
                                     <button
                                         onClick={() => setModalOpen(false)}
-                                        className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                                        className="mt-6 w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
                                     >
-                                        ✖
+                                        Doorgaan
                                     </button>
                                 </>
                             ) : (
@@ -336,7 +426,7 @@ function WasteSorting() {
                                             <button
                                                 key={index}
                                                 onClick={() => handleOptionClick(option)}
-                                                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-300"
+                                                className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
                                             >
                                                 {option}
                                             </button>
@@ -344,7 +434,6 @@ function WasteSorting() {
                                     </div>
                                 </>
                             )}
-
                         </div>
                     </div>
                 )}

@@ -8,10 +8,10 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
     const [currentKey, setCurrentKey] = useState(null);
     const pressedKeysRef = useRef(new Set());
     const requestRef = useRef();
-    const petId = JSON.parse(localStorage.getItem("userData"))?.pet_id
-    const petSprite = petSprites[petId]
-    const petFrameSize = 16
-    const petFrameHeight = 64
+    const petId = JSON.parse(localStorage.getItem("userData"))?.pet_id;
+    const petSprite = petSprites[petId];
+    const petFrameSize = 16;
+    const petFrameHeight = 64;
 
     const spriteFrames = {
         stand: 0,
@@ -42,9 +42,8 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
     }, [position]);
 
     useEffect(() => {
-        if (disabled) return;
-
         const handleKeyDown = (event) => {
+            if (disabled) return;
             const key = event.key;
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d"].includes(key)) {
                 pressedKeysRef.current.add(key);
@@ -53,6 +52,7 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
         };
 
         const handleKeyUp = (event) => {
+            if (disabled) return;
             const key = event.key;
             pressedKeysRef.current.delete(key);
 
@@ -77,7 +77,10 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
     }, [currentKey, disabled]);
 
     useEffect(() => {
-        if (disabled || !currentKey) return;
+        if (disabled || !currentKey) {
+            cancelAnimationFrame(requestRef.current);
+            return;
+        }
 
         const move = () => {
             setPos((prevPosition) => {
@@ -115,6 +118,15 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
         requestRef.current = requestAnimationFrame(move);
         return () => cancelAnimationFrame(requestRef.current);
     }, [currentKey, onMove, disabled]);
+
+    useEffect(() => {
+        if (disabled) {
+            pressedKeysRef.current.clear();
+            setCurrentKey(null);
+            setFrame(spriteFrames.stand);
+            cancelAnimationFrame(requestRef.current);
+        }
+    }, [disabled]);
 
     useEffect(() => {
         if (disabled) return;
@@ -164,7 +176,7 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
                     imageRendering: "pixelated"
                 }}
             ></div>
-            {/* Small Avatar */}
+            {/* Small Pet Avatar */}
             {petSprite && (
                 <div
                     className="absolute bg-no-repeat bg-cover"
@@ -181,7 +193,6 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
                         transform: 'scale(4)',
                         transformOrigin: 'top left',
                     }}
-
                 />
             )}
         </div>

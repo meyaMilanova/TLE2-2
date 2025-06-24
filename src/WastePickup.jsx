@@ -41,27 +41,12 @@ function WastePickup() {
     const [collectedItems, setCollectedItems] = useState([]);
     const [showOverview, setShowOverview] = useState(false);
     const [showFullMessage, setShowFullMessage] = useState(false);
-    const [avatar, setAvatar] = useState(""); // Add state for avatar
+    const [avatar, setAvatar] = useState("");
     const [factMessage, setFactMessage] = useState(null);
     const [showIntro, setShowIntro] = useState(true);
-
     const navigate = useNavigate();
-
-    const updateGameData = (updatedData) => {
-        const currentData = JSON.parse(localStorage.getItem("gameDataWasteSorting")) || {};
-        const newData = { ...currentData, ...updatedData };
-        localStorage.setItem("gameDataWasteSorting", JSON.stringify(newData));
-    };
-
-    const handleMove = (newPos) => {
-        setAvatarPos(newPos);
-        const currentData = JSON.parse(localStorage.getItem("gameDataWasteSorting")) || {};
-        const updatedData = {
-            ...currentData,
-            avatarPos: newPos,
-        };
-        localStorage.setItem("gameDataWasteSorting", JSON.stringify(updatedData));
-    };
+    const [cooldownActive, setCooldownActive] = useState(false);
+    const [countdown, setCountdown] = useState(0);
 
     useEffect(() => {
         const savedData = JSON.parse(localStorage.getItem("gameDataWasteSorting"));
@@ -70,8 +55,6 @@ function WastePickup() {
             setCollectedCount(savedData.collectedCount || 0);
             if (savedData.avatarPos && typeof savedData.avatarPos.left === 'number' && typeof savedData.avatarPos.top === 'number') {
                 setAvatarPos(savedData.avatarPos);
-            } else {
-                setAvatarPos({ left: 50, top: 50 });
             }
             setRandomItems(savedData.randomItems || getRandomWasteItems());
         } else {
@@ -83,8 +66,7 @@ function WastePickup() {
                 avatarPos: { left: 50, top: 50 },
                 randomItems: items
             });
-        };
-
+        }
 
         const savedAvatar = localStorage.getItem("selectedAvatar");
         if (savedAvatar) {
@@ -92,6 +74,34 @@ function WastePickup() {
             setAvatar(movementAvatar);
         }
     }, []);
+
+    useEffect(() => {
+        if (cooldownActive) {
+            const timer = setInterval(() => {
+                setCountdown(prev => {
+                    if (prev <= 1) {
+                        clearInterval(timer);
+                        setCooldownActive(false);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+            return () => clearInterval(timer);
+        }
+    }, [cooldownActive]);
+
+    const updateGameData = (updatedData) => {
+        const currentData = JSON.parse(localStorage.getItem("gameDataWasteSorting")) || {};
+        const newData = { ...currentData, ...updatedData };
+        localStorage.setItem("gameDataWasteSorting", JSON.stringify(newData));
+    };
+
+    const handleMove = (newPos) => {
+        if (cooldownActive) return;
+        setAvatarPos(newPos);
+        updateGameData({ avatarPos: newPos });
+    };
 
     const checkCollision = (avatar, item) => {
         const avatarSize = 10;
@@ -103,7 +113,7 @@ function WastePickup() {
     };
 
     useEffect(() => {
-        if (collectedCount >= 15) return;
+        if (collectedCount >= 15 || cooldownActive) return;
 
         const foundIndex = randomItems.findIndex(item => checkCollision(avatarPos, item));
         if (foundIndex !== -1) {
@@ -120,7 +130,9 @@ function WastePickup() {
             if (messages && messages.length > 0) {
                 const randomIndex = Math.floor(Math.random() * messages.length);
                 setFactMessage(messages[randomIndex]);
-                setTimeout(() => setFactMessage(null), 1000000);
+                setCooldownActive(true);
+                setCountdown(5);
+                setTimeout(() => setFactMessage(null), 5000);
             }
 
             updateGameData({
@@ -131,10 +143,8 @@ function WastePickup() {
             });
             localStorage.setItem("collectedItems", JSON.stringify(newCollectedItems));
         }
-    }, [avatarPos, randomItems, collectedCount]);
+    }, [avatarPos, randomItems, collectedCount, cooldownActive]);
 
-
-    // Nieuw: detecteer wanneer vuilniszak vol is en toon pop-up
     useEffect(() => {
         if (collectedCount >= 15) {
             setShowFullMessage(true);
@@ -161,7 +171,7 @@ function WastePickup() {
             randomItems
         };
         localStorage.setItem("gameDataWasteSorting", JSON.stringify(gameData));
-    }
+    };
 
     const handleBack = () => {
         saveGame();
@@ -193,15 +203,13 @@ function WastePickup() {
                 </div>
             )}
 
-            <div
-            className="waste-sorting min-h-screen flex flex-col items-center justify-center relative"
-            style={{
-                overflow: "hidden",
-                backgroundImage: "url('../backgrounds/map.png')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-            }}
-        >
+            <div className="waste-sorting min-h-screen flex flex-col items-center justify-center relative" style={{ overflow: "hidden", backgroundImage: "url('../backgrounds/map.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
+                {cooldownActive && (
+                    <div className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-yellow-200 text-black font-bold py-2 px-4 rounded-lg shadow-lg z-50">
+                        ⏳ Wacht {countdown} seconden voordat je weer kunt verzamelen.
+                    </div>
+                )}
+
             <PauseButton onClick={handleBack} />
             <div style={{
                 position: "fixed",
@@ -270,7 +278,7 @@ function WastePickup() {
                     position={avatarPos}
                     onMove={handleMove}
                     avatar={avatar}
-                    disabled={showIntro || showFullMessage}
+                    disabled={showIntro || showFullMessage || cooldownActive}
                 />
 
                 {randomItems.map((item, index) => (
@@ -289,7 +297,14 @@ function WastePickup() {
 
                 {/* Pop-up met wist-je-datje */}
                 {factMessage && (
-                    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-yellow-100 text-black text-center font-semibold p-4 rounded-xl shadow-lg z-[999] w-[90%] max-w-md border border-yellow-400">
+                    <div
+                        className="fixed left-1/2 transform -translate-x-1/2 bg-yellow-100 text-black text-center font-semibold rounded-xl shadow-lg z-[999] w-[90%] max-w-xl border border-yellow-400"
+                        style={{
+                            top: "12%",
+                            fontSize: "1.5rem",
+                            padding: "2rem 1rem"
+                        }}
+                    >
                         📘 {factMessage}
                     </div>
                 )}
