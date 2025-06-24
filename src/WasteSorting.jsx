@@ -182,11 +182,19 @@ function WasteSorting() {
     }, [remaining]);
 
 
-    function handleOptionClick(selectedOption) {
+    async function handleOptionClick(selectedOption) {
         if (!currentQuestion) return;
 
         if (selectedOption === currentQuestion.answer) {
-            setFeedbackMessage(`✅ Goed zo! ${currentQuestion.explanation}`);
+            const types = ["paper", "organic", "plastic", "rest"];
+            const randomType = types[Math.floor(Math.random() * types.length)];
+
+// Voeg +2 toe aan willekeurig type afval
+            await updateSortingData(userId, randomType);
+            await updateSortingData(userId, randomType);
+
+            setFeedbackMessage(`✅ Goed zo! ${currentQuestion.explanation}\nJe hebt +2 gekregen voor "${randomType}" afval!`);
+
         } else {
             setFeedbackMessage(`❌ Fout. Het juiste antwoord is "${currentQuestion.answer}". ${currentQuestion.explanation}`);
         }
@@ -195,7 +203,7 @@ function WasteSorting() {
             setModalOpen(false);
             setCurrentQuestion(null);
             setFeedbackMessage("");
-        }, 5000); // Geef gebruiker 5 seconden om uitleg te lezen
+        }, 15000); // Geef gebruiker 15 seconden om uitleg te lezen
     }
 
 
@@ -317,12 +325,12 @@ function WasteSorting() {
                         <div className="bg-white rounded-lg p-6 w-[90vw] max-w-md shadow-xl text-center relative">
                             {feedbackMessage ? (
                                 <>
-                                    <p className="mb-4 text-[1.5vw] text-base">{feedbackMessage}</p>
+                                    <p className="mb-4 text-[1.5vw] text-base whitespace-pre-line">{feedbackMessage}</p>
                                     <button
                                         onClick={() => setModalOpen(false)}
-                                        className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                                        className="mt-6 w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
                                     >
-                                        ✖
+                                        Doorgaan
                                     </button>
                                 </>
                             ) : (
@@ -334,7 +342,7 @@ function WasteSorting() {
                                             <button
                                                 key={index}
                                                 onClick={() => handleOptionClick(option)}
-                                                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-300"
+                                                className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
                                             >
                                                 {option}
                                             </button>
@@ -342,10 +350,10 @@ function WasteSorting() {
                                     </div>
                                 </>
                             )}
-
                         </div>
                     </div>
                 )}
+
             </div>
         </>
     );

@@ -74,12 +74,14 @@ function AvatarSelection() {
                             src={selectedAvatar}
                             alt="Selected Avatar"
                             className="w-auto h-[50vh] rounded-[1vw] border-4 px-2 py-5 border-orange-500 ring-4 ring-yellow-400 ring-inset"
+                            style={{imageRendering: "pixelated"}}
                         />
                     ) : (
                         <img
                             src={greyAvatar}
                             alt="Unselected Avatar"
                             className="w-auto h-[50vh] rounded-[1vw] border-4 px-2 py-5 border-orange-500 ring-4 ring-yellow-400 ring-inset"
+                            style={{imageRendering: "pixelated"}}
                         />
                     )}
                     <PinkButton onClick={handleSave} className="mt-6">
@@ -101,6 +103,7 @@ function AvatarSelection() {
                                 src={avatar}
                                 alt={`Avatar ${index + 1}`}
                                 className="w-[9vw] h-[9vw] object-cover"
+                                style={{imageRendering: "pixelated"}}
                             />
                         </div>
                     ))}
