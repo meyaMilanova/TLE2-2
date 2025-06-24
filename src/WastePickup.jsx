@@ -127,12 +127,12 @@ function WastePickup() {
             setRandomItems(newRandomItems);
 
             const messages = facts[foundItem.name];
-            if (messages && messages.length > 0) {
+            if (messages && messages.length > 0 && newCollectedCount % 4 === 0) {
                 const randomIndex = Math.floor(Math.random() * messages.length);
                 setFactMessage(messages[randomIndex]);
                 setCooldownActive(true);
-                setCountdown(0);
-                setTimeout(() => setFactMessage(null), 0);
+                setCountdown(5);
+                setTimeout(() => setFactMessage(null), 5000);
             }
 
             updateGameData({
