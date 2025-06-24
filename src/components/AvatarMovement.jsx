@@ -23,12 +23,19 @@ function AvatarMovement({ position, onMove, avatar, disabled }) {
     const [avatarImage, setAvatarImage] = useState("blond-hair-girl-avatar-p.png");
 
     useEffect(() => {
-        const savedAvatar = localStorage.getItem("selectedAvatar");
-        if (savedAvatar) {
-            const baseName = savedAvatar.replace("-p.png", ".png");
-            setAvatarImage(baseName);
+        const raw = localStorage.getItem('selectedAvatar');
+        if (raw) {
+            try {
+                const parsed = JSON.parse(raw)
+                const updated = parsed.replace("-p.png", ".png")
+                setAvatarImage(updated)
+            } catch {
+                const updated = raw.replace("-p.png", ".png")
+                setAvatarImage(updated);
+            }
         }
     }, []);
+
 
     useEffect(() => {
         if (
