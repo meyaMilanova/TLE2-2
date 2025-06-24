@@ -277,10 +277,13 @@ function WasteSorting() {
                             <div className="mt-2">
                         <span
                             className="inline-block bg-gray-200 border border-gray-400 rounded px-3 py-1 text-base font-semibold shadow-sm"
-                            style={{ minWidth: "2.5rem" }}
+                            style={{minWidth: "2.5rem"}}
                         >
                             {index + 1}
                         </span>
+                                <div className="text-lg font-bold text-gray-800 mt-1">
+                                    {["Plastic", "GFT", "Papier", "Restafval"][index]}
+                                </div>
                             </div>
                         </div>
                     ))}
