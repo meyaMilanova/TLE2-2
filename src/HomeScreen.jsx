@@ -29,6 +29,11 @@ function HomeScreen() {
     }, []);
 
     useEffect(() => {
+        localStorage.removeItem("collectedItems");
+        localStorage.removeItem("gameDataWasteSorting");
+    }, []);
+
+    useEffect(() => {
         const raw = localStorage.getItem('selectedAvatar');
         if (raw) {
             try {
