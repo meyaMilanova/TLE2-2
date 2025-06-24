@@ -196,7 +196,7 @@ function WasteSorting() {
             setModalOpen(false);
             setCurrentQuestion(null);
             setFeedbackMessage("");
-        }, 5000); // Geef gebruiker 5 seconden om uitleg te lezen
+        }, 15000);
     }
 
 
