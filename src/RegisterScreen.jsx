@@ -21,35 +21,65 @@ function RegisterScreen() {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://145.24.223.108:8000/user', {
+            // ✅ Stap 1: Registreer gebruiker
+            const registerResponse = await fetch('http://145.24.223.108:8000/user', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(form),
-            })
+            });
 
-            if (response.ok) {
-                const data = await response.json()
-                console.log('Registratie succesvol:', data)
-                navigate('/avatarkiezen')
+            if (registerResponse.ok) {
+                const registerData = await registerResponse.json();
+                console.log('Registratie succesvol:', registerData);
+
+                // ✅ Stap 2: Log automatisch in met voornaam + wachtwoord
+                const loginResponse = await fetch('http://145.24.223.108:8000/user/login', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        voornaam: form.voornaam,
+                        wachtwoord: form.wachtwoord,
+                    }),
+                });
+
+                if (loginResponse.ok) {
+                    const loginData = await loginResponse.json();
+                    console.log('Automatisch ingelogd:', loginData);
+
+                    // ✅ Sla userData en avatar op in localStorage
+                    if (loginData.user) {
+                        localStorage.setItem('userData', JSON.stringify(loginData.user));
+                        if (loginData.user.avatar) {
+                            localStorage.setItem('selectedAvatar', JSON.stringify(loginData.user.avatar));
+                        }
+                    }
+
+                    // ✅ Ga naar avatarkiezen
+                    navigate('/avatarkiezen');
+                } else {
+                    const loginError = await loginResponse.json();
+                    alert('Inloggen mislukt na registratie: ' + (loginError.message || loginError.error));
+                }
             } else {
-                const errorData = await response.json()
-                console.error('Fout bij registratie:', errorData)
-                alert('Fout bij registratie: ' + errorData.message || errorData.error)
+                const errorData = await registerResponse.json();
+                console.error('Fout bij registratie:', errorData);
+                alert('Fout bij registratie: ' + (errorData.message || errorData.error));
             }
         } catch (error) {
-            console.error('Netwerkfout:', error)
-            alert('Netwerkfout: ' + error.message)
+            console.error('Netwerkfout:', error);
+            alert('Netwerkfout: ' + error.message);
         }
-    }
+    };
 
     return (
         <div className="min-h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
-
-            <h1
-                className="text-white text-8xl font-bold mb-10 font-itim" >Aanmelden</h1>
+            <h1 className="text-white text-8xl font-bold mb-10 font-itim">Aanmelden</h1>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-[90%] max-w-md">
                 <input
