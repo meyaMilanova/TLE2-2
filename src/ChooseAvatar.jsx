@@ -35,6 +35,7 @@ function AvatarSelection() {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
+                    'apikey' : 'superspookysecretadminapikeythatsuuuurelywontbeguessed',
                 },
                 body: JSON.stringify({
                     userId,

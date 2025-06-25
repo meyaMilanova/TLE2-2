@@ -27,6 +27,7 @@ function RegisterScreen() {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
+                    'apikey' : 'superspookysecretadminapikeythatsuuuurelywontbeguessed',
                 },
                 body: JSON.stringify(form),
             });
@@ -41,6 +42,7 @@ function RegisterScreen() {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
+                        'apikey' : 'superspookysecretadminapikeythatsuuuurelywontbeguessed',
                     },
                     body: JSON.stringify({
                         voornaam: form.voornaam,
