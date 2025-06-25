@@ -45,7 +45,7 @@ function AvatarSelection() {
 
             if (response.ok) {
                 localStorage.setItem('selectedAvatar', selectedAvatar);
-                navigate(-1); // Navigate back to homepage
+                navigate('/hoofdpagina'); // Navigate to homepage
             } else {
                 const errorData = await response.json();
                 console.error('Error saving avatar:', errorData);
