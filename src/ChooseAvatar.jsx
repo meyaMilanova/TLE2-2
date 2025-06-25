@@ -38,7 +38,7 @@ function AvatarSelection() {
 
             if (response.ok) {
                 localStorage.setItem('selectedAvatar', selectedAvatar);
-                navigate('/profiel'); // Redirect to profile page
+                navigate(-1); // Redirect back to profile page
             } else {
                 const errorData = await response.json();
                 console.error('Error saving avatar:', errorData);
@@ -54,7 +54,7 @@ function AvatarSelection() {
         <>
             <AntiDeeplink />
             <div className="flex min-h-screen items-center justify-center bg-green-900 p-6">
-                <BackButtonProfiel onClick={() => navigate('/profiel')} />
+                <BackButtonProfiel />
 
                 {/* Modal Alert */}
                 {showAlert && (
