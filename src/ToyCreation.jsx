@@ -25,7 +25,9 @@ function ToyCreation() {
         try {
             const response = await fetch(`http://145.24.223.108:8000/sortingGame/user/${userId}`, {
                 method: "GET",
-                headers: { "Accept": "application/json" }
+                headers: {
+                    "Accept": "application/json",
+                    'apikey' : 'superspookysecretadminapikeythatsuuuurelywontbeguessed',}
             });
             if (!response.ok) throw new Error("Fout bij ophalen van vuilniszak data");
             const data = await response.json();
@@ -41,7 +43,9 @@ function ToyCreation() {
         try {
             const response = await fetch(`http://145.24.223.108:8000/pet/craftable/${userId}`, {
                 method: "GET",
-                headers: { "Accept": "application/json" }
+                headers: {
+                    "Accept": "application/json",
+                    'apikey' : 'superspookysecretadminapikeythatsuuuurelywontbeguessed',}
             });
             if (!response.ok) throw new Error("Fout bij ophalen van speelgoed data");
             const data = await response.json();
@@ -59,7 +63,8 @@ function ToyCreation() {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    'apikey' : 'superspookysecretadminapikeythatsuuuurelywontbeguessed',
                 },
                 body: JSON.stringify({ toyId })
             });
@@ -81,7 +86,8 @@ function ToyCreation() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    'apikey' : 'superspookysecretadminapikeythatsuuuurelywontbeguessed',
                 },
                 body: JSON.stringify({
                     userId,

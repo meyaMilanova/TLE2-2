@@ -25,6 +25,7 @@ async function updateSortingData(userId, type) {
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json",
+                'apikey' : 'superspookysecretadminapikeythatsuuuurelywontbeguessed',
             },
             body: JSON.stringify(body),
         });
