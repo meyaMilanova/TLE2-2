@@ -12,6 +12,9 @@ Eerst maak jij een account aan bij het aanmelden, en dit laat jou automatisch ee
 Afval sorteren: WASD om te lopen, sleep de muis of druk op 1, 2, 3 of 4 om afval te sorteren.<br>
 Speelgoed maken: druk op de knop om speelgoed te maken als jij genoeg materiaal hebt.<br>
 
+Hier is de link voor onze applicatie's back end<br>
+https://github.com/Justin4625/Start-up-BE
+
 Voor het verder ontwikkelijken van de applicatie, hou deze dingen in gedachten:<br>
 -Images zitten in 2 verschillende plekken. /public, en /src/assets/images<br>
 -Anti-Deeplink, Avatar Movement, Fun Facts, Slideshow en meeste Buttons zij al gemaakt als Components<br>
